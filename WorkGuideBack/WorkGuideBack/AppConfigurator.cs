@@ -1,6 +1,12 @@
 ﻿using DAL.Interfaces;
 using DAL.EF;
 using Microsoft.EntityFrameworkCore;
+using BLL.Interfaces;
+using DAL.Repositories;
+using BLL.Services;
+using DAL.Entities;
+using Microsoft.AspNetCore.Identity;
+using DAL.Repository;
 
 namespace WorkGuideBack
 {
@@ -19,6 +25,13 @@ namespace WorkGuideBack
 
             string dbconectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             services.AddEntityFrameworkSqlServer().AddDbContext<DatabaseContext>(options => options.UseSqlServer(dbconectionString));
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddIdentity<User, IdentityRole<Guid>>().AddEntityFrameworkStores<DatabaseContext>();
+            services.AddScoped<RoleManager<IdentityRole<Guid>>>();
+            services.AddScoped<UserManager<User>>();
+            services.AddScoped<SignInManager<User>>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -39,6 +52,13 @@ namespace WorkGuideBack
             });
 
             services.AddSingleton<IDatabaseContextFactory, DatabaseContextFactory>();
+
+            services.AddScoped<ICourseRepository, CourseRepository>(provider =>
+                new CourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserRepository, UserRepository>(provider =>
+                new UserRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+
+            services.AddScoped<ICourseService, CourseService>();
         }
     }
 }
