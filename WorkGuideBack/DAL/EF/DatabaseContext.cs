@@ -13,6 +13,7 @@ namespace DAL.EF
         }
 
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
