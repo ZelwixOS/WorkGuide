@@ -32,6 +32,8 @@ namespace WorkGuideBack
             services.AddScoped<UserManager<User>>();
             services.AddScoped<SignInManager<User>>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IRolesInitializer, RolesInitializer>(provider =>
+                new RolesInitializer(provider.GetService<RoleManager<IdentityRole<Guid>>>(), provider.GetService<UserManager<User>>()));
 
             services.ConfigureApplicationCookie(options =>
             {

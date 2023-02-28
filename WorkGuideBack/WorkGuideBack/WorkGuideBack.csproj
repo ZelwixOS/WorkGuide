@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\" />
+    <Folder Include="ClientApp\coursePics\" />
   </ItemGroup>
 
   <ItemGroup>

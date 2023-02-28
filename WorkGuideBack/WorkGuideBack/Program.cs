@@ -1,5 +1,8 @@
+using BLL.Interfaces;
 using DAL.EF;
+using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,6 +31,31 @@ using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>(
     catch (Exception ex)
     {
         logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
+using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
+        logger.LogInformation("Database migrated successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+
+    try
+    {
+        var initer = serviceScope.ServiceProvider.GetRequiredService<IRolesInitializer>();
+        initer.CreateUserRoles().Wait();
+        logger.LogInformation("Roles created successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Roles can't be created because of exception.");
     }
 }
 
