@@ -42,14 +42,14 @@ namespace WorkGuideBack.Controllers
 
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<CourseDto>> Create([FromBody] CourseCreateRequestDto course)
+        public async Task<ActionResult<CourseDto>> Create([FromForm] CourseCreateRequestDto course)
         {
             return this.Ok(await _courseService.CreateCourseAsync(course));
         }
 
         [HttpPut]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<CourseDto>> Update([FromBody] CourseUpdateRequestDto course)
+        public async Task<ActionResult<CourseDto>> Update([FromForm] CourseUpdateRequestDto course)
         {
             return this.Ok(await _courseService.UpdateCourseAsync(course));
         }
