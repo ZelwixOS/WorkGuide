@@ -12,7 +12,8 @@ namespace BLL.DTO.Request.Lesson
             {
                 Id = this.Id,
                 Name = this.Name,
-                Url = this.Url,
+                OrderNumber = this.OrderNumber,
+                CourseId = this.CourseId
             };
         }
     }

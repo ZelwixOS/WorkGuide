@@ -35,6 +35,7 @@ namespace DAL.Repositories
         public Course GetItem(string url)
         {
             var category = this.Context.Courses
+                .Include(c => c.Lessons)
                 .AsNoTracking()
                 .FirstOrDefault(c => c.Url == url);
 

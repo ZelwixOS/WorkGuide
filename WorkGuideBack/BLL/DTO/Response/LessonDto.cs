@@ -1,25 +1,30 @@
 ﻿using DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.DTO.Response
 {
     public class LessonDto
     {
-        public LessonDto(Lesson course)
+        public LessonDto(Lesson lesson)
         {
-            this.Id = course.Id;
-            this.Name = course.Name;
-            this.Url = course.Url;
+            this.Id = lesson.Id;
+            this.Name = lesson.Name;
+            this.OrderNumber = lesson.OrderNumber;
+            
+            if (lesson.Course != null)
+            {
+                this.CourseUrl = lesson.Course.Url;
+                this.CourseName = lesson.Course.Name;
+            }
         }
 
         public Guid Id { get; set; }
 
         public string Name { get; set; }
 
-        public string Url { get; set; }
+        public int OrderNumber { get; set; }
+
+        public string CourseUrl { get; set; }
+
+        public string CourseName { get; set; }
     }
 }

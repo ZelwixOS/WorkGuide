@@ -9,6 +9,5 @@ namespace DAL.Interfaces
 {
     public interface ILessonRepository : IRepository<Lesson, Guid>
     {
-        Lesson GetItem(string url);
     }
 }

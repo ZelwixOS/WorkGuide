@@ -4,6 +4,7 @@ using BLL.Helpers;
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
+using System.Security.Policy;
 
 namespace BLL.Services
 {
@@ -80,9 +81,9 @@ namespace BLL.Services
             return new CourseDto(res);
         }
 
-        public CourseDto PublishService(Guid id)
+        public CourseDto PublishService(string url)
         {
-            var course = _courseRepository.GetItem(id);
+            var course = _courseRepository.GetItem(url);
 
             if (course != null)
             {
@@ -93,9 +94,9 @@ namespace BLL.Services
             return null;
         }
 
-        public CourseDto UnpublishService(Guid id)
+        public CourseDto UnpublishService(string url)
         {
-            var course = this._courseRepository.GetItem(id);
+            var course = this._courseRepository.GetItem(url);
 
             if (course != null)
             {

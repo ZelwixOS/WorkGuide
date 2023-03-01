@@ -10,8 +10,8 @@ namespace BLL.Interfaces
         CourseDto GetCourse(Guid id);
         CourseDto GetCourse(string url);
         PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string search, bool published);
-        CourseDto PublishService(Guid id);
-        CourseDto UnpublishService(Guid id);
+        CourseDto PublishService(string url);
+        CourseDto UnpublishService(string url);
         Task<CourseDto> UpdateCourseAsync(CourseUpdateRequestDto course);
     }
 }

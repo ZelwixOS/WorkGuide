@@ -32,15 +32,6 @@ namespace DAL.Repositories
             return lessons;
         }
 
-        public Lesson GetItem(string url)
-        {
-            var lessons = this.Context.Lessons
-                .AsNoTracking()
-                .FirstOrDefault(c => c.Url == url);
-
-            return lessons;
-        }
-
         public int DeleteItem(Lesson lesson)
         {
             this.Context.Lessons.Remove(lesson);

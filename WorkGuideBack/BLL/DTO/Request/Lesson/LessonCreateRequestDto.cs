@@ -7,7 +7,8 @@
             return new DAL.Entities.Lesson()
             {
                 Name = this.Name,
-                Url = this.Url,
+                OrderNumber = this.OrderNumber,
+                CourseId = this.CourseId
             };
         }
     }

@@ -13,5 +13,7 @@
         public string PicUrl { get; set; }
 
         public bool Published { get; set; }
+
+        public HashSet<Lesson> Lessons { get; set; }
     }
 }

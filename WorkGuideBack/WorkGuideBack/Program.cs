@@ -32,20 +32,6 @@ using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>(
     {
         logger.LogError(ex, "An error occurred while migrating the database.");
     }
-}
-
-using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-{
-    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    try
-    {
-        serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
-        logger.LogInformation("Database migrated successfully.");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while migrating the database.");
-    }
 
     try
     {

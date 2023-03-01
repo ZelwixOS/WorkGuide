@@ -13,51 +13,45 @@ namespace WorkGuideBack.Controllers
     public class LessonController : ControllerBase
     {
         private readonly ILogger<LessonController> logger;
-        private ILessonService _lessonService;
+        private ILessonService lessonService;
 
-        public LessonController(ILogger<LessonController> logger, ICourseService _lessonService)
+        public LessonController(ILogger<LessonController> logger, ILessonService lessonService)
         {
             this.logger = logger;
-            _lessonService = _lessonService;
-        }
-
-        [HttpGet]
-        public ActionResult<LessonDto> Get(int page, int itemsOnPage, string? search)
-        {
-            return this.Ok(_lessonService.GetLessons(page, itemsOnPage, search));
+            this.lessonService = lessonService;
         }
 
         [HttpGet("id/{id}")]
         public ActionResult<LessonDto> Get(Guid id)
         {
-            return this.Ok(_lessonService.GetLesson(id));
+            return this.Ok(this.lessonService.GetLesson(id));
         }
 
-        [HttpGet("url/{url}")]
-        public ActionResult<LessonDto> Get(string url)
+        [HttpGet("url/{url}/{lessonNumber}")]
+        public ActionResult<LessonDto> Get(string url, int lessonNumber)
         {
-            return this.Ok(_lessonService.GetLesson(url));
+            return this.Ok(this.lessonService.GetLesson(url, lessonNumber));
         }
 
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<LessonDto>> Create([FromForm] LessonCreateRequestDto lesson)
+        public ActionResult<LessonDto> Create([FromBody] LessonCreateRequestDto lesson)
         {
-            return this.Ok(await _lessonService.CreateLessonAsync(lesson));
+            return this.Ok(this.lessonService.CreateLesson(lesson));
         }
 
         [HttpPut]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<LessonDto>> Update([FromForm] LessonUpdateRequestDto lesson)
+        public ActionResult<LessonDto> Update([FromBody] LessonUpdateRequestDto lesson)
         {
-            return this.Ok(await _lessonService.UpdateLessonAsync(lesson));
+            return this.Ok(this.lessonService.UpdateLesson(lesson));
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public ActionResult<int> Delete(Guid id)
         {
-            return this.Ok(_lessonService.DeleteLesson(id));
+            return this.Ok(this.lessonService.DeleteLesson(id));
         }
     }
 }

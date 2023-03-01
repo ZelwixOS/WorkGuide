@@ -6,6 +6,10 @@
 
         public string Name { get; set; }
 
-        public string Url { get; set; }
+        public int OrderNumber { get; set; }
+
+        public Guid CourseId { get; set; }
+
+        public Course Course { get; set; }
     }
 }

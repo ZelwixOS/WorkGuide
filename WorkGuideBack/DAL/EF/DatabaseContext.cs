@@ -17,6 +17,12 @@ namespace DAL.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Lesson>(entity =>
+            {
+                entity.HasOne(l => l.Course).WithMany(c => c.Lessons).HasForeignKey(l => l.CourseId);
+                entity.HasKey(l => l.Id);
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }

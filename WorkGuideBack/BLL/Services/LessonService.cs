@@ -1,40 +1,22 @@
-﻿using BLL.DTO.Request.Course;
-using BLL.DTO.Request.Lesson;
+﻿using BLL.DTO.Request.Lesson;
 using BLL.DTO.Response;
-using BLL.Helpers;
 using BLL.Interfaces;
-using DAL.Entities;
 using DAL.Interfaces;
 
 namespace BLL.Services
 {
     public class LessonService : ILessonService
     {
-        private ILessonRepository _lessonRepository;
+        private ILessonRepository lessonService;
 
-        public LessonService(ICourseRepository categoryRepository)
+        public LessonService(ILessonRepository lessonRepository)
         {
-            _lessonRepository = _lessonRepository;
-        }
-
-        public PaginatedData<LessonDto> GetLessons(int page, int itemsOnPage, string search)
-        {
-            if (search == "\"\"")
-            {
-                search = null;
-            }
-
-            var lessons = _lessonRepository
-            .GetItems()
-                .Where(s => string.IsNullOrEmpty(search) || s.Name.Contains(search));
-
-            var result = Paginator<Lesson>.ElementsOfPage(lessons, page, itemsOnPage);
-            return new PaginatedData<LessonDto>(result.Data.Select(s => new LessonDto(s)).ToList(), result.CurrentPage, result.MaxPage);
+            this.lessonService = lessonRepository;
         }
 
         public LessonDto GetLesson(Guid id)
         {
-            var lesson = _lessonRepository.GetItem(id);
+            var lesson = this.lessonService.GetItem(id);
             if (lesson != null)
             {
                 return new LessonDto(lesson);
@@ -43,9 +25,9 @@ namespace BLL.Services
             return null;
         }
 
-        public LessonDto GetLesson(string url)
+        public LessonDto GetLesson(string url, int lessonNumber)
         {
-            var lesson = _lessonRepository.GetItem(url);
+            var lesson = this.lessonService.GetItems().FirstOrDefault(l => l.Course.Url == url && l.OrderNumber == lessonNumber);
             if (lesson != null)
             {
                 return new LessonDto(lesson);
@@ -54,21 +36,21 @@ namespace BLL.Services
             return null;
         }
 
-        public async Task<LessonDto> CreateLessonAsync(LessonCreateRequestDto lesson)
+        public LessonDto CreateLesson(LessonCreateRequestDto lesson)
         {
             var les = lesson.ToModel();
-            var res = _lessonRepository.CreateItem(les);
+            var res = this.lessonService.CreateItem(les);
 
             return new LessonDto(res);
         }
 
         public LessonDto PublishService(Guid id)
         {
-            var lesson = _lessonRepository.GetItem(id);
+            var lesson = this.lessonService.GetItem(id);
 
             if (lesson != null)
             {
-                return new LessonDto(_lessonRepository.UpdateItem(lesson));
+                return new LessonDto(this.lessonService.UpdateItem(lesson));
             }
 
             return null;
@@ -76,19 +58,19 @@ namespace BLL.Services
 
         public LessonDto UnpublishService(Guid id)
         {
-            var lesson = this._lessonRepository.GetItem(id);
+            var lesson = this.lessonService.GetItem(id);
 
             if (lesson != null)
             {
-                return new LessonDto(_lessonRepository.UpdateItem(lesson));
+                return new LessonDto(this.lessonService.UpdateItem(lesson));
             }
 
             return null;
         }
 
-        public async Task<LessonDto> UpdateLessonAsync(LessonUpdateRequestDto lesson)
+        public LessonDto UpdateLesson(LessonUpdateRequestDto lesson)
         {
-            var lesEntity = _lessonRepository.GetItem(lesson.Id);
+            var lesEntity = this.lessonService.GetItem(lesson.Id);
 
             if (lesEntity == null)
             {
@@ -96,19 +78,17 @@ namespace BLL.Services
             }
 
             var les = lesson.ToModel();
-
-            lesEntity = null;
-            var lessonEntity = _lessonRepository.UpdateItem(les);
+            var lessonEntity = this.lessonService.UpdateItem(les);
 
             return new LessonDto(lessonEntity);
         }
 
         public int DeleteLesson(Guid id)
         {
-            var lesson = _lessonRepository.GetItem(id);
+            var lesson = this.lessonService.GetItem(id);
             if (lesson != null)
             {
-                return _lessonRepository.DeleteItem(lesson);
+                return this.lessonService.DeleteItem(lesson);
             }
             else
             {

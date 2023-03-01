@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Security.Policy;
 
 namespace WorkGuideBack.Controllers
 {
@@ -14,51 +15,68 @@ namespace WorkGuideBack.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ILogger<CourseController> logger;
-        private ICourseService _courseService;
+        private ICourseService courseService;
 
         public CourseController(ILogger<CourseController> logger, ICourseService courseService)
         {
             this.logger = logger;
-            _courseService = courseService;
+            this.courseService = courseService;
         }
 
         [HttpGet]
         public ActionResult<CourseDto> Get(int page, int itemsOnPage, string? search)
         {
-            return this.Ok(_courseService.GetCourses(page, itemsOnPage, search, true));
+            return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, true));
         }
 
         [HttpGet("id/{id}")]
         public ActionResult<CourseDto> Get(Guid id)
         {
-            return this.Ok(_courseService.GetCourse(id));
+            return this.Ok(this.courseService.GetCourse(id));
         }
 
         [HttpGet("url/{url}")]
         public ActionResult<CourseDto> Get(string url)
         {
-            return this.Ok(_courseService.GetCourse(url));
+            return this.Ok(this.courseService.GetCourse(url));
         }
 
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public async Task<ActionResult<CourseDto>> Create([FromForm] CourseCreateRequestDto course)
         {
-            return this.Ok(await _courseService.CreateCourseAsync(course));
+            return this.Ok(await this.courseService.CreateCourseAsync(course));
         }
 
         [HttpPut]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public async Task<ActionResult<CourseDto>> Update([FromForm] CourseUpdateRequestDto course)
         {
-            return this.Ok(await _courseService.UpdateCourseAsync(course));
+            return this.Ok(await this.courseService.UpdateCourseAsync(course));
+        }
+
+
+        [HttpPost]
+        [Route("publish/{url}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<CourseDto> Publish(string url)
+        {
+            return this.Ok(this.courseService.PublishService(url));
+        }
+
+        [HttpPost]
+        [Route("unpublish/{url}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<CourseDto> Unpublish(string url)
+        {
+            return this.Ok(this.courseService.UnpublishService(url));
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public ActionResult<int> Delete(Guid id)
         {
-            return this.Ok(_courseService.DeleteCourse(id));
+            return this.Ok(this.courseService.DeleteCourse(id));
         }
     }
 }

@@ -12,6 +12,11 @@ namespace BLL.DTO.Response
             this.Url = course.Url;
             this.PicUrl = course.PicUrl;
             this.Published = course.Published;
+
+            if (course.Lessons != null)
+            {
+                Lessons = course.Lessons.Select(l => new LessonDto(l)).ToList();
+            }
         }
 
         public Guid Id { get; set; }
@@ -25,5 +30,7 @@ namespace BLL.DTO.Response
         public string PicUrl { get; set; }
 
         public string Description { get; set; }
+
+        public List<LessonDto> Lessons { get; set; }
     }
 }
