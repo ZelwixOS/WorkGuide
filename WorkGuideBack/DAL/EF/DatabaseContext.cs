@@ -13,9 +13,16 @@ namespace DAL.EF
         }
 
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Lesson>(entity =>
+            {
+                entity.HasOne(l => l.Course).WithMany(c => c.Lessons).HasForeignKey(l => l.CourseId);
+                entity.HasKey(l => l.Id);
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }
