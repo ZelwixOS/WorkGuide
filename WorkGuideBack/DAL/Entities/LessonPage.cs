@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
 
-        public int PageOrder { get; set; }
+        public int PageNumer { get; set; }
 
         public string Content { get; set; }
 
