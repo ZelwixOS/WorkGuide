@@ -1,6 +1,4 @@
-﻿using BLL.DTO.Request.Course;
-
-namespace BLL.DTO.Request.Lesson
+﻿namespace BLL.DTO.Request.Lesson
 {
     public class LessonUpdateRequestDto : LessonRequestDto
     {
