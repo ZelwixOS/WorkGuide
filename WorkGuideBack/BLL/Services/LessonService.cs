@@ -2,12 +2,15 @@
 using BLL.DTO.Response;
 using BLL.Interfaces;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
     public class LessonService : ILessonService
     {
+        private const string PicPath = "ClientApp/lessonsContentPics/";
+
         private ILessonRepository lessonService;
 
         public LessonService(ILessonRepository lessonRepository)
@@ -95,6 +98,20 @@ namespace BLL.Services
             {
                 return 0;
             }
+        }
+
+        public async Task<string> SaveFile(IFormFile picFile)
+        {
+            string picUrl;
+            var format = picFile.FileName.Substring(picFile.FileName.LastIndexOf('.'));
+            picUrl = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + Guid.NewGuid() + format;
+
+            using (var fs = File.Create(PicPath + picUrl))
+            {
+                await picFile.CopyToAsync(fs);
+            }
+
+            return picUrl;
         }
     }
 }
