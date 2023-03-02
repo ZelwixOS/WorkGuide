@@ -67,6 +67,10 @@ namespace WorkGuideBack
                 new TestRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
             services.AddScoped<IAnswerRepository, AnswerRepository>(provider =>
                 new AnswerRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserLessonScoreRepository, UserLessonScoreRepository>(provider =>
+                new UserLessonScoreRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserTestAnswerRepository, UserTestAnswerRepository>(provider =>
+                new UserTestAnswerRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
 
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ICourseService, CourseService>();

@@ -4,6 +4,7 @@ using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BLL.Helpers;
+using BLL.DTO.Request;
 
 namespace WorkGuideBack.Controllers
 {
@@ -13,11 +14,13 @@ namespace WorkGuideBack.Controllers
     {
         private readonly ILogger<TestController> logger;
         private ITestService testService;
+        private IAccountService accountService;
 
-        public TestController(ILogger<TestController> logger, ITestService testService)
+        public TestController(ILogger<TestController> logger, ITestService testService, IAccountService accountService)
         {
             this.logger = logger;
             this.testService = testService;
+            this.accountService = accountService;
         }
 
         [HttpGet("id/{id}")]
@@ -45,6 +48,24 @@ namespace WorkGuideBack.Controllers
         public ActionResult<int> Delete(Guid id)
         {
             return this.Ok(this.testService.DeleteTest(id));
+        }
+
+        [HttpPost("checkAnswer")]
+        public ActionResult<bool> CheckAnswer(TestAnswerDto testAnswer)
+        {
+            return this.Ok(this.testService.CheckAnswer(testAnswer) ?? false);
+        }
+
+        [HttpPost("checkTest")]
+        public async Task<ActionResult<TestResultDto>> CheckAnswerAsync(ComplexTestAnswersDto testAnswers)
+        {
+            var user = await this.accountService.GetCurrentUserAsync(HttpContext);
+            if (user == null)
+            {
+                return this.Ok(null);
+            }
+
+            return this.Ok(this.testService.CheckComplexTest(testAnswers, user.Id));
         }
     }
 }

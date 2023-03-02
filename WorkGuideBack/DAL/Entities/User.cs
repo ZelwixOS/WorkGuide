@@ -21,5 +21,9 @@
         public string? Avatar { get; set; }
 
         public bool Banned { get; set; }
+
+        public HashSet<UserLessonScore> LessonsScore { get; set; }
+
+        public HashSet<UserTestAnswer> TestsAnswers { get; set; }
     }
 }
