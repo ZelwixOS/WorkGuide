@@ -15,5 +15,7 @@
         public HashSet<Theory> TheoryPages { get; set; }
 
         public HashSet<Test> TestPages { get; set; }
+
+        public HashSet<UserLessonScore> UsersLessonScores { get; set; }
     }
 }

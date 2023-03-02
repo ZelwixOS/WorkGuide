@@ -15,11 +15,16 @@ namespace DAL.EF
         public DbSet<Course> Courses { get; set; }
 
         public DbSet<Lesson> Lessons { get; set; }
+
         public DbSet<Test> Tests { get; set; }
+
         public DbSet<Answer> Question { get; set; }
 
-
         public DbSet<Theory> TheoryPages { get; set; }
+
+        public DbSet<UserTestAnswer> UserTestAnswers { get; set; }
+
+        public DbSet<UserLessonScore> UserLessonScores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +49,20 @@ namespace DAL.EF
             modelBuilder.Entity<Answer>(entity =>
             {
                 entity.HasOne(t => t.Test).WithMany(q => q.Answers).HasForeignKey(t => t.TestId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<UserLessonScore>(entity =>
+            {
+                entity.HasOne(u => u.Lesson).WithMany(q => q.UsersLessonScores).HasForeignKey(t => t.LessonId);
+                entity.HasOne(u => u.User).WithMany(q => q.LessonsScore).HasForeignKey(t => t.UserId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<UserTestAnswer>(entity =>
+            {
+                entity.HasOne(u => u.Test).WithMany(q => q.UsersTestAnswers).HasForeignKey(t => t.TestId);
+                entity.HasOne(u => u.User).WithMany(q => q.TestsAnswers).HasForeignKey(t => t.UserId);
                 entity.HasKey(q => q.Id);
             });
 
