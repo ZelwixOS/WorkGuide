@@ -10,9 +10,9 @@ namespace BLL.DTO.Response
 
             this.Content = test.Content;
 
-            if (test.Question != null)
+            if (test.Answers != null)
             {
-
+                this.Answers = test.Answers.Select(a => new AnswerDto(a)).ToList();
             }
         }
 

@@ -4,6 +4,7 @@ using DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230302171201_Test")]
+    partial class Test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -364,7 +366,7 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Entities.Answer", b =>
                 {
                     b.HasOne("DAL.Entities.Test", "Test")
-                        .WithMany("Answers")
+                        .WithMany("Question")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -386,7 +388,7 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Entities.Test", b =>
                 {
                     b.HasOne("DAL.Entities.Lesson", "Lesson")
-                        .WithMany("TestPages")
+                        .WithMany()
                         .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -463,14 +465,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Lesson", b =>
                 {
-                    b.Navigation("TestPages");
-
                     b.Navigation("TheoryPages");
                 });
 
             modelBuilder.Entity("DAL.Entities.Test", b =>
                 {
-                    b.Navigation("Answers");
+                    b.Navigation("Question");
                 });
 #pragma warning restore 612, 618
         }

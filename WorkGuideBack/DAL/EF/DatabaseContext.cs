@@ -34,10 +34,16 @@ namespace DAL.EF
                 entity.HasOne(t => t.Lesson).WithMany(l => l.TheoryPages).HasForeignKey(t => t.LessonId);
                 entity.HasKey(t => t.Id);
             });
-            
+
+            modelBuilder.Entity<Test>(entity =>
+            {
+                entity.HasOne(t => t.Lesson).WithMany(q => q.TestPages).HasForeignKey(t => t.LessonId);
+                entity.HasKey(q => q.Id);
+            });
+
             modelBuilder.Entity<Answer>(entity =>
             {
-                entity.HasOne(t => t.Test).WithMany(q => q.Question).HasForeignKey(t => t.TestId);
+                entity.HasOne(t => t.Test).WithMany(q => q.Answers).HasForeignKey(t => t.TestId);
                 entity.HasKey(q => q.Id);
             });
 
