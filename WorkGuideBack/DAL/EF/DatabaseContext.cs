@@ -15,6 +15,9 @@ namespace DAL.EF
         public DbSet<Course> Courses { get; set; }
 
         public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Answer> Question { get; set; }
+
 
         public DbSet<Theory> TheoryPages { get; set; }
 
@@ -30,6 +33,12 @@ namespace DAL.EF
             {
                 entity.HasOne(t => t.Lesson).WithMany(l => l.TheoryPages).HasForeignKey(t => t.LessonId);
                 entity.HasKey(t => t.Id);
+            });
+            
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.HasOne(t => t.Test).WithMany(q => q.Question).HasForeignKey(t => t.TestId);
+                entity.HasKey(q => q.Id);
             });
 
             base.OnModelCreating(modelBuilder);
