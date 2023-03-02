@@ -5,6 +5,7 @@ using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BLL.Helpers;
+using BLL.DTO.Request;
 
 namespace WorkGuideBack.Controllers
 {
@@ -52,6 +53,13 @@ namespace WorkGuideBack.Controllers
         public ActionResult<int> Delete(Guid id)
         {
             return this.Ok(this.lessonService.DeleteLesson(id));
+        }
+
+        [HttpPost("picture")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public async Task<ActionResult<string>> UploadLessonPicture([FromForm] PictureRequest picture)
+        {
+            return this.Ok(await this.lessonService.SaveFile(picture?.Picture));
         }
     }
 }

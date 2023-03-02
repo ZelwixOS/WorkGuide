@@ -13,7 +13,13 @@ namespace DAL.EF
         }
 
         public DbSet<Course> Courses { get; set; }
+
         public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Answer> Question { get; set; }
+
+
+        public DbSet<Theory> TheoryPages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +27,24 @@ namespace DAL.EF
             {
                 entity.HasOne(l => l.Course).WithMany(c => c.Lessons).HasForeignKey(l => l.CourseId);
                 entity.HasKey(l => l.Id);
+            });
+
+            modelBuilder.Entity<Theory>(entity =>
+            {
+                entity.HasOne(t => t.Lesson).WithMany(l => l.TheoryPages).HasForeignKey(t => t.LessonId);
+                entity.HasKey(t => t.Id);
+            });
+
+            modelBuilder.Entity<Test>(entity =>
+            {
+                entity.HasOne(t => t.Lesson).WithMany(q => q.TestPages).HasForeignKey(t => t.LessonId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.HasOne(t => t.Test).WithMany(q => q.Answers).HasForeignKey(t => t.TestId);
+                entity.HasKey(q => q.Id);
             });
 
             base.OnModelCreating(modelBuilder);

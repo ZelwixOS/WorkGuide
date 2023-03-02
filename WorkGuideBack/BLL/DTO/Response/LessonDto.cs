@@ -15,6 +15,16 @@ namespace BLL.DTO.Response
                 this.CourseUrl = lesson.Course.Url;
                 this.CourseName = lesson.Course.Name;
             }
+
+            if (lesson.TheoryPages != null)
+            {
+                this.TheoryPages = lesson.TheoryPages.Select(t => new TheoryDto(t)).ToList();
+            }
+
+            if (lesson.TestPages != null)
+            {
+                this.TestPage = lesson.TestPages.Select(t => new TestDto(t)).ToList();
+            }
         }
 
         public Guid Id { get; set; }
@@ -26,5 +36,9 @@ namespace BLL.DTO.Response
         public string CourseUrl { get; set; }
 
         public string CourseName { get; set; }
+
+        public List<TheoryDto> TheoryPages { get; set; }
+
+        public List<TestDto> TestPage { get; set; }
     }
 }

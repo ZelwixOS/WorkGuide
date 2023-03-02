@@ -2,11 +2,15 @@
 using BLL.DTO.Response;
 using BLL.Interfaces;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
     public class LessonService : ILessonService
     {
+        private const string PicPath = "ClientApp/lessonsContentPics/";
+
         private ILessonRepository lessonService;
 
         public LessonService(ILessonRepository lessonRepository)
@@ -27,7 +31,11 @@ namespace BLL.Services
 
         public LessonDto GetLesson(string url, int lessonNumber)
         {
-            var lesson = this.lessonService.GetItems().FirstOrDefault(l => l.Course.Url == url && l.OrderNumber == lessonNumber);
+            var lesson = this.lessonService.GetItems()
+                .Include(l => l.TheoryPages)
+                .Include(l => l.TestPages)
+                    .ThenInclude(t => t.Answers)
+                .FirstOrDefault(l => l.Course.Url == url && l.OrderNumber == lessonNumber);
             if (lesson != null)
             {
                 return new LessonDto(lesson);
@@ -94,6 +102,20 @@ namespace BLL.Services
             {
                 return 0;
             }
+        }
+
+        public async Task<string> SaveFile(IFormFile picFile)
+        {
+            string picUrl;
+            var format = picFile.FileName.Substring(picFile.FileName.LastIndexOf('.'));
+            picUrl = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + Guid.NewGuid() + format;
+
+            using (var fs = File.Create(PicPath + picUrl))
+            {
+                await picFile.CopyToAsync(fs);
+            }
+
+            return picUrl;
         }
     }
 }
