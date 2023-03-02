@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import CoursePage from './Components/Course/CoursePage';
+import CourseListPage from './Components/CourseListPage/CourseListPage';
 
 function App() {
   return (
@@ -9,7 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<h2>Главная</h2>} />
           <Route path="/courses">
-            <Route index element={<h2>Список курсов</h2>} />
+            <Route index element={<CourseListPage />} />
             <Route path=":url" element={<CoursePage />} />
           </Route>
           <Route path="*" element={<h2>Ресурс не найден</h2>} />
