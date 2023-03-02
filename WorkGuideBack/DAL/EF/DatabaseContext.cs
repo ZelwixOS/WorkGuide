@@ -13,7 +13,10 @@ namespace DAL.EF
         }
 
         public DbSet<Course> Courses { get; set; }
+
         public DbSet<Lesson> Lessons { get; set; }
+
+        public DbSet<Theory> TheoryPages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +24,12 @@ namespace DAL.EF
             {
                 entity.HasOne(l => l.Course).WithMany(c => c.Lessons).HasForeignKey(l => l.CourseId);
                 entity.HasKey(l => l.Id);
+            });
+
+            modelBuilder.Entity<Theory>(entity =>
+            {
+                entity.HasOne(t => t.Lesson).WithMany(l => l.TheoryPages).HasForeignKey(t => t.LessonId);
+                entity.HasKey(t => t.Id);
             });
 
             base.OnModelCreating(modelBuilder);

@@ -2,6 +2,7 @@
 using BLL.DTO.Response;
 using BLL.Interfaces;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
@@ -27,7 +28,7 @@ namespace BLL.Services
 
         public LessonDto GetLesson(string url, int lessonNumber)
         {
-            var lesson = this.lessonService.GetItems().FirstOrDefault(l => l.Course.Url == url && l.OrderNumber == lessonNumber);
+            var lesson = this.lessonService.GetItems().Include(l => l.TheoryPages).FirstOrDefault(l => l.Course.Url == url && l.OrderNumber == lessonNumber);
             if (lesson != null)
             {
                 return new LessonDto(lesson);

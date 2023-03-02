@@ -11,5 +11,7 @@
         public Guid CourseId { get; set; }
 
         public Course Course { get; set; }
+
+        public HashSet<Theory> TheoryPages { get; set; }
     }
 }

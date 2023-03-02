@@ -61,9 +61,12 @@ namespace WorkGuideBack
                 new UserRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
             services.AddScoped<ILessonRepository, LessonRepository>(provider =>
                 new LessonRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<ITheoryRepository, TheoryRepository>(provider =>
+                new TheoryRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
 
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ITheoryService, TheoryService>();
         }
     }
 }
