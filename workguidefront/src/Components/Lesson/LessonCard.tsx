@@ -1,4 +1,5 @@
 import { Badge, Card, Col, Row } from "react-bootstrap";
+import { PatchCheck, PatchCheckFill } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "../../theme";
 import Lesson from "../../Types/Lesson";
@@ -23,30 +24,9 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: '0.375rem'
   },
   primaryFont: {
+    marginLeft: '0.5rem',
+    textAlign: 'left',
     fontSize: 'calc(0.5rem + 1vw)'
-  },
-  secondaryFont: {
-    fontSize: 'calc(0.5rem + 1vw)',
-    color: 'white',
-    fontWeight: 'bold'
-  },
-  numberContainer: {
-    backgroundColor: 'lightgray',
-    textAlign: 'center',
-    borderRadius: '0.375rem'
-  },
-  completionContainer: {
-    borderRadius: '0.375rem',
-    position: 'absolute',
-    right: '0',
-    width: '5px',
-    height: '100%'
-  },
-  complete: {
-    backgroundColor: 'green'
-  },
-  incomplete: {
-    backgroundColor: 'red'
   }
 }))
 
@@ -54,23 +34,20 @@ const LessonCard = (props: ILessonCard) => {
   const { classes, cx } = useStyles();
   const navigate = useNavigate();
   const onLessonClick = () => {
-    navigate(`/lesson/url/${props.lesson.courseUrl}/${props.lesson.orderNumber}`);
+    navigate(`${props.lesson.orderNumber}`);
   }
 
   return (
-    <Card className={`shadow mb-1 ${props.useAnimation ? classes.animated : null}`} onClick={() => onLessonClick()}>
-      <Row>
+    <Card className={`shadow mb-1 ${props.useAnimation ? classes.animated : null} d-flex-row align-items-left`} onClick={() => onLessonClick()}>
+      <Row className='my-3'>
         <Col md={1}>
-          <div className={`${classes.secondaryFont} ${classes.numberContainer}`}>
-            {props.lesson.orderNumber}
-          </div>
+          <Badge pill className={`${classes.primaryFont} mt-1`} bg='success'>{props.lesson?.orderNumber}</Badge>
         </Col>
-        <Col md={1}></Col>
         <Col>
-          <Card.Title className={classes.primaryFont}>{props.lesson?.name}</Card.Title>
+          <Card.Title className={`${classes.primaryFont} mt-2`}>{props.lesson?.name}</Card.Title>
         </Col>
+        <Col md={1}>{props.lesson.orderNumber % 2 === 0 ? <PatchCheckFill color="green" size={42}/> : <PatchCheckFill color="#BABABA" size={42}/>}</Col>
       </Row>
-        <div className={`${classes.completionContainer} ${props.lesson.orderNumber % 2 == 0 ? classes.complete : classes.incomplete}`}></div>
     </Card>
   );
 }

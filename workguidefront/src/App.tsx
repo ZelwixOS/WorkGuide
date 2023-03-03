@@ -12,8 +12,8 @@ function App() {
           <Route path="/courses">
             <Route index element={<CourseListPage />} />
             <Route path=":url" element={<CoursePage />} />
+            <Route path=":url/:lessonNumber" element={<h2>url</h2>} />
           </Route>
-          <Route path="/lesson/url/:url/:lessonNumber" element={<h2>url</h2>} />
           <Route path="*" element={<h2>Ресурс не найден</h2>} />
         </Routes>
       </div>
