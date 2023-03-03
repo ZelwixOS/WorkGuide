@@ -29,7 +29,7 @@ const TestQuestion = (props: ITestQuestion) => {
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     props.onChanged(props.test.id, event.currentTarget.id)
   }
-
+  
   return (
     <Card
       className={`shadow mb-1 d-flex-row align-items-left ${

@@ -7,7 +7,7 @@ namespace BLL.DTO.Response
         public TestDto(Test test)
         {
             this.Id = test.Id;
-
+            this.PageNumber = test.PageNumer;
             this.Content = test.Content;
 
             if (test.Answers != null)

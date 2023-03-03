@@ -8,6 +8,7 @@ interface ILessonCard {
   lesson: Lesson
   useAnimation?: boolean
   hideCompletion?: boolean
+  dontGoTo?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -35,7 +36,8 @@ const LessonCard = (props: ILessonCard) => {
   const { classes, cx } = useStyles()
   const navigate = useNavigate()
   const onLessonClick = () => {
-    navigate(`${props.lesson.orderNumber}`)
+    if (!props.dontGoTo)
+      navigate(`${props.lesson.orderNumber}`)
   }
 
   return (

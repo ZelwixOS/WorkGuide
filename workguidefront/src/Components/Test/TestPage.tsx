@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Button, Card, Container } from 'react-bootstrap'
+import {  Container } from 'react-bootstrap'
 import { makeStyles } from '../../theme'
 import Test from '../../Types/Test'
 import LessonCard from '../Lesson/LessonCard'
@@ -35,7 +34,7 @@ const TestPage = (props: ITestPage) => {
           courseUrl: props.test.courseUrl,
           courseName: '',
           theoryPages: [],
-          testPage: [],
+          testPages: [],
         }}
         hideCompletion
       />
