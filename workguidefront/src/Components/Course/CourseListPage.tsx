@@ -6,6 +6,7 @@ import { getCourses } from "../../Request/GetRequests";
 import { makeStyles } from "../../theme";
 import Course from "../../Types/Course";
 import Loading from "../Common/Loading";
+import Paginate from "../Common/Paginate";
 import CourseCard from "./CourseCard";
 
 const useStyles = makeStyles()((theme) => ({
@@ -42,11 +43,8 @@ const CourseListPage = () => {
   const itemsOnPage = 10;
   let isMounted = true
 
-  const openMainPageClick = () => {
-    navigate(`/`);
-  }
-
   const getCoursesForPage = async (isMounted: boolean) => {
+    setLoading(true);
     const res = await getCourses(
       page,
       itemsOnPage
@@ -58,9 +56,12 @@ const CourseListPage = () => {
     }
   }
 
-  useEffect(() => {
+  const changePage = (page: number) => {
+    setPage(page);
+    getCoursesForPage(isMounted);
+  }
 
-    setLoading(true);
+  useEffect(() => {
     getCoursesForPage(isMounted);
 
     return () => {
@@ -75,29 +76,7 @@ const CourseListPage = () => {
       {isLoading ? <Loading /> : courses.map(course => <CourseCard key={course.id} course={course} listItem />)}
 
       <Row className={classes.backButtons}>
-        <Row>
-          {isLoading || maxPage <= 1 ? null : <ReactPaginate
-            initialPage={page - 1}
-            nextLabel=">"
-            onPageChange={(e) => setPage(e.selected + 1)}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={1}
-            pageCount={maxPage}
-            previousLabel="<"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            breakLabel="..."
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination d-flex justify-content-center"
-            activeClassName="active"
-            renderOnZeroPageCount={() => null}
-          />}
-        </Row>
+        <Paginate initialPage={page} maxPage={maxPage} onPageChange={changePage} loading={isLoading} />
       </Row>
     </Container>
   );

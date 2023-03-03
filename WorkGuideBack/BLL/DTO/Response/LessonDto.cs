@@ -23,7 +23,7 @@ namespace BLL.DTO.Response
 
             if (lesson.TestPages != null)
             {
-                this.TestPage = lesson.TestPages.Select(t => new TestDto(t)).ToList();
+                this.TestPages = lesson.TestPages.Select(t => new TestDto(t)).ToList();
             }
         }
 
@@ -39,6 +39,6 @@ namespace BLL.DTO.Response
 
         public List<TheoryDto> TheoryPages { get; set; }
 
-        public List<TestDto> TestPage { get; set; }
+        public List<TestDto> TestPages { get; set; }
     }
 }
