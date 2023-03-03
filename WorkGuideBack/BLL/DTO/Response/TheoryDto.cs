@@ -12,7 +12,7 @@ namespace BLL.DTO.Response
         public TheoryDto(Theory theory)
         {
             this.Id = theory.Id;
-            this.PageNumer = theory.PageNumer;
+            this.PageNumber = theory.PageNumer;
 
             if (theory.Lesson != null)
             {
@@ -28,7 +28,7 @@ namespace BLL.DTO.Response
 
         public Guid Id { get; set; }
 
-        public int PageNumer { get; set; }
+        public int PageNumber { get; set; }
 
         public string Content { get; set; }
 

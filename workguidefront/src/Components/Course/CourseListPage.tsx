@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { getCourses } from "../../Request/GetRequests";
 import Course from "../../Types/Course";
-import CourseCard from "../CourseCard/CourseCard";
+import CourseCard from "./CourseCard";
 
 const CourseListPage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
