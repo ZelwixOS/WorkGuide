@@ -8,7 +8,7 @@ type Lesson = {
   courseUrl: string;
   courseName: string;
   theoryPages: Theory[];
-  testPage: Test[];
+  testPages: Test[];
 };
 
 export default Lesson;

@@ -1,5 +1,5 @@
 import { Badge, Card, Col, Row } from 'react-bootstrap'
-import { PatchCheck, PatchCheckFill } from 'react-bootstrap-icons'
+import { PatchCheckFill } from 'react-bootstrap-icons'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '../../theme'
 import Lesson from '../../Types/Lesson'
@@ -39,13 +39,8 @@ const LessonCard = (props: ILessonCard) => {
   }
 
   return (
-    <Card
-      className={`shadow mb-1 ${
-        props.useAnimation ? classes.animated : null
-      } d-flex-row align-items-left`}
-      onClick={() => onLessonClick()}
-    >
-      <Row className="my-3">
+    <Card className={`shadow mb-1 ${props.useAnimation ? classes.animated : null}`} onClick={() => onLessonClick()}>
+      <Row className='my-3'>
         <Col md={1}>
           <Badge pill className={`${classes.primaryFont} mt-1`} bg="success">
             {props.lesson?.orderNumber}
