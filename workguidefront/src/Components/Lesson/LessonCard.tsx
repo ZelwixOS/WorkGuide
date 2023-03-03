@@ -1,12 +1,12 @@
 import { Badge, Card, Col, Row } from "react-bootstrap";
-import { PatchCheck, PatchCheckFill } from "react-bootstrap-icons";
+import { PatchCheckFill } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "../../theme";
 import Lesson from "../../Types/Lesson";
 
 interface ILessonCard {
   lesson: Lesson;
-  useAnimation?: boolean;
+  listItem?: boolean;
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -38,7 +38,7 @@ const LessonCard = (props: ILessonCard) => {
   }
 
   return (
-    <Card className={`shadow mb-1 ${props.useAnimation ? classes.animated : null} d-flex-row align-items-left`} onClick={() => onLessonClick()}>
+    <Card className={`shadow mb-1 ${props.listItem ? classes.animated : null}`} onClick={() => onLessonClick()}>
       <Row className='my-3'>
         <Col md={1}>
           <Badge pill className={`${classes.primaryFont} mt-1`} bg='success'>{props.lesson?.orderNumber}</Badge>
@@ -46,7 +46,7 @@ const LessonCard = (props: ILessonCard) => {
         <Col>
           <Card.Title className={`${classes.primaryFont} mt-2`}>{props.lesson?.name}</Card.Title>
         </Col>
-        <Col md={1}>{props.lesson.orderNumber % 2 === 0 ? <PatchCheckFill color="green" size={42}/> : <PatchCheckFill color="#BABABA" size={42}/>}</Col>
+        {props.listItem ? (<Col md={1}>{props.lesson.orderNumber % 2 === 0 ? <PatchCheckFill color="green" size={42}/> : <PatchCheckFill color="#BABABA" size={42}/>}</Col>) : null}
       </Row>
     </Card>
   );

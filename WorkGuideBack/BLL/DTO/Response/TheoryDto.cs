@@ -13,6 +13,7 @@ namespace BLL.DTO.Response
         {
             this.Id = theory.Id;
             this.PageNumber = theory.PageNumer;
+            this.Content = theory.Content;
 
             if (theory.Lesson != null)
             {
