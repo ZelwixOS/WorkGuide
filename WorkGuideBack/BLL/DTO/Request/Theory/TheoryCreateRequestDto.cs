@@ -9,7 +9,6 @@
                 PageNumer = this.PageNumer,
                 Content = this.Content,
                 LessonId = this.LessonId,
-
             };
         }
     }

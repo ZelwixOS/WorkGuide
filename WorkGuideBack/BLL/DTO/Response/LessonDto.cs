@@ -27,6 +27,15 @@ namespace BLL.DTO.Response
             }
         }
 
+        public LessonDto(Lesson lesson, Guid userId)
+            : this(lesson)
+        {
+            if (lesson.UsersLessonScores != null)
+            {
+                lesson.UsersLessonScores.First(i => i.UserId == userId);
+            }
+        }
+
         public Guid Id { get; set; }
 
         public string Name { get; set; }
@@ -36,6 +45,10 @@ namespace BLL.DTO.Response
         public string CourseUrl { get; set; }
 
         public string CourseName { get; set; }
+
+        public bool Finished { get; set; }
+
+        public TestResultDto TestResult { get; set; }
 
         public List<TheoryDto> TheoryPages { get; set; }
 

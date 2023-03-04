@@ -32,6 +32,7 @@ namespace BLL.Services
         public LessonDto GetLesson(string url, int lessonNumber)
         {
             var lesson = this.lessonService.GetItems()
+                .Include(l => l.Course)
                 .Include(l => l.TheoryPages)
                 .Include(l => l.TestPages)
                     .ThenInclude(t => t.Answers)
