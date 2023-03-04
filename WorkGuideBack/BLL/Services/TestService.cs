@@ -83,7 +83,7 @@ namespace BLL.Services
             }
 
             int correct = 0;
-            int total = complexTest.Answers.Count;
+            int total = lesson.TestPages.Count;
             bool? result;
 
             var existingResult = this.userLessonScoreRepository.GetItems().FirstOrDefault(u => u.UserId == userId && u.LessonId == lesson.Id);

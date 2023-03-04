@@ -7,6 +7,7 @@ interface ITestQuestion extends HTMLAttributes<null> {
   test: Test
   onChanged: (testId: string, answerId: string) => void
   wrongAnswer?: boolean
+  pickedAnswer?: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -56,6 +57,7 @@ const TestQuestion = (props: ITestQuestion) => {
             <Form.Check
               id={answer.id}
               key={answer.id}
+              checked={props.pickedAnswer === answer.id}
               type="radio"
               name={props.test.id}
               label={answer.content}
