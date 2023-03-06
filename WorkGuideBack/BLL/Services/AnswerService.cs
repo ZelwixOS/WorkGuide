@@ -7,16 +7,16 @@ namespace BLL.Services
 {
     public class AnswerService : IAnswerService
     {
-        private IAnswerRepository answerService;
+        private IAnswerRepository answerRepository;
 
         public AnswerService(IAnswerRepository answerRepository)
         {
-            this.answerService = answerRepository;
+            this.answerRepository = answerRepository;
         }
 
         public AnswerDto GetAnswer(Guid id)
         {
-            var answer = this.answerService.GetItem(id);
+            var answer = this.answerRepository.GetItem(id);
             if (answer != null)
             {
                 return new AnswerDto(answer);
@@ -28,14 +28,14 @@ namespace BLL.Services
         public AnswerDto CreateAnswer(AnswerCreateRequestDto answer)
         {
             var answerMod = answer.ToModel();
-            var res = this.answerService.CreateItem(answerMod);
+            var res = this.answerRepository.CreateItem(answerMod);
 
             return new AnswerDto(res);
         }
 
         public AnswerDto UpdateAnswer(AnswerUpdateRequestDto answer)
         {
-            var answEntity = this.answerService.GetItem(answer.Id);
+            var answEntity = this.answerRepository.GetItem(answer.Id);
 
             if (answEntity == null)
             {
@@ -43,17 +43,17 @@ namespace BLL.Services
             }
 
             var answerMod = answer.ToModel();
-            var answerEntity = this.answerService.UpdateItem(answerMod);
+            var answerEntity = this.answerRepository.UpdateItem(answerMod);
 
             return new AnswerDto(answerEntity);
         }
 
         public int DeleteAnswer(Guid id)
         {
-            var answer = this.answerService.GetItem(id);
+            var answer = this.answerRepository.GetItem(id);
             if (answer != null)
             {
-                return this.answerService.DeleteItem(answer);
+                return this.answerRepository.DeleteItem(answer);
             }
             else
             {
