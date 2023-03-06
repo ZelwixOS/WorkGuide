@@ -79,6 +79,7 @@ namespace WorkGuideBack
             services.AddScoped<IAnswerService, AnswerService>();
             services.AddScoped<ITheoryService, TheoryService>();
             services.AddScoped<ITestService, TestService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
