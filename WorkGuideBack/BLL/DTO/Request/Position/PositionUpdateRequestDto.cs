@@ -8,6 +8,7 @@
         {
             return new DAL.Entities.Position()
             {
+                Id = this.Id,
                 Title = this.Title
             };
         }
