@@ -26,6 +26,10 @@ namespace DAL.EF
 
         public DbSet<UserLessonScore> UserLessonScores { get; set; }
 
+        public DbSet<Position> Positions { get; set; }
+
+        public DbSet<PositionCourse> PositionCources { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lesson>(entity =>
@@ -64,6 +68,19 @@ namespace DAL.EF
                 entity.HasOne(u => u.Test).WithMany(q => q.UsersTestAnswers).HasForeignKey(t => t.TestId);
                 entity.HasOne(u => u.User).WithMany(q => q.TestsAnswers).HasForeignKey(t => t.UserId);
                 entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<PositionCourse>(entity =>
+            {
+                entity.HasOne(c => c.Course).WithMany(p => p.PositionCources).HasForeignKey(c => c.CourceId);
+                entity.HasOne(p => p.Position).WithMany(p => p.PositionCources).HasForeignKey(p => p.PositionId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasOne(u => u.Position).WithMany(p => p.User).HasForeignKey(u => u.PositionId);
+                entity.HasKey(u => u.Id);
             });
 
             base.OnModelCreating(modelBuilder);

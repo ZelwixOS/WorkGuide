@@ -13,5 +13,7 @@ namespace BLL.Interfaces
         CourseDto PublishService(string url);
         CourseDto UnpublishService(string url);
         Task<CourseDto> UpdateCourseAsync(CourseUpdateRequestDto course);
+        CourseDto AddPosition(Guid id, Guid positionId);
+        bool DeletePosition(Guid id, Guid positionId);
     }
 }

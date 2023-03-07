@@ -4,6 +4,7 @@ using BLL.Helpers;
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BLL.Services
 {
@@ -12,6 +13,8 @@ namespace BLL.Services
         private const string PicPath = "ClientApp/coursePics/";
 
         private ICourseRepository _courseRepository;
+        private IPositionRepository positionRepository;
+        private IPositionCourseRepository positionCourseRepository;
 
         public CourseService(ICourseRepository categoryRepository)
         {
@@ -152,6 +155,60 @@ namespace BLL.Services
             {
                 return 0;
             }
+        }
+
+        public CourseDto AddPosition(Guid id, Guid positionId)
+        {
+            var course = this._courseRepository.GetItem(id);
+            var position = positionRepository.GetItem(positionId);
+
+            if (course == null || position == null)
+            {
+                return null;
+            }
+
+            PositionCourse positionCourse = positionCourseRepository.GetItems()
+                .FirstOrDefault(i => i.CourceId == id && i.PositionId == positionId);
+
+            if (positionCourse != null)
+            {
+                return new CourseDto(course);
+            }
+
+            positionCourse = new PositionCourse() 
+            {
+                PositionId = positionId, 
+                CourceId = id, 
+                Position = position, 
+                Course = course
+
+            };
+
+            positionCourseRepository.CreateItem(positionCourse);
+            course.PositionCources.Add(positionCourse);
+
+            return new CourseDto(course);
+        }
+
+        public bool DeletePosition(Guid id, Guid positionId)
+        {
+            var course = this._courseRepository.GetItem(id);
+            var position = positionRepository.GetItem(positionId);
+
+            if (course == null || position == null)
+            {
+                return false;
+            }
+
+            PositionCourse positionCourse = positionCourseRepository.GetItems()
+                .FirstOrDefault(i => i.CourceId == id && i.PositionId == positionId);
+
+            if (positionCourse == null)
+            {
+                return false;
+            }
+
+            return course.PositionCources.Remove(positionCourse);
         }
     }
 }

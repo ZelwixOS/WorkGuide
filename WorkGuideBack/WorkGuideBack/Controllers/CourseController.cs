@@ -78,5 +78,19 @@ namespace WorkGuideBack.Controllers
         {
             return this.Ok(this.courseService.DeleteCourse(id));
         }
+
+        [HttpDelete("{id}/{positionId}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<bool> DeletePosition(Guid id, Guid positionId)
+        {
+            return this.Ok(this.courseService.DeletePosition(id, positionId));
+        }
+
+        [HttpPost("{id}/{positionId}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<CourseDto> AddPosition(Guid id, Guid positionId)
+        {
+            return this.Ok(this.courseService.AddPosition(id, positionId));
+        }
     }
 }
