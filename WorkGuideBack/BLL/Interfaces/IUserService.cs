@@ -11,6 +11,6 @@ namespace BLL.Interfaces
 
         public UserInfo UpdatePosition(Guid id, Guid positionId);
 
-        public Task<UserInfo> UpdateUserAsync(UserUpdateRequestDto userInfo);
+        public Task<UserInfo> UpdateUserAsync(UserUpdateRequestDto userInfo, Guid userId);
     }
 }
