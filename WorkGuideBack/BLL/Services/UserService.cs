@@ -1,7 +1,10 @@
-﻿using BLL.DTO.Response.Account;
+﻿using BLL.DTO.Request.Account;
+using BLL.DTO.Response;
+using BLL.DTO.Response.Account;
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace BLL.Services
 {
@@ -9,11 +12,13 @@ namespace BLL.Services
     {
         private IUserRepository userRepository;
         private IPositionRepository positionRepository;
+        private UserManager<User> userManager;
 
-        public UserService(IUserRepository userRepository, IPositionRepository positionRepository)
+        public UserService(IUserRepository userRepository, IPositionRepository positionRepository, UserManager<User> userManager)
         {
             this.userRepository = userRepository;
             this.positionRepository = positionRepository;
+            this.userManager = userManager;
         }
 
         public List<UserInfo> GetUsersInfo(string request, int count)
@@ -69,6 +74,44 @@ namespace BLL.Services
             user.Position = position;
 
             return new UserInfo(this.userRepository.UpdateUser(user));
+        }
+
+        public async Task<UserInfo> UpdateUserAsync(UserUpdateRequestDto userInfo)
+        {
+            var usEntity = this.userRepository.GetItem(userInfo.Id);
+
+            if (usEntity == null)
+            {
+                return null;
+            }
+
+            var us = userInfo.ToModel();
+            us.Position = usEntity.Position;
+            us.PositionId = usEntity.PositionId;
+            us.Avatar = usEntity.Avatar;
+            us.Banned = usEntity.Banned;
+            us.FirstName = usEntity.FirstName;
+            us.LessonsScore = usEntity.LessonsScore;
+            us.SecondName = usEntity.SecondName;
+            us.TestsAnswers = usEntity.TestsAnswers;
+            us.AccessFailedCount = usEntity.AccessFailedCount;
+            us.ConcurrencyStamp = usEntity.ConcurrencyStamp;
+            us.EmailConfirmed = usEntity.EmailConfirmed;
+            us.Id = usEntity.Id;
+            us.LockoutEnabled = usEntity.LockoutEnabled;
+            us.LockoutEnd = usEntity.LockoutEnd;
+            us.NormalizedEmail = usEntity.NormalizedEmail;
+            us.NormalizedUserName = usEntity.NormalizedUserName;
+            us.PasswordHash = usEntity.PasswordHash;
+            us.PhoneNumberConfirmed = usEntity.PhoneNumberConfirmed;
+            us.UserName = usEntity.UserName;
+            us.SecurityStamp = usEntity.SecurityStamp;
+            us.TwoFactorEnabled = usEntity.TwoFactorEnabled;
+
+
+            var res = await this.userManager.UpdateAsync(us);
+            
+            return res.Succeeded ? new UserInfo(us) : null;
         }
     }
 }
