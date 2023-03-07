@@ -10,6 +10,12 @@ namespace BLL.Services
         private IUserRepository userRepository;
         private IPositionRepository positionRepository;
 
+        public UserService(IUserRepository userRepository, IPositionRepository positionRepository)
+        {
+            this.userRepository = userRepository;
+            this.positionRepository = positionRepository;
+        }
+
         public List<UserInfo> GetUsersInfo(string request, int count)
         {
             string[] words = request.Split(' ');
@@ -49,7 +55,7 @@ namespace BLL.Services
             return new UserInfo(user);
         }
 
-        public User UpdatePosition(Guid id, Guid positionId)
+        public UserInfo UpdatePosition(Guid id, Guid positionId)
         {
             var user = this.userRepository.GetItem(id);
             var position = this.positionRepository.GetItem(positionId);
@@ -62,7 +68,7 @@ namespace BLL.Services
             user.PositionId = position.Id;
             user.Position = position;
 
-            return this.userRepository.UpdateUser(user);
+            return new UserInfo(this.userRepository.UpdateUser(user));
         }
     }
 }

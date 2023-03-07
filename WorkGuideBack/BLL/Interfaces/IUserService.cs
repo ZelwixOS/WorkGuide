@@ -9,6 +9,6 @@ namespace BLL.Interfaces
 
         public UserInfo GetUserInfo(Guid id);
 
-        public User UpdatePosition(Guid id, Guid positionId);
+        public UserInfo UpdatePosition(Guid id, Guid positionId);
     }
 }
