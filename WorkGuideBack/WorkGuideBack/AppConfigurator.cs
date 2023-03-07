@@ -71,6 +71,10 @@ namespace WorkGuideBack
                 new UserLessonScoreRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
             services.AddScoped<IUserTestAnswerRepository, UserTestAnswerRepository>(provider =>
                 new UserTestAnswerRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IPositionCourseRepository, PositionCourseRepository>( provider =>
+                new PositionCourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IPositionRepository, PositionRepository>(provider =>
+                new PositionRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
 
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ICourseService, CourseService>();
@@ -80,6 +84,7 @@ namespace WorkGuideBack
             services.AddScoped<ITheoryService, TheoryService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPositionService, PositionService>();
         }
     }
 }

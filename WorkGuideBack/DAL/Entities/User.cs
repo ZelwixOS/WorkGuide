@@ -25,5 +25,9 @@
         public HashSet<UserLessonScore> LessonsScore { get; set; }
 
         public HashSet<UserTestAnswer> TestsAnswers { get; set; }
+
+        public Guid PositionId { get; set; }
+
+        public Position Position { get; set; }
     }
 }

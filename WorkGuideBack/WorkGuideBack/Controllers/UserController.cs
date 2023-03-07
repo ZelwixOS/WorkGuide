@@ -1,6 +1,9 @@
 ﻿using BLL.DTO.Request;
 using BLL.DTO.Response.Account;
+using BLL.Helpers;
 using BLL.Interfaces;
+using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +32,13 @@ namespace WorkGuideBack.Controllers
         public ActionResult<List<UserInfo>> SearchUser(Guid id)
         {
             return this.Ok(this.userService.GetUserInfo(id));
+        }
+
+        [HttpPost("id/{id}/{position}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<UserInfo> UpdatePosition(Guid id, Guid positionId)
+        {
+            return this.Ok(this.userService.UpdatePosition(id, positionId));
         }
     }
 }

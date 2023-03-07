@@ -11,11 +11,15 @@ namespace BLL.Services
     {
         private const string PicPath = "ClientApp/coursePics/";
 
-        private ICourseRepository _courseRepository;
+        private ICourseRepository courseRepository;
+        private IPositionRepository positionRepository;
+        private IPositionCourseRepository positionCourseRepository;
 
-        public CourseService(ICourseRepository categoryRepository)
+        public CourseService(ICourseRepository categoryRepository, IPositionRepository positionRepository, IPositionCourseRepository positionCourseRepository)
         {
-            _courseRepository = categoryRepository;
+            this.courseRepository = categoryRepository;
+            this.positionRepository = positionRepository;
+            this.positionCourseRepository = positionCourseRepository;
         }
 
         public PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string search, bool published)
@@ -25,7 +29,7 @@ namespace BLL.Services
                 search = null;
             }
 
-            var courses = _courseRepository
+            var courses = courseRepository
             .GetItems()
                 .Where(s => !published || s.Published)
                 .Where(s => string.IsNullOrEmpty(search) || s.Name.Contains(search));
@@ -36,7 +40,7 @@ namespace BLL.Services
 
         public CourseDto GetCourse(Guid id)
         {
-            var course = _courseRepository.GetItem(id);
+            var course = courseRepository.GetItem(id);
             if (course != null)
             {
                 return new CourseDto(course);
@@ -47,7 +51,7 @@ namespace BLL.Services
 
         public CourseDto GetCourse(string url)
         {
-            var course = _courseRepository.GetItem(url);
+            var course = courseRepository.GetItem(url);
             if (course != null)
             {
                 return new CourseDto(course);
@@ -75,19 +79,19 @@ namespace BLL.Services
                 cour.PicUrl = string.Empty;
             }
 
-            var res = _courseRepository.CreateItem(cour);
+            var res = courseRepository.CreateItem(cour);
 
             return new CourseDto(res);
         }
 
         public CourseDto PublishService(string url)
         {
-            var course = _courseRepository.GetItem(url);
+            var course = courseRepository.GetItem(url);
 
             if (course != null)
             {
                 course.Published = true;
-                return new CourseDto(_courseRepository.UpdateItem(course));
+                return new CourseDto(courseRepository.UpdateItem(course));
             }
 
             return null;
@@ -95,12 +99,12 @@ namespace BLL.Services
 
         public CourseDto UnpublishService(string url)
         {
-            var course = this._courseRepository.GetItem(url);
+            var course = this.courseRepository.GetItem(url);
 
             if (course != null)
             {
                 course.Published = false;
-                return new CourseDto(_courseRepository.UpdateItem(course));
+                return new CourseDto(courseRepository.UpdateItem(course));
             }
 
             return null;
@@ -108,7 +112,7 @@ namespace BLL.Services
 
         public async Task<CourseDto> UpdateCourseAsync(CourseUpdateRequestDto course)
         {
-            var courEntity = _courseRepository.GetItem(course.Id);
+            var courEntity = courseRepository.GetItem(course.Id);
 
             if (courEntity == null)
             {
@@ -136,22 +140,76 @@ namespace BLL.Services
             }
 
             courEntity = null;
-            var courseEntity = _courseRepository.UpdateItem(cour);
+            var courseEntity = courseRepository.UpdateItem(cour);
 
             return new CourseDto(courseEntity);
         }
 
         public int DeleteCourse(Guid id)
         {
-            var category = _courseRepository.GetItem(id);
+            var category = courseRepository.GetItem(id);
             if (category != null)
             {
-                return _courseRepository.DeleteItem(category);
+                return courseRepository.DeleteItem(category);
             }
             else
             {
                 return 0;
             }
+        }
+
+        public CourseDto AddPosition(Guid id, Guid positionId)
+        {
+            var course = this.courseRepository.GetItem(id);
+            var position = positionRepository.GetItem(positionId);
+
+            if (course == null || position == null)
+            {
+                return null;
+            }
+
+            PositionCourse positionCourse = positionCourseRepository.GetItems()
+                .FirstOrDefault(i => i.CourceId == id && i.PositionId == positionId);
+
+            if (positionCourse != null)
+            {
+                return new CourseDto(course);
+            }
+
+            positionCourse = new PositionCourse() 
+            {
+                PositionId = positionId, 
+                CourceId = id, 
+                Position = position, 
+                Course = course
+
+            };
+
+            positionCourseRepository.CreateItem(positionCourse);
+            course.PositionCources.Add(positionCourse);
+
+            return new CourseDto(course);
+        }
+
+        public bool DeletePosition(Guid id, Guid positionId)
+        {
+            var course = this.courseRepository.GetItem(id);
+            var position = positionRepository.GetItem(positionId);
+
+            if (course == null || position == null)
+            {
+                return false;
+            }
+
+            PositionCourse positionCourse = positionCourseRepository.GetItems()
+                .FirstOrDefault(i => i.CourceId == id && i.PositionId == positionId);
+
+            if (positionCourse == null)
+            {
+                return false;
+            }
+
+            return course.PositionCources.Remove(positionCourse);
         }
     }
 }
