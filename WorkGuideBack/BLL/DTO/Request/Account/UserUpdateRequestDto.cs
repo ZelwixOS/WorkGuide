@@ -6,8 +6,6 @@ namespace BLL.DTO.Request.Account
 {
     public class UserUpdateRequestDto : IDtoMapper<User>
     {
-        public Guid Id { get; set; }
-
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }
@@ -16,7 +14,6 @@ namespace BLL.DTO.Request.Account
         {
             return new User()
             {
-                Id = this.Id,
                 Email = this.Email,
                 PhoneNumber = this.PhoneNumber
             };

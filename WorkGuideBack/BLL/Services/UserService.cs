@@ -76,9 +76,9 @@ namespace BLL.Services
             return new UserInfo(this.userRepository.UpdateUser(user));
         }
 
-        public async Task<UserInfo> UpdateUserAsync(UserUpdateRequestDto userInfo)
+        public async Task<UserInfo> UpdateUserAsync(UserUpdateRequestDto userInfo, Guid userId)
         {
-            var usEntity = this.userRepository.GetItem(userInfo.Id);
+            var usEntity = this.userRepository.GetItem(userId);
 
             if (usEntity == null)
             {

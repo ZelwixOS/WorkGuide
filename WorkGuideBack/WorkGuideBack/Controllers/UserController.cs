@@ -16,11 +16,13 @@ namespace WorkGuideBack.Controllers
     {
         private readonly ILogger<UserController> logger;
         private IUserService userService;
+        private IAccountService accountService;
 
-        public UserController(ILogger<UserController> logger, IUserService userService)
+        public UserController(ILogger<UserController> logger, IUserService userService, IAccountService accountService)
         {
             this.logger = logger;
             this.userService = userService;
+            this.accountService = accountService;
         }
 
         [HttpGet("searchUsers")]
@@ -43,9 +45,14 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpPut]
-        public ActionResult<UserInfo> UpdateUserAsync([FromBody] UserUpdateRequestDto userInfo)
+        public async Task<ActionResult<UserInfo>> UpdateUserAsync([FromBody] UserUpdateRequestDto userInfo)
         {
-            return this.Ok(this.userService.UpdateUserAsync(userInfo));
+            var user = await this.accountService.GetCurrentUserAsync(HttpContext);
+            if (user == null)
+            {
+                return this.Ok(null);
+            }
+            return this.Ok(await this.userService.UpdateUserAsync(userInfo, user.Id));
         }
     }
 }
