@@ -21,7 +21,6 @@ const LessonPage = () => {
   const { classes, cx } = useStyles()
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [maxPage, setMaxPage] = useState<number>(1)
-  const [page, setPage] = useState<number>(0)
   const [isLoading, setLoading] = useState<boolean>(true)
   const params = useParams()
 
@@ -51,7 +50,6 @@ const LessonPage = () => {
       setMaxPage(
         Math.max(lesson.testPages.length + lesson.theoryPages.length, 1),
       )
-      setPage(1)
     }
 
     return () => {
@@ -70,8 +68,6 @@ const LessonPage = () => {
           loading={isLoading}
           lesson={lesson}
           maxPage={maxPage}
-          setPage={setPage}
-          page={page}
         />
       )}
     </>
