@@ -58,7 +58,6 @@ const CourseListPage = () => {
 
   const changePage = (page: number) => {
     setPage(page);
-    getCoursesForPage(isMounted);
   }
 
   useEffect(() => {

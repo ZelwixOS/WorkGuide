@@ -4,14 +4,12 @@ interface IPaginate {
   initialPage: number;
   maxPage: number;
   loading: boolean;
-  currentPage?: number;
   onPageChange: (e: number) => void;
 }
 
 const Paginate = (props: IPaginate) => {
   return (props.loading || props.maxPage <= 1 ? null :<ReactPaginate
     initialPage={props.initialPage - 1}
-    forcePage={props.currentPage? props.currentPage - 1 : undefined}
     nextLabel=">"
     onPageChange={(e) => (e.selected === props.initialPage - 1 ? null : props.onPageChange(e.selected + 1))}
     pageRangeDisplayed={3}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Row } from 'react-bootstrap'
 import { checkAnswer } from '../../Request/PostRequests'
 import { makeStyles } from '../../theme'
@@ -25,13 +25,12 @@ interface ICommonLesson {
   loading: boolean
   lesson: Lesson | null
   maxPage: number
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 const CommonLesson = (props: ICommonLesson) => {
   const { classes, cx } = useStyles()
 
+  const [page, setPage] = useState<number>(1);
   const [lessonPage, setLessonPage] = useState<any>(null)
   const [isTheory, setTheoryCondition] = useState<boolean>(false)
   const [showWrongAnswer, setShowWrongAnswer] = useState<boolean>(false)
@@ -42,7 +41,7 @@ const CommonLesson = (props: ICommonLesson) => {
   const checkAnswerCorrectness = async () => {
     const isCorrect = await checkAnswer(
       (lessonPage as Test).id,
-      currentAnswers[props.page],
+      currentAnswers[page],
     )
 
     setAnsweredCorrectly(isCorrect)
@@ -64,7 +63,7 @@ const CommonLesson = (props: ICommonLesson) => {
           !isAnsweredCorrectly &&
           lessonPage &&
           !isTheory &&
-          newPage > props.page
+          newPage > page
         ) {
           checkAnswerCorrectness().then((isCorrect: boolean) => {
             if (isCorrect) getLessonPage(newPage, true)
@@ -82,12 +81,12 @@ const CommonLesson = (props: ICommonLesson) => {
     if (theory) {
       setLessonPage(theory)
       setTheoryCondition(true)
-      props.setPage(newPage)
+      setPage(newPage)
       setAnsweredCorrectly(true)
     } else if (test) {
       setLessonPage(test)
       setTheoryCondition(false)
-      props.setPage(newPage)
+      setPage(newPage)
       setAnsweredCorrectly(false)
     }
 
@@ -97,9 +96,13 @@ const CommonLesson = (props: ICommonLesson) => {
 
   const onTestAnswerChanged = (testId: string, answerId: string) => {
     const answers = [...currentAnswers]
-    answers[props.page] = answerId
+    answers[page] = answerId
     setCurrentAnswers(answers)
   }
+
+  useEffect(() => {
+    getLessonPage(page, true);
+  }, [])
 
   return (
     <Container className={classes.container}>
@@ -115,18 +118,16 @@ const CommonLesson = (props: ICommonLesson) => {
           test={lessonPage}
           wrongAnswer={showWrongAnswer}
           onChanged={onTestAnswerChanged}
-          pickedAnswer={currentAnswers[props.page]}
+          pickedAnswer={currentAnswers[page]}
         />
       )}
-      {getLessonPage(props.page) ? <></> : <></>}
       <Row className={classes.paginator}>
-        {props.page > 0 ? (
+        {page > 0 ? (
           <Paginate
-            currentPage={props.page}
-            initialPage={props.page}
+            initialPage={page}
             maxPage={props.maxPage}
             onPageChange={getLessonPage}
-            loading={props.loading}
+            loading={props.loading || showWrongAnswer}
           />
         ) : (
           <></>
