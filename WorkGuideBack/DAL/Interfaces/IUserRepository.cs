@@ -1,6 +1,6 @@
 ﻿namespace DAL.Interfaces
 {
-    using DAL.Entities;
+    using Entities;
     using System;
     using System.Linq;
 

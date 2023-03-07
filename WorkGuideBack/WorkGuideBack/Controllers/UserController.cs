@@ -1,4 +1,5 @@
 ﻿using BLL.DTO.Request;
+using BLL.DTO.Request.Account;
 using BLL.DTO.Response.Account;
 using BLL.Helpers;
 using BLL.Interfaces;
@@ -39,6 +40,12 @@ namespace WorkGuideBack.Controllers
         public ActionResult<UserInfo> UpdatePosition(Guid id, Guid positionId)
         {
             return this.Ok(this.userService.UpdatePosition(id, positionId));
+        }
+
+        [HttpPut]
+        public ActionResult<UserInfo> UpdateUserAsync([FromBody] UserUpdateRequestDto userInfo)
+        {
+            return this.Ok(this.userService.UpdateUserAsync(userInfo));
         }
     }
 }

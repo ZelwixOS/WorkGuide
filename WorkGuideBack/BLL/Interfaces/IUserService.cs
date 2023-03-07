@@ -1,5 +1,5 @@
-﻿using BLL.DTO.Response.Account;
-using DAL.Entities;
+﻿using BLL.DTO.Request.Account;
+using BLL.DTO.Response.Account;
 
 namespace BLL.Interfaces
 {
@@ -10,5 +10,7 @@ namespace BLL.Interfaces
         public UserInfo GetUserInfo(Guid id);
 
         public UserInfo UpdatePosition(Guid id, Guid positionId);
+
+        public Task<UserInfo> UpdateUserAsync(UserUpdateRequestDto userInfo);
     }
 }

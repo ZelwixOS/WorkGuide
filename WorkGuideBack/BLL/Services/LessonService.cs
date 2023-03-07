@@ -11,16 +11,16 @@ namespace BLL.Services
     {
         private const string PicPath = "ClientApp/lessonsContentPics/";
 
-        private ILessonRepository lessonService;
+        private ILessonRepository lessonRepository;
 
         public LessonService(ILessonRepository lessonRepository)
         {
-            this.lessonService = lessonRepository;
+            this.lessonRepository = lessonRepository;
         }
 
         public LessonDto GetLesson(Guid id)
         {
-            var lesson = this.lessonService.GetItem(id);
+            var lesson = this.lessonRepository.GetItem(id);
             if (lesson != null)
             {
                 return new LessonDto(lesson);
@@ -31,7 +31,7 @@ namespace BLL.Services
 
         public LessonDto GetLesson(string url, int lessonNumber)
         {
-            var lesson = this.lessonService.GetItems()
+            var lesson = this.lessonRepository.GetItems()
                 .Include(l => l.Course)
                 .Include(l => l.TheoryPages)
                 .Include(l => l.TestPages)
@@ -48,18 +48,18 @@ namespace BLL.Services
         public LessonDto CreateLesson(LessonCreateRequestDto lesson)
         {
             var les = lesson.ToModel();
-            var res = this.lessonService.CreateItem(les);
+            var res = this.lessonRepository.CreateItem(les);
 
             return new LessonDto(res);
         }
 
         public LessonDto PublishService(Guid id)
         {
-            var lesson = this.lessonService.GetItem(id);
+            var lesson = this.lessonRepository.GetItem(id);
 
             if (lesson != null)
             {
-                return new LessonDto(this.lessonService.UpdateItem(lesson));
+                return new LessonDto(this.lessonRepository.UpdateItem(lesson));
             }
 
             return null;
@@ -67,11 +67,11 @@ namespace BLL.Services
 
         public LessonDto UnpublishService(Guid id)
         {
-            var lesson = this.lessonService.GetItem(id);
+            var lesson = this.lessonRepository.GetItem(id);
 
             if (lesson != null)
             {
-                return new LessonDto(this.lessonService.UpdateItem(lesson));
+                return new LessonDto(this.lessonRepository.UpdateItem(lesson));
             }
 
             return null;
@@ -79,7 +79,7 @@ namespace BLL.Services
 
         public LessonDto UpdateLesson(LessonUpdateRequestDto lesson)
         {
-            var lesEntity = this.lessonService.GetItem(lesson.Id);
+            var lesEntity = this.lessonRepository.GetItem(lesson.Id);
 
             if (lesEntity == null)
             {
@@ -87,17 +87,17 @@ namespace BLL.Services
             }
 
             var les = lesson.ToModel();
-            var lessonEntity = this.lessonService.UpdateItem(les);
+            var lessonEntity = this.lessonRepository.UpdateItem(les);
 
             return new LessonDto(lessonEntity);
         }
 
         public int DeleteLesson(Guid id)
         {
-            var lesson = this.lessonService.GetItem(id);
+            var lesson = this.lessonRepository.GetItem(id);
             if (lesson != null)
             {
-                return this.lessonService.DeleteItem(lesson);
+                return this.lessonRepository.DeleteItem(lesson);
             }
             else
             {
