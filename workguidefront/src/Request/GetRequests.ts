@@ -2,6 +2,7 @@ import axios from 'axios'
 import Course from '../Types/Course';
 import CoursePage from '../Types/CoursePage';
 import Lesson from '../Types/Lesson';
+import UserMainInfo from '../Types/UserMainInfo';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -19,11 +20,16 @@ async function getLessonByNumber(url: string, lessonNumber: string): Promise<Les
   return await getRequest(`/api/lesson/url/${url}/${lessonNumber}`);
 }
 
+async function getAllWorkers(): Promise<UserMainInfo[]>  {
+  return await getRequest(`/api/account/GetAllWorkers`);
+}
+
 export default getRequest
 
 export {
   getRequest,
   getCourses,
   getCourseByUrl,
+  getAllWorkers,
   getLessonByNumber
 }

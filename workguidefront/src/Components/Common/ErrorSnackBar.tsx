@@ -1,43 +1,32 @@
-import React from 'react'
-import { Alert } from 'react-bootstrap'
-import { makeStyles } from '../../theme'
+import React from 'react';
+import { Snackbar } from '@mui/material';
+import { AlertTitle } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
 
 interface IErrorSnackBar {
-  open: boolean
-  setOpen: (b: boolean) => void
-  message: string
-  errors: string[]
+  open: boolean;
+  setOpen: (b: boolean) => void;
+  message: string;
+  errors: string[];
 }
 
-const useStyles = makeStyles()((theme) => ({
-  main: {
-    position: "absolute",
-    top: "2rem",
-  },
-}),
-);
-
-const ErrorSnackBar: React.FC<IErrorSnackBar> = (props) => {
+const ErrorSnackBar: React.FC<IErrorSnackBar> = props => {
   const handleClose = () => {
-    props.setOpen(false)
-  }
-
-  const { classes, cx } = useStyles()
+    props.setOpen(false);
+  };
 
   return (
-    <>
-      {props?.open && (
-        <Alert variant="warning" className={classes.main} onClose={handleClose}>
-          <Alert.Heading>{props?.message}</Alert.Heading>
-          <ul>
-            {props?.errors.map((er, key) => (
-              <li key={key}>{er}</li>
-            ))}
-          </ul>
-        </Alert>
-      )}
-    </>
-  )
-}
+    <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={props?.open} onClose={handleClose}>
+      <MuiAlert onClose={handleClose} severity="warning">
+        <AlertTitle>{props?.message}</AlertTitle>
+        <ul>
+          {props?.errors.map((er, key) => (
+            <li key={key}>{er}</li>
+          ))}
+        </ul>
+      </MuiAlert>
+    </Snackbar>
+  );
+};
 
-export default ErrorSnackBar
+export default ErrorSnackBar;

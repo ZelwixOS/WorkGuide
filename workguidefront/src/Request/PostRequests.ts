@@ -27,6 +27,14 @@ async function checkComplexTest(lessonId: string, answers: any) {
   })
 }
 
+async function banUser(id: string) {
+  return await post(`/api/Account/Ban/${id}`, null);
+}
+
+async function unbanUser(id: string) {
+  return await post(`/api/Account/Unban/${id}`, null);
+}
+
 export default post
 
-export { post, checkAnswer, checkComplexTest }
+export { post, checkAnswer, checkComplexTest, banUser, unbanUser }

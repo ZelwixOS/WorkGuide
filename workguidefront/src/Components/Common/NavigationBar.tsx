@@ -11,7 +11,8 @@ const useStyles = makeStyles()((theme) => ({
     margin: "2rem",
   },
   mainBack: {
-    background: "linear-gradient(90deg, rgba(255,255,255,1) 33%, rgba(136,0,255,0.8519782913165266) 100%)"
+    background: "linear-gradient(90deg, rgba(255,255,255,1) 33%, rgba(136,0,255,0.8519782913165266) 100%)",
+    boxShadow: "0px 2px linear-gradient(rgba(0,0,0,1) 0%, rgba(255,255,255,0) 30%)"
   }
 }))
 

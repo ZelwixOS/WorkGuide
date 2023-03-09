@@ -2,6 +2,13 @@ import React from 'react'
 import { Button, Modal, Row } from 'react-bootstrap'
 import { makeStyles } from '../../theme'
 import LoginForm from '../User/LoginForm'
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 
 const useStyles = makeStyles()((theme) => ({
   buttons: {
@@ -30,25 +37,19 @@ const LoginModal: React.FC = () => {
       >
         Войти
       </Button>
-      <Modal
-        show={open}
-        onHide={handleClose}
+      <Dialog
+        open={open}
+        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="alert-dialog-title">Войти</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <LoginForm />
-        </Modal.Body>
-        <Modal.Footer>
-          <Row>
-            Вы здесь впервые?
-            <a href="/Registration"> Зарегистрироваться </a>
-          </Row>
-        </Modal.Footer>
-      </Modal>
+        <DialogTitle id="alert-dialog-title">Войти</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <LoginForm />
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

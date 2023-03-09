@@ -77,5 +77,14 @@
             var res = this.accountService.UnBanUser(id);
             return Ok(res);
         }
+
+        [HttpGet]
+        [Route("GetAllWorkers")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public async Task<ActionResult<IList<UserInfo>>> GetAllWorkers()
+        {
+            var res = await this.accountService.GetWorkers();
+            return Ok(res);
+        }
     }
 }
