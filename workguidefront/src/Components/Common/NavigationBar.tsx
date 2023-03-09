@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Container, Navbar } from 'react-bootstrap'
+import { Container, Navbar } from 'react-bootstrap'
 import { getRole } from '../../Request/AccountRequests'
 import { makeStyles } from '../../theme'
 import Roles from '../../Types/Roles'
@@ -10,6 +10,9 @@ const useStyles = makeStyles()((theme) => ({
   buttons: {
     margin: "2rem",
   },
+  mainBack: {
+    background: "linear-gradient(90deg, rgba(255,255,255,1) 33%, rgba(136,0,255,0.8519782913165266) 100%)"
+  }
 }))
 
 const NavigationBar: React.FC = () => {
@@ -56,7 +59,7 @@ const NavigationBar: React.FC = () => {
   const { classes, cx } = useStyles()
 
   return (
-    <Navbar bg="dark">
+    <Navbar className={classes.mainBack}>
       <Container>
         <Navbar.Brand href="#home">
           <img

@@ -107,10 +107,10 @@ const LoginForm: React.FC = () => {
       </Row>
       <Row className={classes.buttons}>
         <Button
-          type="submit"
-          color="secondary"
-          className={classes.spaces}
+          type="button"
+          className={`btn btn-primary ${classes.spaces}`}
           variant="contained"
+          color="primary"
           onClick={logInButtonClicked}
         >
           Войти
