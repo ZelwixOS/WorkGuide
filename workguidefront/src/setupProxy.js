@@ -5,6 +5,8 @@ module.exports = function(app) {
     '/api',
     createProxyMiddleware({
       target: 'http://localhost:5180',
+      cookieDomainRewrite: 'localhost',
+      changeOrigin: true,
     })
   );
 
@@ -12,6 +14,8 @@ module.exports = function(app) {
     '/coursePics',
     createProxyMiddleware({
       target: 'http://localhost:5180',
+      cookieDomainRewrite: 'localhost',
+      changeOrigin: true
     })
   );
 };

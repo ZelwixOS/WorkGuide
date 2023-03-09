@@ -6,6 +6,7 @@ import { getCourses } from "../../Request/GetRequests";
 import { makeStyles } from "../../theme";
 import Course from "../../Types/Course";
 import Loading from "../Common/Loading";
+import NavigationBar from "../Common/NavigationBar";
 import Paginate from "../Common/Paginate";
 import CourseCard from "./CourseCard";
 
@@ -69,6 +70,8 @@ const CourseListPage = () => {
   }, [page]);
 
   return (
+    <>
+    <NavigationBar />
     <Container className={classes.container}>
       <h3>Список курсов</h3>
       <h5 className="mb-4">Здесь хранятся все доступные Вам курсы</h5>
@@ -78,6 +81,7 @@ const CourseListPage = () => {
         <Paginate initialPage={page} maxPage={maxPage} onPageChange={changePage} loading={isLoading} />
       </Row>
     </Container>
+    </>
   );
 }
 
