@@ -28,7 +28,7 @@ namespace DAL.EF
 
         public DbSet<Position> Positions { get; set; }
 
-        public DbSet<PositionCourse> PositionCources { get; set; }
+        public DbSet<PositionCourse> PositionCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,15 +72,15 @@ namespace DAL.EF
 
             modelBuilder.Entity<PositionCourse>(entity =>
             {
-                entity.HasOne(c => c.Course).WithMany(p => p.PositionCources).HasForeignKey(c => c.CourceId);
-                entity.HasOne(p => p.Position).WithMany(p => p.PositionCources).HasForeignKey(p => p.PositionId);
+                entity.HasOne(c => c.Course).WithMany(p => p.PositionCourses).HasForeignKey(c => c.CourseId);
+                entity.HasOne(p => p.Position).WithMany(p => p.PositionCourses).HasForeignKey(p => p.PositionId);
                 entity.HasKey(p => p.Id);
             });
 
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<Position>(entity =>
             {
-                entity.HasOne(u => u.Position).WithMany(p => p.User).HasForeignKey(u => u.PositionId);
-                entity.HasKey(u => u.Id);
+                entity.HasMany(p => p.Users).WithOne(u => u.Position).HasForeignKey(u => u.PositionId);
+                entity.HasKey(p => p.Id);
             });
 
             base.OnModelCreating(modelBuilder);

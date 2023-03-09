@@ -6,8 +6,8 @@
 
         public string Title { get; set; }
 
-        public HashSet<PositionCourse> PositionCources { get; set; }
+        public HashSet<PositionCourse> PositionCourses { get; set; }
 
-        public HashSet<User> User { get; set; }
+        public HashSet<User> Users { get; set; }
     }
 }

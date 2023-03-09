@@ -7,6 +7,7 @@ using BLL.Services;
 using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using DAL.Repository;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WorkGuideBack
 {
@@ -33,7 +34,19 @@ namespace WorkGuideBack
             services.AddScoped<SignInManager<User>>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IRolesInitializer, RolesInitializer>(provider =>
-                new RolesInitializer(provider.GetService<RoleManager<IdentityRole<Guid>>>(), provider.GetService<UserManager<User>>()));
+                new RolesInitializer(
+                    provider.GetService<RoleManager<IdentityRole<Guid>>>(),
+                    provider.GetService<UserManager<User>>(),
+                    provider.GetService<IPositionRepository>()));
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+                options.Password.RequireNonAlphanumeric = false;
+            });
 
             services.ConfigureApplicationCookie(options =>
             {
