@@ -16,6 +16,6 @@
 
         public HashSet<Lesson> Lessons { get; set; }
 
-        public HashSet<PositionCourse> PositionCources { get; set;}
+        public HashSet<PositionCourse> PositionCourses { get; set;}
     }
 }

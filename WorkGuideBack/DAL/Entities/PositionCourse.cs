@@ -6,7 +6,7 @@
 
         public Guid PositionId { get; set; }
 
-        public Guid CourceId { get; set; }
+        public Guid CourseId { get; set; }
 
         public Position Position { get; set; }
 

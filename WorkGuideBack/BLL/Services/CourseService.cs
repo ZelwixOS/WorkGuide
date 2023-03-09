@@ -169,7 +169,7 @@ namespace BLL.Services
             }
 
             PositionCourse positionCourse = positionCourseRepository.GetItems()
-                .FirstOrDefault(i => i.CourceId == id && i.PositionId == positionId);
+                .FirstOrDefault(i => i.CourseId == id && i.PositionId == positionId);
 
             if (positionCourse != null)
             {
@@ -179,14 +179,14 @@ namespace BLL.Services
             positionCourse = new PositionCourse() 
             {
                 PositionId = positionId, 
-                CourceId = id, 
+                CourseId = id, 
                 Position = position, 
                 Course = course
 
             };
 
             positionCourseRepository.CreateItem(positionCourse);
-            course.PositionCources.Add(positionCourse);
+            course.PositionCourses.Add(positionCourse);
 
             return new CourseDto(course);
         }
@@ -202,14 +202,14 @@ namespace BLL.Services
             }
 
             PositionCourse positionCourse = positionCourseRepository.GetItems()
-                .FirstOrDefault(i => i.CourceId == id && i.PositionId == positionId);
+                .FirstOrDefault(i => i.CourseId == id && i.PositionId == positionId);
 
             if (positionCourse == null)
             {
                 return false;
             }
 
-            return course.PositionCources.Remove(positionCourse);
+            return course.PositionCourses.Remove(positionCourse);
         }
     }
 }

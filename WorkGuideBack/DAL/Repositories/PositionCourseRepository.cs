@@ -21,12 +21,12 @@ namespace DAL.Repositories
 
         public IQueryable<PositionCourse> GetItems()
         {
-            return this.Context.PositionCources.AsNoTracking();
+            return this.Context.PositionCourses.AsNoTracking();
         }
 
         public PositionCourse GetItem(Guid id)
         {
-            var positionCource = this.Context.PositionCources
+            var positionCource = this.Context.PositionCourses
                 .FirstOrDefault(c => c.Id == id);
 
             return positionCource;
@@ -34,13 +34,13 @@ namespace DAL.Repositories
 
         public int DeleteItem(PositionCourse positionCourse)
         {
-            this.Context.PositionCources.Remove(positionCourse);
+            this.Context.PositionCourses.Remove(positionCourse);
             return this.Context.SaveChanges();
         }
 
         public PositionCourse UpdateItem(PositionCourse positionCourse)
         {
-            var entity = this.Context.PositionCources.Update(positionCourse);
+            var entity = this.Context.PositionCourses.Update(positionCourse);
             this.Context.SaveChanges();
             return entity.Entity;
         }
