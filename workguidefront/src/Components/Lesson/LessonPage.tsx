@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { getLessonByNumber } from '../../Request/GetRequests'
 import { makeStyles } from '../../theme'
 import Lesson from '../../Types/Lesson'
+import Loading from '../Common/Loading'
 import CommonLesson from './CommonLesson'
 import TestLesson from './TestLesson'
 
@@ -59,7 +60,8 @@ const LessonPage = () => {
 
   return (
     <>
-      {lesson != null &&
+      {isLoading ? <Loading /> : 
+      lesson != null &&
       lesson.theoryPages.length == 0 &&
       lesson.testPages.length > 0 ? (
         <TestLesson loading={isLoading} lesson={lesson} />
