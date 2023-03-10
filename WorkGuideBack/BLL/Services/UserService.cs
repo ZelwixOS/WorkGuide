@@ -30,10 +30,10 @@ namespace BLL.Services
                 words[i] = words[i].ToLower();
             }
 
-            var users = this.userRepository.GetItems().Where(u => words.Any(u.FirstName.ToLower().Contains) ||
-                                                                  words.Any(u.SecondName.ToLower().Contains)).
-                                                                  Take(count).
-                                                                  ToList();
+            var users = this.userRepository.GetItems()
+                .ToList()
+                .Where(u => words.Any(u.FirstName.ToLower().Contains) || words.Any(u.SecondName.ToLower().Contains))
+                .Take(count);
 
             if (users == null)
             {

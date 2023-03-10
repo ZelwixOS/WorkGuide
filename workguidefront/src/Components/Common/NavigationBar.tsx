@@ -5,13 +5,15 @@ import { makeStyles } from '../../theme'
 import Roles from '../../Types/Roles'
 import UserMiniPanel from '../User/UserMiniPanel'
 import LoginModal from './LoginModal'
+import SearchBar from './SearchBar'
 
 const useStyles = makeStyles()((theme) => ({
   buttons: {
     margin: "2rem",
   },
   mainBack: {
-    background: "linear-gradient(90deg, rgba(255,255,255,1) 33%, rgba(136,0,255,0.8519782913165266) 100%)"
+    background: "linear-gradient(90deg, rgba(255,255,255,1) 33%, rgba(136,0,255,0.8519782913165266) 100%)",
+    zIndex: 10000
   }
 }))
 
@@ -70,6 +72,9 @@ const NavigationBar: React.FC = () => {
             alt="WorkGuide"
           />
         </Navbar.Brand>
+      </Container>
+      <Container style={{justifyContent: 'end'}}>
+        <SearchBar />
         {loaded && (isAuth ? <UserMiniPanel /> : <LoginModal />)}
       </Container>
     </Navbar>

@@ -2,6 +2,7 @@ import axios from 'axios'
 import Course from '../Types/Course';
 import CoursePage from '../Types/CoursePage';
 import Lesson from '../Types/Lesson';
+import UserSearchInfo from '../Types/UserSearchInfo';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -19,11 +20,16 @@ async function getLessonByNumber(url: string, lessonNumber: string): Promise<Les
   return await getRequest(`/api/lesson/url/${url}/${lessonNumber}`);
 }
 
+async function getUsersBySearch(request: string, count: number): Promise<UserSearchInfo[]>  {
+  return await getRequest(`/api/User/searchUsers?request=${request}&count=${count}`);
+}
+
 export default getRequest
 
 export {
   getRequest,
   getCourses,
   getCourseByUrl,
-  getLessonByNumber
+  getLessonByNumber,
+  getUsersBySearch
 }

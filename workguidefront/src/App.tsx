@@ -3,10 +3,12 @@ import './App.css';
 import CoursePage from './Components/Course/CoursePage';
 import CourseListPage from './Components/Course/CourseListPage';
 import LessonPage from './Components/Lesson/LessonPage';
+import NavigationBar from './Components/Common/NavigationBar';
 
 function App() {
   return (
     <BrowserRouter>
+      <NavigationBar />
       <div className='App'>
         <Routes>
           <Route path="/" element={<h2>Главная</h2>} />
