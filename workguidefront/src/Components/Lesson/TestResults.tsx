@@ -54,6 +54,11 @@ const TestResults = (props: ITestResults) => {
     navigate(`/courses/${props.courseUrl}`)
   }
 
+  const getRightIndex = () => {
+    const real = props.score / props.total * (evaluation.length - 1)
+    return Math.round(real)
+  }
+
   return (
     <>
       <Row className={`d-flex justify-content-center ${classes.title}`}>
@@ -61,13 +66,13 @@ const TestResults = (props: ITestResults) => {
       </Row>
       <Row
         className={`d-flex justify-content-center ${classes.circle} ${
-          colorStyle[(props.score / props.total) * evaluation.length]
+          colorStyle[getRightIndex()]
         }`}
       >
         {props.score}/{props.total}
       </Row>
       <Row className={`d-flex justify-content-center ${classes.title}`}>
-        {evaluation[(props.score / props.total) * evaluation.length]}
+        {evaluation[getRightIndex()]}
       </Row>
       <Row className={classes.paginator}>
         <Button onClick={onReturnToCourse}>К курсу</Button>
