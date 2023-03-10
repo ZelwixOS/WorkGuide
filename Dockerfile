@@ -13,7 +13,7 @@ RUN dotnet build "WorkGuideBack.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "WorkGuideBack.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM node:alpine as clientBuild
+FROM node:16.9.1-alpine as clientBuild
 WORKDIR /app
 COPY ./workguidefront/package*.json ./
 RUN npm install
