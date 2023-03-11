@@ -29,6 +29,11 @@ namespace BLL.Services
 
         public PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string search, bool published, User user)
         {
+            if (user == null)
+            {
+                return null;
+            }
+
             if (search == "\"\"")
             {
                 search = null;

@@ -17,16 +17,23 @@ namespace WorkGuideBack.Controllers
     {
         private readonly ILogger<CourseController> logger;
         private ICourseService courseService;
+        private IAccountService accountService;
 
-        public CourseController(ILogger<CourseController> logger, ICourseService courseService)
+        public CourseController(ILogger<CourseController> logger, ICourseService courseService, IAccountService accountService)
         {
             this.logger = logger;
             this.courseService = courseService;
+            this.accountService = accountService;
         }
 
         [HttpGet]
-        public ActionResult<CourseDto> Get(int page, int itemsOnPage, string? search, User user)
+        public async Task<ActionResult<CourseDto>> Get(int page, int itemsOnPage, string? search)
         {
+            var user = await this.accountService.GetCurrentUserAsync(HttpContext);
+            if (user == null)
+            {
+                return this.Ok(null);
+            }
             return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, true, user));
         }
 
