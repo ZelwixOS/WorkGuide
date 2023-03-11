@@ -1,4 +1,4 @@
-type UserSearchInfo = {
+type UserInfo = {
   id: string;
   userName: string;
   firstName: string;
@@ -10,4 +10,4 @@ type UserSearchInfo = {
   banned: boolean;
 };
 
-export default UserSearchInfo;
+export default UserInfo;

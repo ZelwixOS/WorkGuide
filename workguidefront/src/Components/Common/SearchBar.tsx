@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Search } from 'react-bootstrap-icons'
 import { getUsersBySearch } from '../../Request/GetRequests'
 import { makeStyles } from '../../theme'
-import UserSearchInfo from '../../Types/UserSearchInfo'
+import UserInfo from '../../Types/UserInfo'
 import UserSearchCard from '../User/UserSearchCard'
 
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
     transform: 'translate(-455px, 0px)'
   },
   noOptions: {
-    background: '#A370F780',
+    background: '#A370F780'
   },
   searchBar: {
     borderRadius: '5px',
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const SearchBar = () => {
   const { classes, cx } = useStyles()
-  const [users, setUsers] = useState<readonly UserSearchInfo[]>([]);
+  const [users, setUsers] = useState<readonly UserInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
   const [focused, setFocus] = useState<boolean>(false);

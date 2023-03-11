@@ -4,14 +4,16 @@ import CoursePage from './Components/Course/CoursePage';
 import CourseListPage from './Components/Course/CourseListPage';
 import LessonPage from './Components/Lesson/LessonPage';
 import NavigationBar from './Components/Common/NavigationBar';
+import UserPage from './Components/User/UserPage';
 
 function App() {
   return (
     <BrowserRouter>
-      <NavigationBar />
       <div className='App'>
+        <NavigationBar />
         <Routes>
-          <Route path="/" element={<h2>Главная</h2>} />
+          <Route path="/" element={<UserPage />} />
+          <Route path="/achievments" element={<h2>Достижения</h2>} />
           <Route path="/courses">
             <Route index element={<CourseListPage />} />
             <Route path=":url" element={<CoursePage />} />

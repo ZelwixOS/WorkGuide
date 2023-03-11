@@ -64,7 +64,7 @@ const CoursePage = () => {
   return (
     <Container className={classes.container}>
       {isLoading || !course ? <Loading /> : <CourseCard course={course} />}
-      {isLoading || !course ? null : course.lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)}
+      {isLoading || !course ? null : course.lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} useAnimation />)}
       <Row className={classes.backButtons}>
         <Col><Button className={classes.linkButton} variant="outline-primary" onClick={()=>openCourseListPageClick()}>К моим курсам</Button></Col>
       </Row>

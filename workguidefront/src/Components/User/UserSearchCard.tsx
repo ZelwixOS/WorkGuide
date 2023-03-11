@@ -1,11 +1,9 @@
 import { Card, Col, Row } from 'react-bootstrap'
 import { Globe, PersonLinesFill, ShieldLock, TelephoneFill } from 'react-bootstrap-icons'
 import { makeStyles } from '../../theme'
-import UserSearchInfo from '../../Types/UserSearchInfo'
-import UserAvatar from './UserAvatar'
-
+import UserInfo from '../../Types/UserInfo'
 interface IUserSearchCard {
-  user: UserSearchInfo
+  user: UserInfo
 }
 
 const useStyles = makeStyles()((theme) => ({

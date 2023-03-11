@@ -10,7 +10,7 @@ interface ICourseCard {
 
 const useStyles = makeStyles()((theme) => ({
   listItem: {
-    transition: 'backgroundColor 0.5s',
+    transition: 'background-color 0.5s',
     "&:hover": {
       "backgroundColor": 'lightgray'
     }
