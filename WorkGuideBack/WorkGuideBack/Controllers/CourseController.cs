@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Security.Policy;
+using DAL.Entities;
 
 namespace WorkGuideBack.Controllers
 {
@@ -24,9 +25,9 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpGet]
-        public ActionResult<CourseDto> Get(int page, int itemsOnPage, string? search)
+        public ActionResult<CourseDto> Get(int page, int itemsOnPage, string? search, User user)
         {
-            return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, true));
+            return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, true, user));
         }
 
         [HttpGet("id/{id}")]

@@ -11,7 +11,8 @@
                 Id = this.Id,
                 Name = this.Name,
                 OrderNumber = this.OrderNumber,
-                CourseId = this.CourseId
+                CourseId = this.CourseId,
+                IsComplexTest = this.IsComplexTest
             };
         }
     }

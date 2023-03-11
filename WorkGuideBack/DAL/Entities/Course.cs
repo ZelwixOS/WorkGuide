@@ -17,5 +17,7 @@
         public HashSet<Lesson> Lessons { get; set; }
 
         public HashSet<PositionCourse> PositionCourses { get; set;}
+
+        public HashSet<UserCourse> UserCourses { get; set; }
     }
 }
