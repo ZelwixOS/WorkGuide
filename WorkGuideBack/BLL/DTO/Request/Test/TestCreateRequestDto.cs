@@ -16,7 +16,8 @@ namespace BLL.DTO.Request.Test
             {
                 Content = this.Content,
                 PageNumer = this.PageNumer,
-                LessonId = this.LessonId
+                LessonId = this.LessonId,
+                IsManyAnswer = this.IsManyAnswer
             };
         }
     }
