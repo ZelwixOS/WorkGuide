@@ -12,7 +12,6 @@ const useStyles = makeStyles()((theme) => ({
   },
   mainBack: {
     background: "linear-gradient(90deg, rgba(255,255,255,1) 33%, rgba(136,0,255,0.8519782913165266) 100%)",
-    boxShadow: "0px 2px linear-gradient(rgba(0,0,0,1) 0%, rgba(255,255,255,0) 30%)",
     zIndex: 10000
   }
 }))
@@ -61,7 +60,7 @@ const NavigationBar: React.FC = () => {
   const { classes, cx } = useStyles()
 
   return (
-    <Navbar className={classes.mainBack}>
+    <Navbar className={`shadow mb-1 ${classes.mainBack}`}>
       <Container>
         <Navbar.Brand href="#home">
           <img

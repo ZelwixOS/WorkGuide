@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 import {Fab, Grid, Snackbar, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui'
 import { Plus, Pencil, Trash } from 'react-bootstrap-icons'
@@ -73,21 +73,19 @@ export const TableStructure = <Type,>(props: ITableStructure<Type>) => {
     };
   };
 
+  const { pageSize } = props;
   const [data, setData] = useState<Type[]>([]);
   const [dataPage, setPage] = useState<Type[]>([]);
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: props.pageSize,
-    page: 0,
-  });
+  const [pageNum, setPageNum] = useState<number>(0);
   const [selectedItem, setSelectedItem] = useState<string>();
 
   const onPageChange = (page: number, details?: unknown) => {
     const paged = [...data];
     setPage(paged);
-    setPaginationModel({ page: page, pageSize: props.pageSize });
+    setPageNum(page);
   };
 
-  const onSelection = (selectionModel: GridRowSelectionModel, details?: unknown) => {
+  const onSelection = (selectionModel: GridSelectionModel, details?: unknown) => {
     if (selectionModel.length > 0) {
       setSelectedItem(selectionModel[0] as string);
       if (props.setSelected) {
@@ -148,11 +146,13 @@ export const TableStructure = <Type,>(props: ITableStructure<Type>) => {
         <DataGrid
           style={props.compact ? { minHeight: 350 } : { minHeight: 650 }}
           rows={dataPage}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
+          page={pageNum}
           rowCount={data.length}
           columns={props.columns}
-          onRowSelectionModelChange={onSelection}
+          pageSize={pageSize}
+          rowsPerPageOptions={[pageSize]}
+          onPageChange={onPageChange}
+          onSelectionModelChange={onSelection}
         />
         <Grid className={classes.floating} direction="row" container justifyContent="flex-end" alignContent="stretch">
           <Grid container justifyContent="center" item xs={12} sm={4}>

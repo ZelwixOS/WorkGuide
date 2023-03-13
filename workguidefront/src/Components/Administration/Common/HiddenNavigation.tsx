@@ -1,10 +1,11 @@
 import React from 'react'
 import Drawer from '@mui/material/Drawer'
-import { List } from 'react-bootstrap-icons'
+import { List as ListIcon } from 'react-bootstrap-icons'
 import Divider from '@mui/material/Divider'
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import { IconButton, ListItemButton, MenuItem, Typography } from '@mui/material'
+import { IconButton, MenuItem, Typography } from '@mui/material'
 
 import Roles from '../../../Types/Roles'
 import { getRole } from '../../../Request/AccountRequests'
@@ -36,11 +37,13 @@ const HiddenNavigation = () => {
   const workers = onMenuItemClick.bind(this, '/admin/workers')
 
   const menuItem = (name: string, click: () => void) => (
-    <ListItem disablePadding>
-      <ListItemButton onClick={click}>
-        <ListItemText primary={name} />
-      </ListItemButton>
-    </ListItem>
+    <MenuItem onClick={click}>
+      <ListItem>
+        <ListItemText>
+          <Typography variant="h6">{name}</Typography>
+        </ListItemText>
+      </ListItem>
+    </MenuItem>
   )
 
   React.useEffect(() => {
@@ -68,18 +71,16 @@ const HiddenNavigation = () => {
         aria-label="menu"
         onClick={toggleDrawer(true)}
       >
-        <List />
+        <ListIcon />
       </IconButton>
       <Drawer anchor={'left'} open={state} onClose={toggleDrawer(false)}>
-        {role === Roles.admin && (
-          <List>
-            {menuItem('Курсы', courses)}
-            <Divider />
-            {menuItem('Уроки', lessons)}
-            <Divider />
-            {menuItem('Работники', workers)}
-          </List>
-        )}
+        <List>
+          {menuItem('Курсы', courses)}
+          <Divider />
+          {menuItem('Уроки', lessons)}
+          <Divider />
+          {menuItem('Работники', workers)}
+        </List>
       </Drawer>
     </React.Fragment>
   )

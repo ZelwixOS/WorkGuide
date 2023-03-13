@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
 import { makeStyles } from 'tss-react/mui'
 import { Fab, Grid, Snackbar, Typography } from '@mui/material'
 import { Plus, Pencil, Trash } from 'react-bootstrap-icons'
@@ -88,23 +88,16 @@ export const UserTable = <Type,>(props: IUserTable) => {
   const { pageSize } = props
   const [data, setData] = useState<IUserType[]>([])
   const [dataPage, setPage] = useState<IUserType[]>([])
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: props.pageSize,
-    page: 0,
-  });
+  const [pageNum, setPageNum] = useState<number>(0)
   const [selectedItem, setSelectedItem] = useState<string>()
 
   const onPageChange = (page: number, details?: unknown) => {
     const paged = [...data]
     setPage(paged)
-    setPaginationModel({
-      pageSize: props.pageSize,
-      page: page,
-    });
+    setPageNum(page)
   }
-
   const onSelection = (
-    selectionModel: GridRowSelectionModel,
+    selectionModel: GridSelectionModel,
     details?: unknown,
   ) => {
     if (selectionModel.length > 0) {
@@ -182,11 +175,13 @@ export const UserTable = <Type,>(props: IUserTable) => {
         <DataGrid
           style={{ minHeight: 650 }}
           rows={dataPage}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
+          page={pageNum}
           rowCount={data.length}
           columns={props.columns}
-          onRowSelectionModelChange={onSelection}
+          pageSize={pageSize}
+          rowsPerPageOptions={[pageSize]}
+          onPageChange={onPageChange}
+          onSelectionModelChange={onSelection}
         />
         <Grid
           className={classes.floating}
