@@ -13,7 +13,7 @@ interface ILessonCard {
 
 const useStyles = makeStyles()((theme) => ({
   animated: {
-    transition: 'backgroundColor 0.5s',
+    transition: 'background-color 0.5s',
     '&:hover': {
       backgroundColor: 'lightgray',
     },

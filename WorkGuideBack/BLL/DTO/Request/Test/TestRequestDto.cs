@@ -8,6 +8,8 @@ namespace BLL.DTO.Request.Test
 
         public string Content { get; set; }
 
+        public bool IsManyAnswer { get; set; }
+
         public Guid LessonId { get; set; }
 
         public abstract DAL.Entities.Test ToModel();

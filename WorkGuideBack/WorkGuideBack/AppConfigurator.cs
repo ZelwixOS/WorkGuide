@@ -88,6 +88,8 @@ namespace WorkGuideBack
                 new PositionCourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
             services.AddScoped<IPositionRepository, PositionRepository>(provider =>
                 new PositionRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserCourseRepository, UserCourseRepository>(provider =>
+                new UserCourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
 
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ICourseService, CourseService>();

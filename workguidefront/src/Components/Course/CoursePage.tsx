@@ -68,7 +68,7 @@ const CoursePage = () => {
         {isLoading || !course
           ? null
           : course.lessons.map((lesson) => (
-              <LessonCard key={lesson.id} lesson={lesson} />
+              <LessonCard key={lesson.id} lesson={lesson} useAnimation />
             ))}
         <Row className={classes.backButtons}>
           <Col>

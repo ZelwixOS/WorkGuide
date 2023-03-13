@@ -6,8 +6,8 @@ import CourseListPage from './Components/Course/CourseListPage'
 import LessonPage from './Components/Lesson/LessonPage'
 import { AdminPage } from './Components/Administration/Pages/AdminPage'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import MainPage from './Components/Common/MainPage'
 import { WorkersPage } from './Components/Administration/Pages/WorkersPage'
+import UserPage from './Components/User/UserPage';
 
 const innerTheme = createTheme({
   palette: {
@@ -29,7 +29,7 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Routes>
-            <Route path="/" element={<MainPage/>} />
+            <Route path="/" element={<UserPage/>} />
             <Route path="/courses">
               <Route index element={<CourseListPage />} />
               <Route path=":url" element={<CoursePage />} />

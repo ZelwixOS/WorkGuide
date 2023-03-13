@@ -6,6 +6,8 @@
 
         public bool CheckNow { get; set; }
 
+        public bool IsManyAnswer { get; set; }
+
         public HashSet<UserTestAnswer> UsersTestAnswers { get; set; }
     }
 }

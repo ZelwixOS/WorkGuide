@@ -14,16 +14,26 @@ namespace BLL.Services
         private ICourseRepository courseRepository;
         private IPositionRepository positionRepository;
         private IPositionCourseRepository positionCourseRepository;
+        private IUserCourseRepository userCourseRepository;
 
-        public CourseService(ICourseRepository categoryRepository, IPositionRepository positionRepository, IPositionCourseRepository positionCourseRepository)
+        public CourseService(ICourseRepository categoryRepository, 
+            IPositionRepository positionRepository, 
+            IPositionCourseRepository positionCourseRepository,
+            IUserCourseRepository userCourseRepository)
         {
             this.courseRepository = categoryRepository;
             this.positionRepository = positionRepository;
             this.positionCourseRepository = positionCourseRepository;
+            this.userCourseRepository = userCourseRepository;
         }
 
-        public PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string search, bool published)
+        public PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string search, bool published, User user)
         {
+            if (user == null)
+            {
+                return null;
+            }
+
             if (search == "\"\"")
             {
                 search = null;
@@ -35,7 +45,23 @@ namespace BLL.Services
                 .Where(s => string.IsNullOrEmpty(search) || s.Name.Contains(search));
 
             var result = Paginator<Course>.ElementsOfPage(courses, page, itemsOnPage);
-            return new PaginatedData<CourseDto>(result.Data.Select(s => new CourseDto(s)).ToList(), result.CurrentPage, result.MaxPage);
+
+            var paginatedData = new PaginatedData<CourseDto>(result.Data.Select(s =>
+            {
+                var userCourse = userCourseRepository.GetItems()
+                    .FirstOrDefault(u => u.CourseId == s.Id && u.UserId == user.Id);
+
+                if (userCourse == null)
+                {
+                   return new CourseDto(s);
+                }
+                else
+                {
+                   return new CourseDto(s, userCourse);
+                }
+            }).ToList(), result.CurrentPage, result.MaxPage);
+
+            return paginatedData;
         }
 
         public CourseDto GetCourse(Guid id)

@@ -30,6 +30,8 @@ namespace DAL.EF
 
         public DbSet<PositionCourse> PositionCourses { get; set; }
 
+        public DbSet<UserCourse> UserCourses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lesson>(entity =>
@@ -80,6 +82,13 @@ namespace DAL.EF
             modelBuilder.Entity<Position>(entity =>
             {
                 entity.HasMany(p => p.Users).WithOne(u => u.Position).HasForeignKey(u => u.PositionId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<UserCourse>(entity =>
+            {
+                entity.HasOne(c => c.Course).WithMany(p => p.UserCourses).HasForeignKey(c => c.CourseId);
+                entity.HasOne(p => p.User).WithMany(p => p.UserCourses).HasForeignKey(p => p.UserId);
                 entity.HasKey(p => p.Id);
             });
 

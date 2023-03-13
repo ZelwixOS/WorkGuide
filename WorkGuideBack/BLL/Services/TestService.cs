@@ -4,6 +4,7 @@ using BLL.DTO.Response;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using System.Runtime.CompilerServices;
+using DAL.Entities;
 
 namespace BLL.Services
 {
@@ -13,17 +14,23 @@ namespace BLL.Services
         private ILessonRepository lessonRepository;
         private IUserLessonScoreRepository userLessonScoreRepository;
         private IUserTestAnswerRepository userTestAnswerRepository;
+        private IUserCourseRepository userCourseRepository;
+        private IUserRepository userRepository;
 
         public TestService(
             ITestRepository testRepository,
             ILessonRepository lessonRepository,
             IUserLessonScoreRepository userLessonScoreRepository,
-            IUserTestAnswerRepository userTestAnswerRepository)
+            IUserTestAnswerRepository userTestAnswerRepository,
+            IUserCourseRepository userCourseRepository,
+            IUserRepository userRepository)
         {
             this.testService = testRepository;
             this.lessonRepository = lessonRepository;
             this.userLessonScoreRepository = userLessonScoreRepository;
             this.userTestAnswerRepository = userTestAnswerRepository;
+            this.userCourseRepository = userCourseRepository;
+            this.userRepository = userRepository;
         }
 
         public TestDto GetTest(Guid id)
@@ -130,6 +137,37 @@ namespace BLL.Services
                     TestsCount = total
                 });
 
+            int completedTests = userLessonScoreRepository.GetItems().
+                Where(u => u.UserId == userId && u.Lesson.CourseId == lesson.CourseId).Count();
+
+            int totalTests = lessonRepository.GetItems().
+                Where(l => l.CourseId == lesson.Id && l.IsComplexTest).Count();
+
+            var userCour = userCourseRepository.GetItems()
+                .FirstOrDefault(c => c.CourseId == lesson.CourseId && c.UserId == userId);
+
+            if (userCour != null)
+            {
+                userCour.CompletedTests = completedTests;
+                userCour.TotalTests = totalTests;
+                userCourseRepository.UpdateItem(userCour);
+            }
+            else
+            {
+                User user = userRepository.GetItem(userId);
+                UserCourse userCourse = new UserCourse()
+                {
+                    CompletedTests = completedTests,
+                    TotalTests = totalTests,
+                    Course = lesson.Course,
+                    CourseId = lesson.CourseId,
+                    UserId = userId,
+                    User = user
+                };
+
+                userCourseRepository.CreateItem(userCourse);
+            }
+
             return new TestResultDto(correct, total);
         }
 
@@ -142,14 +180,20 @@ namespace BLL.Services
                 return null;
             }
 
-            var answer = test.Answers.FirstOrDefault(t => t.Id == testAnswer.AnswerId);
+            var answerUser = test.Answers.Where(t => testAnswer.AnswerId.Contains(t.Id))?.ToList();
+            var trueAnswerLess = test.Answers.Where(t => t.TestId == testAnswer.TestId && t.IsValid)?.ToList();
 
-            if (answer == null)
+            if (answerUser == null || trueAnswerLess == null)
             {
                 return null;
             }
 
-            return answer.IsValid;
+            if (answerUser.Count != trueAnswerLess.Count)
+            {
+                return false;
+            }
+
+            return answerUser.Any(a => a.IsValid);
         }
     }
 }
