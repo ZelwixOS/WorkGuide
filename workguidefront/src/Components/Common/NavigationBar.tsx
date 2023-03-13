@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
   },
   mainBack: {
     background: "linear-gradient(90deg, rgba(255,255,255,1) 33%, rgba(136,0,255,0.8519782913165266) 100%)",
-    zIndex: 10000
+    zIndex: 255
   }
 }))
 
@@ -63,7 +63,7 @@ const NavigationBar: React.FC = () => {
   return (
     <Navbar className={classes.mainBack}>
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/">
           <img
             src="/logo512.png"
             width="30"
@@ -74,7 +74,7 @@ const NavigationBar: React.FC = () => {
         </Navbar.Brand>
       </Container>
       <Container style={{justifyContent: 'end'}}>
-        <SearchBar />
+        {loaded && isAuth ? <SearchBar /> : null}
         {loaded && (isAuth ? <UserMiniPanel /> : <LoginModal />)}
       </Container>
     </Navbar>
