@@ -4,6 +4,7 @@ using BLL.Helpers;
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
+using System.Linq;
 
 namespace BLL.Services
 {
@@ -42,7 +43,8 @@ namespace BLL.Services
             var courses = courseRepository
             .GetItems()
                 .Where(s => !published || s.Published)
-                .Where(s => string.IsNullOrEmpty(search) || s.Name.Contains(search));
+                .Where(s => string.IsNullOrEmpty(search) || s.Name.Contains(search))
+                .Where(s => !published || s.PositionCourses.Any(pc => pc.PositionId == user.PositionId));
 
             var result = Paginator<Course>.ElementsOfPage(courses, page, itemsOnPage);
 

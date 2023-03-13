@@ -193,7 +193,7 @@ namespace BLL.Services
                 return false;
             }
 
-            return answerUser.Any(a => a.IsValid);
+            return answerUser.All(a => a.IsValid);
         }
     }
 }

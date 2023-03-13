@@ -34,7 +34,9 @@ namespace WorkGuideBack.Controllers
             {
                 return this.Ok(null);
             }
-            return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, true, user));
+
+            var roles = await this.accountService.GetRole(HttpContext);
+            return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, !roles.Contains(Constants.RoleManager.Admin), user));
         }
 
         [HttpGet("id/{id}")]
@@ -64,7 +66,7 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpPost]
-        [Route("publish/{url}")]
+        [Route("publish/{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public ActionResult<CourseDto> Publish(Guid id)
         {
@@ -72,7 +74,7 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpPost]
-        [Route("unpublish/{url}")]
+        [Route("unpublish/{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public ActionResult<CourseDto> Unpublish(Guid id)
         {
