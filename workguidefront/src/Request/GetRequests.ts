@@ -31,7 +31,8 @@ async function getLessonByNumber(url: string, lessonNumber: string): Promise<Les
 
 async function getAllWorkers(): Promise<UserMainInfo[]>  {
   return await getRequest(`/api/account/GetAllWorkers`);
-  
+}
+
 async function getUsersBySearch(request: string, count: number): Promise<UserInfo[]>  {
   return await getRequest(`/api/User/searchUsers?request=${request}&count=${count}`);
 }
