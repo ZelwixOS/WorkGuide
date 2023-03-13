@@ -180,8 +180,8 @@ namespace BLL.Services
                 return null;
             }
 
-            var answerUser = test.Answers.Where(t => testAnswer.AnswerId.Contains(t.Id)).ToList();
-            var trueAnswerLess = test.Answers.Where(t => t.TestId == testAnswer.TestId && t.IsValid).ToList();
+            var answerUser = test.Answers.Where(t => testAnswer.AnswerId.Contains(t.Id))?.ToList();
+            var trueAnswerLess = test.Answers.Where(t => t.TestId == testAnswer.TestId && t.IsValid)?.ToList();
 
             if (answerUser == null || trueAnswerLess == null)
             {
