@@ -26,7 +26,7 @@ namespace DAL.Repositories
 
         public Lesson GetItem(Guid id)
         {
-            var lessons = this.Context.Lessons
+            var lessons = this.Context.Lessons.Include(l => l.TheoryPages).Include(l => l.TestPages)
                 .FirstOrDefault(c => c.Id == id);
 
             return lessons;

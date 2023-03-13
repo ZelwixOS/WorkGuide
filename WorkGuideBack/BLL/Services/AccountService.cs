@@ -150,6 +150,11 @@
             return this.userManager.GetUsersInRoleAsync(role);
         }
 
+        public async Task<IList<UserInfo>> GetWorkers()
+        {
+            return (await GetByRole(Constants.RoleManager.Worker))?.Select(u => new UserInfo(u))?.ToList();
+        }
+
         public async Task<UserInfo> GetCurrentUserInfo(HttpContext httpCont)
         {
             User usr = await GetCurrentUserAsync(httpCont);

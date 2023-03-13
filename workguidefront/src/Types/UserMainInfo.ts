@@ -1,4 +1,5 @@
 type UserMainInfo = {
+  id: string;
   userName: string;
   firstName: string;
   secondName: string;
@@ -6,6 +7,7 @@ type UserMainInfo = {
   email: string;
   phoneNumber: string;
   avatar: string;
+  banned: boolean;
 };
 
 export default UserMainInfo;

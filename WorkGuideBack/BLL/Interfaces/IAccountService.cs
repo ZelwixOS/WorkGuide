@@ -27,5 +27,6 @@
         public int BanUser(Guid id);
 
         public int UnBanUser(Guid id);
+        Task<IList<UserInfo>> GetWorkers();
     }
 }

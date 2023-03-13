@@ -21,7 +21,7 @@ namespace DAL.Repositories
 
         public IQueryable<Course> GetItems()
         {
-            return this.Context.Courses.AsNoTracking();
+            return this.Context.Courses.Include(c => c.PositionCourses).AsNoTracking();
         }
 
         public Course GetItem(Guid id)
