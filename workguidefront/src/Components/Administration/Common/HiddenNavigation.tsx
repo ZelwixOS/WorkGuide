@@ -2,7 +2,7 @@ import React from 'react'
 import Drawer from '@mui/material/Drawer'
 import { List as ListIcon } from 'react-bootstrap-icons'
 import Divider from '@mui/material/Divider'
-import List from '@mui/material/List';
+import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { IconButton, MenuItem, Typography } from '@mui/material'

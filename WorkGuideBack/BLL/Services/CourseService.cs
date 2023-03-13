@@ -84,9 +84,9 @@ namespace BLL.Services
             return new CourseDto(res);
         }
 
-        public CourseDto PublishService(string url)
+        public CourseDto PublishService(Guid id)
         {
-            var course = courseRepository.GetItem(url);
+            var course = courseRepository.GetItem(id);
 
             if (course != null)
             {
@@ -97,9 +97,9 @@ namespace BLL.Services
             return null;
         }
 
-        public CourseDto UnpublishService(string url)
+        public CourseDto UnpublishService(Guid id)
         {
-            var course = this.courseRepository.GetItem(url);
+            var course = this.courseRepository.GetItem(id);
 
             if (course != null)
             {

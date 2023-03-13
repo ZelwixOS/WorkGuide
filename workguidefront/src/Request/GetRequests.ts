@@ -12,8 +12,16 @@ async function getCourseByUrl(url: string): Promise<Course>  {
   return await getRequest(`/api/course/url/${url}`);
 }
 
+async function getCourseById(id: string): Promise<Course>  {
+  return await getRequest(`/api/course/id/${id}`);
+}
+
 async function getCourses(page: number, itemsOnPage: number): Promise<CoursePage>  {
   return await getRequest(`/api/course?page=${page}&itemsOnPage=${itemsOnPage}`);
+}
+
+async function getSearchedCourses(page: number, itemsOnPage: number, search: string): Promise<CoursePage>  {
+  return await getRequest(`/api/course?page=${page}&itemsOnPage=${itemsOnPage}&search=${search}`);
 }
 
 async function getLessonByNumber(url: string, lessonNumber: string): Promise<Lesson>  {
@@ -31,5 +39,7 @@ export {
   getCourses,
   getCourseByUrl,
   getAllWorkers,
-  getLessonByNumber
+  getLessonByNumber,
+  getCourseById,
+  getSearchedCourses
 }

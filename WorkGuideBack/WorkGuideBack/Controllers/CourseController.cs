@@ -55,21 +55,20 @@ namespace WorkGuideBack.Controllers
             return this.Ok(await this.courseService.UpdateCourseAsync(course));
         }
 
-
         [HttpPost]
         [Route("publish/{url}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<CourseDto> Publish(string url)
+        public ActionResult<CourseDto> Publish(Guid id)
         {
-            return this.Ok(this.courseService.PublishService(url));
+            return this.Ok(this.courseService.PublishService(id));
         }
 
         [HttpPost]
         [Route("unpublish/{url}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<CourseDto> Unpublish(string url)
+        public ActionResult<CourseDto> Unpublish(Guid id)
         {
-            return this.Ok(this.courseService.UnpublishService(url));
+            return this.Ok(this.courseService.UnpublishService(id));
         }
 
         [HttpDelete("{id}")]

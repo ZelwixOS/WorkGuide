@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import CoursePage from './Components/Course/CoursePage'
+import { CoursePage as AdministrationCourses } from './Components/Administration/Pages/CoursePage'
 import CourseListPage from './Components/Course/CourseListPage'
 import LessonPage from './Components/Lesson/LessonPage'
 import { AdminPage } from './Components/Administration/Pages/AdminPage'
@@ -37,6 +38,7 @@ function App() {
             <Route path="/admin">
             <Route index element={<AdminPage />} />
               <Route path='workers' element={<WorkersPage />} />
+              <Route path='courses' element={<AdministrationCourses />} />
             </Route>
             <Route path="*" element={<h2>Ресурс не найден</h2>} />
           </Routes>

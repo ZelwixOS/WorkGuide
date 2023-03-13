@@ -28,13 +28,49 @@ async function checkComplexTest(lessonId: string, answers: any) {
 }
 
 async function banUser(id: string) {
-  return await post(`/api/Account/Ban/${id}`, null);
+  return await post(`/api/Account/Ban/${id}`, null)
+}
+
+async function createCourse(
+  url: string,
+  name: string,
+  description: string,
+  picFile: File | null,
+) {
+
+  const formData = new FormData()
+  formData.append('name', name)
+  formData.append('url', url);
+  formData.append('description', description)
+
+  if (picFile) {
+    formData.append('picFile', picFile)
+  }
+
+  return await post(`/api/Course`, formData)
 }
 
 async function unbanUser(id: string) {
-  return await post(`/api/Account/Unban/${id}`, null);
+  return await post(`/api/Account/Unban/${id}`, null)
+}
+
+async function publishCourse(id: string) {
+  return await post(`/api/Course/publish/${id}`, null)
+}
+
+async function unpublishCourse(id: string) {
+  return await post(`/api/Course/unpublish/${id}`, null)
 }
 
 export default post
 
-export { post, checkAnswer, checkComplexTest, banUser, unbanUser }
+export {
+  post,
+  checkAnswer,
+  checkComplexTest,
+  banUser,
+  unbanUser,
+  publishCourse,
+  unpublishCourse,
+  createCourse,
+}
