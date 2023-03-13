@@ -9,6 +9,7 @@ namespace BLL.DTO.Response
             this.Id = test.Id;
             this.PageNumber = test.PageNumer;
             this.Content = test.Content;
+            this.IsManyAnswer = test.IsManyAnswer;
 
             if (test.Answers != null)
             {
@@ -26,6 +27,7 @@ namespace BLL.DTO.Response
                 }
             }
         }
+        public bool IsManyAnswer { get; set; }
 
         public List<AnswerDto> Answers { get; set; }
     }

@@ -180,14 +180,20 @@ namespace BLL.Services
                 return null;
             }
 
-            var answer = test.Answers.FirstOrDefault(t => t.Id == testAnswer.AnswerId);
+            var answerUser = test.Answers.Where(t => testAnswer.AnswerId.Contains(t.Id)).ToList();
+            var trueAnswerLess = test.Answers.Where(t => t.TestId == testAnswer.TestId && t.IsValid).ToList();
 
-            if (answer == null)
+            if (answerUser == null || trueAnswerLess == null)
             {
                 return null;
             }
 
-            return answer.IsValid;
+            if (answerUser.Count != trueAnswerLess.Count)
+            {
+                return false;
+            }
+
+            return answerUser.Any(a => a.IsValid);
         }
     }
 }
