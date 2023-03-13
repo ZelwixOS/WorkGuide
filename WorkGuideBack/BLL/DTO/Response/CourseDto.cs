@@ -19,6 +19,16 @@ namespace BLL.DTO.Response
             }
         }
 
+        public CourseDto(Course course, UserCourse userCourse)
+            : this(course)
+        {
+            if (userCourse != null)
+            {
+                this.CompletedTests = userCourse.CompletedTests;
+                this.TotalTests = userCourse.TotalTests;
+            }
+        }
+
         public Guid Id { get; set; }
 
         public string Name { get; set; }
@@ -32,5 +42,9 @@ namespace BLL.DTO.Response
         public string Description { get; set; }
 
         public List<LessonDto> Lessons { get; set; }
+
+        public int CompletedTests { get; set; }
+
+        public int TotalTests { get; set; }
     }
 }
