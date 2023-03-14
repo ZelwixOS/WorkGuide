@@ -4,6 +4,6 @@
     {
         public Guid TestId { get; set; }
 
-        public Guid AnswerId { get; set; }
+        public List<Guid> AnswerId { get; set; }
     }
 }

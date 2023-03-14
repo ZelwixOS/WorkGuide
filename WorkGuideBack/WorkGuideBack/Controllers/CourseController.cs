@@ -34,7 +34,9 @@ namespace WorkGuideBack.Controllers
             {
                 return this.Ok(null);
             }
-            return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, true, user));
+
+            var roles = await this.accountService.GetRole(HttpContext);
+            return this.Ok(this.courseService.GetCourses(page, itemsOnPage, search, !roles.Contains(Constants.RoleManager.Admin), user));
         }
 
         [HttpGet("id/{id}")]
@@ -63,21 +65,20 @@ namespace WorkGuideBack.Controllers
             return this.Ok(await this.courseService.UpdateCourseAsync(course));
         }
 
-
         [HttpPost]
-        [Route("publish/{url}")]
+        [Route("publish/{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<CourseDto> Publish(string url)
+        public ActionResult<CourseDto> Publish(Guid id)
         {
-            return this.Ok(this.courseService.PublishService(url));
+            return this.Ok(this.courseService.PublishService(id));
         }
 
         [HttpPost]
-        [Route("unpublish/{url}")]
+        [Route("unpublish/{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<CourseDto> Unpublish(string url)
+        public ActionResult<CourseDto> Unpublish(Guid id)
         {
-            return this.Ok(this.courseService.UnpublishService(url));
+            return this.Ok(this.courseService.UnpublishService(id));
         }
 
         [HttpDelete("{id}")]

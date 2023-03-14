@@ -8,6 +8,7 @@ import AchievmentsList from '../Achievments/AchievmentsList'
 import ActivityList from '../Activity/ActivityList'
 import Calendar from '../Calendar/Calendar'
 import Loading from '../Common/Loading'
+import NavigationBar from '../Common/NavigationBar'
 import CourseSmallCardList from '../Course/CourseSmallCardList'
 import UserModal from './UserModal'
 
@@ -55,6 +56,8 @@ const UserPage = () => {
   }, [])
 
   return (
+    <>
+    <NavigationBar />
     <Container className='h-100'>
       {loading ? <Loading /> : !user ? <div className='w-100 h-100 d-flex align-items-center justify-content-center'><h2>Для работы необходимо войти в систему 🚪</h2></div> :
         <>
@@ -99,7 +102,7 @@ const UserPage = () => {
         </>
       }
     </Container>
-
+    </>
   )
 }
 

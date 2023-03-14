@@ -60,7 +60,7 @@ const LessonPage = () => {
 
   return (
     <>
-      {isLoading ? <Loading /> :
+      {isLoading ? <Loading /> : 
       lesson != null &&
       lesson.theoryPages.length == 0 &&
       lesson.testPages.length > 0 ? (

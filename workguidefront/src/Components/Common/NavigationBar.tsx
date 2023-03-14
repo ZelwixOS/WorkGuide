@@ -61,7 +61,7 @@ const NavigationBar: React.FC = () => {
   const { classes, cx } = useStyles()
 
   return (
-    <Navbar className={classes.mainBack}>
+    <Navbar className={`shadow mb-1 ${classes.mainBack}`}>
       <Container>
         <Navbar.Brand href="/">
           <img
