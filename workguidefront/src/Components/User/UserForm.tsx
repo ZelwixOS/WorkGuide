@@ -5,7 +5,7 @@ import { makeStyles } from '../../theme'
 import { Globe, PersonLinesFill, ShieldLock, TelephoneFill } from 'react-bootstrap-icons'
 import UserMainInfo from '../../Types/UserMainInfo'
 import UserLinks from '../../Types/UserLinks'
-import { updateUserLiks } from '../../Request/PutRequests'
+import { updateUserLinks } from '../../Request/PutRequests'
 import ServerResponse from '../../Types/ServerResponse'
 
 interface IUserForm {
@@ -66,7 +66,7 @@ const UserForm: React.FC<IUserForm> = (props: IUserForm) => {
   }
 
   const onSave = async () => {
-    redirectTo(await updateUserLiks(userData))
+    redirectTo(await updateUserLinks(userData))
   }
 
   const redirectTo = async (response: ServerResponse) => {
