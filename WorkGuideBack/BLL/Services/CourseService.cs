@@ -140,7 +140,7 @@ namespace BLL.Services
 
         public async Task<CourseDto> UpdateCourseAsync(CourseUpdateRequestDto course)
         {
-            var courEntity = courseRepository.GetItem(course.Id);
+            var courEntity = courseRepository.GetItems().FirstOrDefault(c => c.Id == course.Id);
 
             if (courEntity == null)
             {

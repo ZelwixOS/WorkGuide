@@ -148,9 +148,11 @@ const EditCourse: React.FC<IEditCourse> = (props) => {
       if (reason === 'selectOption') {
         addCoursePosition(props.id, details.option.id).then((res) => {
           if (res) {
-            const newPos = [...pickedPositions]
-            newPos.push(details.option)
-            setPickedPositions(newPos)
+            if (!pickedPositions.find(p => p.id == details.option.id)) {
+              const newPos = [...pickedPositions]
+              newPos.push(details.option)
+              setPickedPositions(newPos)
+            }
           } else {
             showFail()
           }
