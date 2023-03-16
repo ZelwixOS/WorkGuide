@@ -207,10 +207,7 @@ namespace BLL.Services
             positionCourse = new PositionCourse() 
             {
                 PositionId = positionId, 
-                CourseId = id, 
-                Position = position, 
-                Course = course
-
+                CourseId = id,
             };
 
             positionCourseRepository.CreateItem(positionCourse);
@@ -237,7 +234,19 @@ namespace BLL.Services
                 return false;
             }
 
-            return course.PositionCourses.Remove(positionCourse);
+            return positionCourseRepository.DeleteItem(positionCourse) > 0;
+        }
+
+        public List<PositionDto> GetPositions(Guid id)
+        {
+            var course = this.courseRepository.GetItem(id);
+
+            if (course == null)
+            {
+                return null;
+            }
+
+            return course.PositionCourses?.Select(pc => new PositionDto(pc.Position)).ToList();
         }
     }
 }

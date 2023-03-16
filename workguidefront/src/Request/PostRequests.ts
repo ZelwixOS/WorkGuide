@@ -62,6 +62,14 @@ async function unpublishCourse(id: string) {
   return await post(`/api/Course/unpublish/${id}`, null)
 }
 
+async function createPosition(title: string) {
+  return await post(`/api/Position`, { title: title })
+}
+
+async function addCoursePosition(courseId: string, positionId: string) {
+  return await post(`/api/Course/${courseId}/${positionId}`, null)
+}
+
 export default post
 
 export {
@@ -73,4 +81,6 @@ export {
   publishCourse,
   unpublishCourse,
   createCourse,
+  createPosition,
+  addCoursePosition,
 }
