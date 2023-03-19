@@ -79,40 +79,20 @@ namespace BLL.Services
 
         public async Task<UserInfo> UpdateUserAsync(UserUpdateRequestDto userInfo, Guid userId)
         {
-            var usEntity = this.userRepository.GetItem(userId);
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
 
-            if (usEntity == null)
+            if (user == null)
             {
                 return null;
             }
-
             var us = userInfo.ToModel();
-            us.Position = usEntity.Position;
-            us.PositionId = usEntity.PositionId;
-            us.Avatar = usEntity.Avatar;
-            us.Banned = usEntity.Banned;
-            us.FirstName = usEntity.FirstName;
-            us.LessonsScore = usEntity.LessonsScore;
-            us.SecondName = usEntity.SecondName;
-            us.TestsAnswers = usEntity.TestsAnswers;
-            us.AccessFailedCount = usEntity.AccessFailedCount;
-            us.ConcurrencyStamp = usEntity.ConcurrencyStamp;
-            us.EmailConfirmed = usEntity.EmailConfirmed;
-            us.Id = usEntity.Id;
-            us.LockoutEnabled = usEntity.LockoutEnabled;
-            us.LockoutEnd = usEntity.LockoutEnd;
-            us.NormalizedEmail = usEntity.NormalizedEmail;
-            us.NormalizedUserName = usEntity.NormalizedUserName;
-            us.PasswordHash = usEntity.PasswordHash;
-            us.PhoneNumberConfirmed = usEntity.PhoneNumberConfirmed;
-            us.UserName = usEntity.UserName;
-            us.SecurityStamp = usEntity.SecurityStamp;
-            us.TwoFactorEnabled = usEntity.TwoFactorEnabled;
 
+            user.PhoneNumber = us.PhoneNumber;
+            user.Email = us.Email;
 
-            var res = await this.userManager.UpdateAsync(us);
-            
-            return res.Succeeded ? new UserInfo(us) : null;
+            await this.userManager.UpdateAsync(user);
+
+            return new UserInfo(user);
         }
     }
 }

@@ -1,10 +1,14 @@
-﻿using BLL.DTO.Request.Position;
+using BLL.DTO.Request.Position;
+using BLL.DTO.Request.Lesson;
+using BLL.DTO.Request;
 using BLL.DTO.Response;
-using BLL.Helpers;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ServicePicker.Controllers;
+using System.Data;
+using BLL.DTO.Request.Position;
+using BLL.Helpers;
 
 namespace WorkGuideBack.Controllers
 {
@@ -28,23 +32,23 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpGet("id/{id}")]
-        public ActionResult<CourseDto> Get(Guid id)
+        public ActionResult<PositionDto> Get(Guid id)
         {
             return this.Ok(this.positionService.GetPosition(id));
         }
 
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<CourseDto>> Create(PositionCreateRequestDto course)
+        public ActionResult<PositionDto> Create([FromBody] PositionCreateRequestDto lesson)
         {
-            return this.Ok(this.positionService.CreatePosition(course));
+            return this.Ok(this.positionService.CreatePosition(lesson));
         }
 
         [HttpPut]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<CourseDto>> Update(PositionUpdateRequestDto course)
+        public ActionResult<PositionDto> Update([FromBody] PositionUpdateRequestDto lesson)
         {
-            return this.Ok(this.positionService.UpdatePosition(course));
+            return this.Ok(this.positionService.UpdatePosition(lesson));
         }
 
         [HttpDelete("{id}")]

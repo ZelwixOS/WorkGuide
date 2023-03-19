@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Card, Col, Container, Row } from 'react-bootstrap'
-import { Globe, Pencil, PersonLinesFill, ShieldLock, TelephoneFill } from 'react-bootstrap-icons'
+import { Globe, PersonLinesFill, ShieldLock, TelephoneFill } from 'react-bootstrap-icons'
 import { getCurrentUserInfo } from '../../Request/GetRequests'
 import { makeStyles } from '../../theme'
 import UserMainInfo from '../../Types/UserMainInfo'
@@ -10,6 +10,7 @@ import Calendar from '../Calendar/Calendar'
 import Loading from '../Common/Loading'
 import NavigationBar from '../Common/NavigationBar'
 import CourseSmallCardList from '../Course/CourseSmallCardList'
+import UserModal from './UserModal'
 
 const useStyles = makeStyles()((theme) => ({
   card: {
@@ -35,19 +36,6 @@ const useStyles = makeStyles()((theme) => ({
   },
   icon: {
     marginRight: '0.5rem'
-  },
-  editIcon: {
-    marginLeft: '0.75rem',
-    color: '#000',
-    '&:hover': {
-      color: '#A370F780'
-    }
-  },
-  placeholder: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#A370F780',
-    color: 'white'
   }
 }))
 
@@ -83,7 +71,7 @@ const UserPage = () => {
                     </Col>
                     <Col>
                       <Card.Body>
-                        <Card.Title className={classes.title}>{user.firstName} {user.secondName}<Pencil size={18} className={classes.editIcon} /></Card.Title>
+                        <Card.Title className={classes.title}>{user.firstName} {user.secondName} <UserModal user={user} /></Card.Title>
                         <Card.Text className={classes.info}><ShieldLock size={18} className={classes.icon} />Отдел: ???</Card.Text>
                         <Card.Text className={classes.info}><PersonLinesFill size={18} className={classes.icon} />Должность: ???</Card.Text>
                         <Card.Text className={classes.info}><Globe size={18} className={classes.icon} />{user.email}</Card.Text>
