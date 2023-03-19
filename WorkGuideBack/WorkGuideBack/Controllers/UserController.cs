@@ -37,7 +37,7 @@ namespace WorkGuideBack.Controllers
             return this.Ok(this.userService.GetUserInfo(id));
         }
 
-        [HttpPost("id/{id}/{position}")]
+        [HttpPost("id/{id}/{positionId}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public ActionResult<UserInfo> UpdatePosition(Guid id, Guid positionId)
         {

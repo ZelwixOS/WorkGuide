@@ -27,5 +27,8 @@
         [MaxLength(100)]
         [MinLength(1)]
         public string SecondName { get; set; }
+
+        [Required]
+        public Guid PositionId { get; set; }
     }
 }

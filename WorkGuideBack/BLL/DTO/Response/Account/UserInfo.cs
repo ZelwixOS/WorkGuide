@@ -14,6 +14,8 @@
             this.PhoneNumber = user.PhoneNumber;
             this.Email = user.Email;
             this.Avatar = user.Avatar;
+            if (user.Position != null)
+                this.Position = user.Position.Title;
         }
 
         public UserInfo(User user)
@@ -26,6 +28,8 @@
             this.Email = user.Email;
             this.Avatar = user.Avatar;
             this.Banned = user.Banned;
+            if (user.Position != null)
+                this.Position = user.Position.Title;
         }
 
         public Guid Id { get; set; }
@@ -45,5 +49,7 @@
         public string Avatar { get; set; }
 
         public bool Banned { get; set; }
+
+        public string Position { get; set; }
     }
 }

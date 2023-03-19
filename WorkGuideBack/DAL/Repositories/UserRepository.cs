@@ -22,6 +22,7 @@
         {
             return this.Context.Users
                 .AsNoTracking()
+                .Include(u => u.Position)
                 .FirstOrDefault(c => c.Id == id);
         }
 
