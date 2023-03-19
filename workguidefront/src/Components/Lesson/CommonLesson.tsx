@@ -35,13 +35,13 @@ const CommonLesson = (props: ICommonLesson) => {
   const [isTheory, setTheoryCondition] = useState<boolean>(false)
   const [showWrongAnswer, setShowWrongAnswer] = useState<boolean>(false)
   const [isAnsweredCorrectly, setAnsweredCorrectly] = useState<boolean>(false)
-  const [currentAnswers, setCurrentAnswers] = useState<string[]>([])
+  const [currentAnswers, setCurrentAnswers] = useState<string[][]>([])
   const [currentPage, setCurrentPage] = useState<number>(0)
 
   const checkAnswerCorrectness = async () => {
     const isCorrect = await checkAnswer(
       (lessonPage as Test).id,
-      currentAnswers[page],
+      currentAnswers[page] ? currentAnswers[page] : [],
     )
 
     setAnsweredCorrectly(isCorrect)
@@ -94,9 +94,22 @@ const CommonLesson = (props: ICommonLesson) => {
     return true
   }
 
-  const onTestAnswerChanged = (testId: string, answerId: string) => {
+  const onTestAnswerChanged = (testId: string, answerId: string, hasManyAnswers: boolean) => {
     const answers = [...currentAnswers]
-    answers[page] = answerId
+    if(hasManyAnswers) {
+      if(answers[page] && answers[page].find((i: string) => i === answerId)) {
+        answers[page] = answers[page].filter((i: string) => i !== answerId);
+      } else {
+        if(answers[page]) {
+          answers[page] = [...answers[page], answerId];
+        } else {
+          answers[page] = [answerId];
+        }
+      }
+    } else {
+      answers[page] = [answerId]
+    }
+
     setCurrentAnswers(answers)
   }
 
@@ -118,11 +131,11 @@ const CommonLesson = (props: ICommonLesson) => {
           test={lessonPage}
           wrongAnswer={showWrongAnswer}
           onChanged={onTestAnswerChanged}
-          pickedAnswer={currentAnswers[page]}
+          pickedAnswers={currentAnswers[page] ? currentAnswers[page] : []}
         />
       )}
       <Row className={classes.paginator}>
-        {page > 0 ? (
+        {page > 0 && !showWrongAnswer ? (
           <Paginate
             initialPage={page}
             maxPage={props.maxPage}

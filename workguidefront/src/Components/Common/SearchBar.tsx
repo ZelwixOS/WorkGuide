@@ -80,7 +80,7 @@ const SearchBar = () => {
         onFocus={() => setFocus(true)}
         forcePopupIcon={false}
         id="user-search-bar"
-        getOptionLabel={(option) => `${option.firstName} ${option.secondName}`}
+        getOptionLabel={(option) => `${option.firstName} ${option.secondName} ${option.phoneNumber} ${option.email}`}
         options={users}
         loading={loading}
         loadingText={'Загрузка...'}

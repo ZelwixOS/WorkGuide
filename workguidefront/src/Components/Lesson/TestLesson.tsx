@@ -34,9 +34,21 @@ const TestLesson = (props: ITestLesson) => {
   const [correctAnswers, setCorrectAnswers] = useState(0)
   const [totalQuestions, setTotalQuestions] = useState(0)
 
-  const onTestAnswerChanged = (testId: string, answerId: string) => {
+  const onTestAnswerChanged = (testId: string, answerId: string, hasManyAnswers: boolean) => {
     const answers = JSON.parse(JSON.stringify(currentAnswers))
-    answers[testId] = answerId
+    if(hasManyAnswers) {
+      if(answers[testId] && answers[testId].find((i: string) => i === answerId)) {
+        answers[testId] = answers[testId].filter((i: string) => i !== answerId);
+      } else {
+        if(answers[testId]) {
+          answers[testId] = [...answers[testId], answerId];
+        } else {
+          answers[testId] = [answerId];
+        }
+      }
+    } else {
+      answers[testId] = [answerId]
+    }
     setCurrentAnswers(answers)
   }
 
@@ -66,7 +78,7 @@ const TestLesson = (props: ITestLesson) => {
             test={test}
             className={classes.questions}
             onChanged={onTestAnswerChanged}
-            pickedAnswer={currentAnswers[test.id] as string}
+            pickedAnswers={currentAnswers[test.id] ? currentAnswers[test.id] as string[] : []}
           />
         ))
       ) : (

@@ -68,6 +68,7 @@ const CourseListPage = () => {
 
   return (
     <>
+      <NavigationBar />
       <Container className={classes.container}>
         <h3>Список курсов</h3>
         <h5 className="mb-4">Здесь хранятся все доступные Вам курсы</h5>
