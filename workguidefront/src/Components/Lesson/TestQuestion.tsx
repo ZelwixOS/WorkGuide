@@ -5,9 +5,9 @@ import Test from '../../Types/Test'
 
 interface ITestQuestion extends HTMLAttributes<null> {
   test: Test
-  onChanged: (testId: string, answerId: string) => void
+  onChanged: (testId: string, answerId: string, hasManyAnswers: boolean) => void
   wrongAnswer?: boolean
-  pickedAnswer?: string
+  pickedAnswers: string[]
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,10 +27,15 @@ const useStyles = makeStyles()((theme) => ({
 
 const TestQuestion = (props: ITestQuestion) => {
   const { classes, cx } = useStyles()
+
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    props.onChanged(props.test.id, event.currentTarget.id)
+    props.onChanged(props.test.id, event.currentTarget.id, false)
   }
-  
+
+  const onChangeMulti = (event: ChangeEvent<HTMLInputElement>) => {
+    props.onChanged(props.test.id, event.currentTarget.id, true)
+  }
+
   return (
     <Card
       className={`shadow mb-1 d-flex-row align-items-left ${
@@ -54,10 +59,22 @@ const TestQuestion = (props: ITestQuestion) => {
       <Card.Body>
         <Form className="d-flex flex-column">
           {props.test.answers.map((answer) => (
+            props.test.isManyAnswer ? 
             <Form.Check
               id={answer.id}
               key={answer.id}
-              checked={props.pickedAnswer === answer.id}
+              checked={props.pickedAnswers.find(i => i === answer.id) !== undefined}
+              type="checkbox"
+              name={props.test.id}
+              label={answer.content}
+              className="d-flex justify-content-start"
+              onChange={onChangeMulti}
+            />
+            :
+            <Form.Check
+              id={answer.id}
+              key={answer.id}
+              checked={props.pickedAnswers.find(i => i === answer.id) !== undefined}
               type="radio"
               name={props.test.id}
               label={answer.content}

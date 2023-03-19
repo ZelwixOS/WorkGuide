@@ -8,6 +8,7 @@ type Test = {
   lessonNumber: number;
   content: string;
   answers: Answer[];
+  isManyAnswer: boolean;
 };
 
 export default Test;
