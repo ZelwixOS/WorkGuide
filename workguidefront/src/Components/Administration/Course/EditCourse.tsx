@@ -2,6 +2,9 @@ import React, { useEffect } from 'react'
 import Button from '@mui/material/Button'
 import { makeStyles } from 'tss-react/mui'
 import {
+  Autocomplete,
+  AutocompleteChangeDetails,
+  AutocompleteChangeReason,
   Card,
   CardContent,
   CardMedia,
@@ -10,8 +13,15 @@ import {
   TextField,
 } from '@mui/material'
 import { Alert } from '@mui/material'
-import { getCourseById } from '../../../Request/GetRequests'
+import {
+  getAllPositions,
+  getCourseById,
+  getCoursePositions,
+} from '../../../Request/GetRequests'
 import { updateCourse } from '../../../Request/PutRequests'
+import Position from '../../../Types/Position'
+import { addCoursePosition } from '../../../Request/PostRequests'
+import { removeCoursePosition } from '../../../Request/DeleteRequests'
 
 interface IRefresher {
   refresh: () => void
@@ -49,10 +59,15 @@ const EditCourse: React.FC<IEditCourse> = (props) => {
 
   const getData = async (isMounted: boolean) => {
     const res = await getCourseById(props.id)
+    const positions = await getAllPositions()
+    const selectedPositions = await getCoursePositions(props.id)
     if (isMounted) {
       setCourseData(formatCourse(res.url, res.name, res.description))
 
       setPicUrl(`/coursePics/${res.picUrl}`)
+
+      setAllPositions(positions)
+      setPickedPositions(selectedPositions)
     }
   }
 
@@ -75,6 +90,8 @@ const EditCourse: React.FC<IEditCourse> = (props) => {
   const [message, setMessage] = React.useState<string>('')
   const [pic, setPic] = React.useState<File>()
   const [picUrl, setPicUrl] = React.useState('')
+  const [pickedPositions, setPickedPositions] = React.useState<Position[]>([])
+  const [allPositions, setAllPositions] = React.useState<Position[]>([])
 
   const handleUrlChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setCourseData(
@@ -116,6 +133,42 @@ const EditCourse: React.FC<IEditCourse> = (props) => {
     }
   }
 
+  const showFail = () => {
+    setMessage('Не удалось выполнить запрос')
+    setOpen(true)
+  }
+
+  const handlePositionChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    value: Position[],
+    reason: AutocompleteChangeReason,
+    details?: AutocompleteChangeDetails<Position> | undefined,
+  ) => {
+    if (details) {
+      if (reason === 'selectOption') {
+        addCoursePosition(props.id, details.option.id).then((res) => {
+          if (res) {
+            if (!pickedPositions.find(p => p.id == details.option.id)) {
+              const newPos = [...pickedPositions]
+              newPos.push(details.option)
+              setPickedPositions(newPos)
+            }
+          } else {
+            showFail()
+          }
+        })
+      } else if (reason === 'removeOption') {
+        removeCoursePosition(props.id, details.option.id).then((res) => {
+          if (res) {
+            setPickedPositions(pickedPositions.filter(p => p.id !== details.option.id))
+          } else {
+            showFail()
+          }
+        })
+      }
+    }
+  }
+
   const handleClose = (
     event?: Event | React.SyntheticEvent<any, Event>,
     reason?: string,
@@ -150,8 +203,7 @@ const EditCourse: React.FC<IEditCourse> = (props) => {
         props.refresher.refresh()
         props.setOpen(false)
       } else {
-        setMessage('Не удалось выполнить запрос')
-        setOpen(true)
+        showFail()
       }
     }
   }
@@ -191,6 +243,22 @@ const EditCourse: React.FC<IEditCourse> = (props) => {
         onChange={handleDescriptionChange}
         label="Описание"
         variant="outlined"
+      />
+      <Autocomplete
+        multiple
+        id="tags-positions"
+        options={allPositions}
+        onChange={handlePositionChange}
+        value={pickedPositions}
+        className={classes.spaces}
+        getOptionLabel={(option) => option.title}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Для должностей"
+            placeholder="Ничего не выбрано"
+          />
+        )}
       />
       <input
         accept="image/*"

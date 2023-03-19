@@ -16,5 +16,6 @@ namespace BLL.Interfaces
         Task<CourseDto> UpdateCourseAsync(CourseUpdateRequestDto course);
         CourseDto AddPosition(Guid id, Guid positionId);
         bool DeletePosition(Guid id, Guid positionId);
+        List<PositionDto> GetPositions(Guid id);
     }
 }

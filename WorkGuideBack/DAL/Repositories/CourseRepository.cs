@@ -27,6 +27,8 @@ namespace DAL.Repositories
         public Course GetItem(Guid id)
         {
             var category = this.Context.Courses
+                .Include(c => c.PositionCourses)
+                    .ThenInclude(pc => pc.Position)
                 .FirstOrDefault(c => c.Id == id);
 
             return category;

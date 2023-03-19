@@ -16,6 +16,12 @@ namespace BLL.Services
             this.positionRepository = positionRepository;
         }
 
+        public List<PositionDto> GetAllPositions()
+        {
+            var positions = this.positionRepository.GetItems();
+            return positions?.Select(i => new PositionDto(i))?.ToList();
+        }
+
         public PositionDto GetPosition(Guid id)
         {
             var position = this.positionRepository.GetItem(id);
@@ -37,9 +43,7 @@ namespace BLL.Services
 
         public PositionDto UpdatePosition(PositionUpdateRequestDto position)
         {
-            var posEntity = this.positionRepository.GetItem(position.Id);
-
-            if (posEntity == null)
+            if (!this.positionRepository.GetItems().Any(p => p.Id == position.Id))
             {
                 return null;
             }

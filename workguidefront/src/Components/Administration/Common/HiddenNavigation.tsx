@@ -35,6 +35,7 @@ const HiddenNavigation = () => {
   const lessons = onMenuItemClick.bind(this, '/admin/lessons')
   const courses = onMenuItemClick.bind(this, '/admin/courses')
   const workers = onMenuItemClick.bind(this, '/admin/workers')
+  const positions = onMenuItemClick.bind(this, '/admin/positions')
 
   const menuItem = (name: string, click: () => void) => (
     <MenuItem onClick={click}>
@@ -80,6 +81,8 @@ const HiddenNavigation = () => {
           {menuItem('Уроки', lessons)}
           <Divider />
           {menuItem('Работники', workers)}
+          <Divider />
+          {menuItem('Должность', positions)}
         </List>
       </Drawer>
     </React.Fragment>

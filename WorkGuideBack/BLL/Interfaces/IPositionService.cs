@@ -8,6 +8,7 @@ namespace BLL.Interfaces
     {
         PositionDto CreatePosition(PositionCreateRequestDto position);
         int DeletePosition(Guid id);
+        List<PositionDto> GetAllPositions();
         PositionDto GetPosition(Guid id);
         PositionDto UpdatePosition(PositionUpdateRequestDto position);
     }

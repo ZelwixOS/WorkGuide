@@ -1,4 +1,5 @@
-﻿using BLL.DTO.Request.Lesson;
+using BLL.DTO.Request.Position;
+using BLL.DTO.Request.Lesson;
 using BLL.DTO.Request;
 using BLL.DTO.Response;
 using BLL.Interfaces;
@@ -15,13 +16,19 @@ namespace WorkGuideBack.Controllers
     [ApiController]
     public class PositionController : ControllerBase
     {
-        private readonly ILogger<PositionController> logger;
-        private IPositionService positionService;
+        private readonly IPositionService positionService;
+        private readonly ILogger logger;
 
-        public PositionController(ILogger<PositionController> logger, IPositionService positionService)
+        public PositionController(IPositionService positionService, ILogger<AccountController> logger)
         {
-            this.logger = logger;
             this.positionService = positionService;
+            this.logger = logger;
+        }
+
+        [HttpGet]
+        public ActionResult<List<PositionDto>> GetAll()
+        {
+            return this.Ok(this.positionService.GetAllPositions());
         }
 
         [HttpGet("id/{id}")]

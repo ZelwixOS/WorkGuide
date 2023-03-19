@@ -38,10 +38,15 @@ async function updateCourse(
   return await put(`/api/Course`, formData)
 }
 
+async function updatePosition(id: string, title: string) {
+  return await put(`/api/Position/`, { id, title })
+}
+
 export default put
 
 export {
   put,
-  updateUserLinks,
-  updateCourse
+  updateCourse,
+  updatePosition,
+  updateUserLinks
 }

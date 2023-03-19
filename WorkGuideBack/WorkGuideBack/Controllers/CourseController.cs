@@ -101,5 +101,13 @@ namespace WorkGuideBack.Controllers
         {
             return this.Ok(this.courseService.AddPosition(id, positionId));
         }
+
+
+        [HttpGet("positions/{id}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<List<Position>> GetPositions(Guid id)
+        {
+            return this.Ok(this.courseService.GetPositions(id));
+        }
     }
 }
