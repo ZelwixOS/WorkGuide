@@ -22,17 +22,20 @@
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration config;
         private readonly IUserRepository userRepository;
+        private readonly IPositionRepository positionRepository;
 
         public AccountService(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IConfiguration config,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IPositionRepository positionRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.userRepository = userRepository;
             this.config = config;
+            this.positionRepository = positionRepository;
         }
 
         public async Task<MessageResultDto> Login(LogInDto model)
@@ -65,6 +68,13 @@
 
         public async Task<MessageResultDto> Register(WorkerRegistrationDto model)
         {
+            Position position = positionRepository.GetItem(model.PositionId);
+
+            if (position == null)
+            {
+                return new MessageResultDto(Answer.RegisteredUnsuccessfully, new List<string>() {"Wrong position!"});
+            }
+
             User user = new User
             {
                 Email = model.Email,
@@ -73,9 +83,11 @@
                 SecondName = model.SecondName,
                 PhoneNumber = model.PhoneNumber,
                 Avatar = "defaultAvatar",
+                PositionId = model.PositionId
             };
 
             var result = await this.userManager.CreateAsync(user, model.Password);
+
             if (result.Succeeded)
             {
                 await this.userManager.AddToRoleAsync(user, Role.Worker);
@@ -163,7 +175,8 @@
                 string role = (await this.userManager.GetRolesAsync(usr)).FirstOrDefault();
                 if (role != null)
                 {
-                    var userInfo = new UserInfo(usr, role);
+                    var user = userRepository.GetItem(usr.Id);
+                    var userInfo = new UserInfo(user, role);
                     return userInfo;
                 }
             }
