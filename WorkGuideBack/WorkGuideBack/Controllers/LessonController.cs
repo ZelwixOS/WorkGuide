@@ -22,6 +22,12 @@ namespace WorkGuideBack.Controllers
             this.lessonService = lessonService;
         }
 
+        [HttpGet]
+        public ActionResult<LessonDto> GetAll()
+        {
+            return this.Ok(this.lessonService.GetLessons());
+        }
+
         [HttpGet("id/{id}")]
         public ActionResult<LessonDto> Get(Guid id)
         {

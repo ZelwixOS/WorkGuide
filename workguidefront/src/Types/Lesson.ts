@@ -6,6 +6,8 @@ type Lesson = {
   name: string;
   orderNumber: number;
   courseUrl: string;
+  isComplexTest: boolean;
+  courseId: string;
   courseName: string;
   theoryPages: Theory[];
   testPages: Test[];

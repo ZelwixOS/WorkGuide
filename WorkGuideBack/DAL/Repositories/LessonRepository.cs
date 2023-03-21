@@ -21,7 +21,7 @@ namespace DAL.Repositories
 
         public IQueryable<Lesson> GetItems()
         {
-            return this.Context.Lessons.AsNoTracking();
+            return this.Context.Lessons.Include(l => l.Course).AsNoTracking();
         }
 
         public Lesson GetItem(Guid id)

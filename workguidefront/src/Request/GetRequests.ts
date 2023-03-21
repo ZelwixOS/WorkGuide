@@ -54,6 +54,14 @@ async function getCoursePositions(id: string): Promise<Position[]>  {
   return await getRequest(`/api/Course/positions/${id}`);
 }
 
+async function getLessonById(id: string) : Promise<Lesson> {
+  return await getRequest(`/api/Lesson/id/${id}`);
+}
+
+async function getAllLessons() : Promise<Lesson[]> {
+  return await getRequest(`/api/Lesson/`);
+}
+
 export default getRequest
 
 export {
@@ -68,5 +76,7 @@ export {
   getCurrentUserInfo,
   getAllPositions,
   getPosition,
-  getCoursePositions
+  getCoursePositions,
+  getLessonById,
+  getAllLessons
 }

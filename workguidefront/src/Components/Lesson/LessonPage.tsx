@@ -62,8 +62,7 @@ const LessonPage = () => {
     <>
       {isLoading ? <Loading /> : 
       lesson != null &&
-      lesson.theoryPages.length == 0 &&
-      lesson.testPages.length > 0 ? (
+      lesson.isComplexTest ? (
         <TestLesson loading={isLoading} lesson={lesson} />
       ) : (
         <CommonLesson

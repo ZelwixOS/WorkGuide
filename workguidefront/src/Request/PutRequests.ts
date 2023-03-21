@@ -42,11 +42,21 @@ async function updatePosition(id: string, title: string) {
   return await put(`/api/Position/`, { id, title })
 }
 
+async function updateLesson(
+  id: string,
+  orderNumber: number,
+  name: string,
+  isComplexTest: boolean,
+  courseId: string) {
+  return await put(`/api/Lesson/`, { id, orderNumber, name, isComplexTest,  courseId })
+}
+
 export default put
 
 export {
   put,
   updateCourse,
   updatePosition,
-  updateUserLinks
+  updateUserLinks,
+  updateLesson
 }

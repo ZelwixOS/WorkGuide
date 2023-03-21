@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { WorkersPage } from './Components/Administration/Pages/WorkersPage'
 import UserPage from './Components/User/UserPage';
 import { PositionPage } from './Components/Administration/Pages/PositionPage'
+import { LessonPage as AdministrationLessonPage } from './Components/Administration/Pages/LessonPage'
 
 const innerTheme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ function App() {
               <Route path='workers' element={<WorkersPage />} />
               <Route path='courses' element={<AdministrationCourses />} />
               <Route path='positions' element={<PositionPage />} />
+              <Route path='lessons' element={<AdministrationLessonPage />} />
             </Route>
             <Route path="*" element={<h2>Ресурс не найден</h2>} />
           </Routes>

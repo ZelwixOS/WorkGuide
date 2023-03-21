@@ -6,6 +6,7 @@ namespace BLL.Interfaces
 {
     public interface ILessonService
     {
+        List<LessonDto> GetLessons();
         LessonDto CreateLesson(LessonCreateRequestDto lesson);
         int DeleteLesson(Guid id);
         LessonDto GetLesson(Guid id);

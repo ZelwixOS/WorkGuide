@@ -16,6 +16,9 @@ async function removeCoursePosition(courseId: string, positionId: string) {
   return await deleteRequest(`/api/Course/${courseId}/${positionId}`)
 }
 
+async function deleteLesson(id: string)  {
+  return await deleteRequest(`/api/Lesson/${id}`);
+}
 
 export default deleteRequest
 
@@ -23,5 +26,6 @@ export {
   deleteRequest,
   deleteCourse,
   deletePosition,
-  removeCoursePosition
+  removeCoursePosition,
+  deleteLesson
 };
