@@ -57,7 +57,7 @@ const LessonCard = (props: ILessonCard) => {
           <></>
         ) : (
           <Col md={1}>
-            {props.lesson.orderNumber % 2 === 0 ? (
+            {props.lesson.finished ? (
               <PatchCheckFill color="green" size={42} />
             ) : (
               <PatchCheckFill color="#BABABA" size={42} />

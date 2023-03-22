@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
-using BLL.DTO.Request.Position;
 using BLL.Helpers;
 
 namespace WorkGuideBack.Controllers
@@ -19,7 +18,7 @@ namespace WorkGuideBack.Controllers
         private readonly IPositionService positionService;
         private readonly ILogger logger;
 
-        public PositionController(IPositionService positionService, ILogger<AccountController> logger)
+        public PositionController(IPositionService positionService, ILogger<PositionController> logger)
         {
             this.positionService = positionService;
             this.logger = logger;

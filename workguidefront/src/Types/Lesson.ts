@@ -9,6 +9,7 @@ type Lesson = {
   courseName: string;
   theoryPages: Theory[];
   testPages: Test[];
+  finished: boolean;
 };
 
 export default Lesson;
