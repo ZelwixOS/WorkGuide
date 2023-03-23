@@ -1,6 +1,5 @@
 ﻿using BLL.DTO.Request.Position;
 using BLL.DTO.Response;
-using DAL.Entities;
 
 namespace BLL.Interfaces
 {

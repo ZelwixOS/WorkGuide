@@ -1,4 +1,4 @@
-﻿namespace ServicePicker.Controllers
+﻿namespace WorkGuideBack.Controllers
 {
     using System;
     using System.Threading.Tasks;
@@ -6,7 +6,6 @@
     using BLL.DTO.Response.Account;
     using BLL.Helpers;
     using BLL.Interfaces;
-    using BLL.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
