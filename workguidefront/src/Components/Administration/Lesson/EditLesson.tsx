@@ -13,6 +13,9 @@ import { Alert } from '@mui/material'
 import Course from '../../../Types/Course'
 import { getLessonById, getSearchedCourses } from '../../../Request/GetRequests'
 import { updateLesson } from '../../../Request/PutRequests'
+import PageList from './PageList'
+import Theory from '../../../Types/Theory'
+import Test from '../../../Types/Test'
 
 interface IRefresher {
   refresh: () => void
@@ -80,6 +83,9 @@ const EditLesson: React.FC<IEditLesson> = (props) => {
           res.courseId,
         ),
       )
+      
+      setTheories(res.theoryPages)
+      setTests(res.testPages)
 
       getCoursesData(isMounted, '', res.courseId)
     }
@@ -98,11 +104,33 @@ const EditLesson: React.FC<IEditLesson> = (props) => {
     refreshData()
   }, [])
 
+  const refreshPagesData = () => {
+    let isMounted = true
+    loadPages(isMounted)
+
+    return () => {
+      isMounted = false
+    }
+  }
+
+  const loadPages = async (isMounted: boolean) =>
+  {
+    const res = await getLessonById(props.id)
+    if (isMounted) { 
+      setTheories(res.theoryPages)
+      setTests(res.testPages)
+    }
+  }
+
+
   const [allCourses, setAllCourses] = React.useState<Course[]>([])
   const [pickedCourse, setPickedCourse] = React.useState<Course | null>(null)
 
   const [open, setOpen] = React.useState<boolean>(false)
   const [message, setMessage] = React.useState<string>('')
+
+  const [theories, setTheories] = React.useState<Theory[]>([])
+  const [tests, setTests] = React.useState<Test[]>([])
 
   const handleNumberChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLessonData(
@@ -264,6 +292,8 @@ const EditLesson: React.FC<IEditLesson> = (props) => {
         }
         label="Проверочный тест"
       />
+
+      <PageList theoryPages={theories} testPages={tests} lessonId={props.id} isComplex={lessonData.isComplexTest} refresh={refreshPagesData} />
 
       <Grid container justifyContent="flex-end">
         <Button
