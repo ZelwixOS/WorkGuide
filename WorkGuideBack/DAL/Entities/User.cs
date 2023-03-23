@@ -30,6 +30,8 @@
 
         public HashSet<UserCourse> UserCourses { get; set; }
 
+        public HashSet<NotificationUser> NotificationUser { get; set; }
+
         public Position Position { get; set; }
     }
 }

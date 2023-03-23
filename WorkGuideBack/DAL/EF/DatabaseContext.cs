@@ -32,6 +32,10 @@ namespace DAL.EF
 
         public DbSet<UserCourse> UserCourses { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<NotificationUser> NotificationUsers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lesson>(entity =>
@@ -89,6 +93,19 @@ namespace DAL.EF
             {
                 entity.HasOne(c => c.Course).WithMany(p => p.UserCourses).HasForeignKey(c => c.CourseId);
                 entity.HasOne(p => p.User).WithMany(p => p.UserCourses).HasForeignKey(p => p.UserId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<NotificationUser>(entity =>
+            {
+                entity.HasOne(c => c.User).WithMany(p => p.NotificationUser).HasForeignKey(c => c.UserId);
+                entity.HasOne(p => p.Notification).WithMany(p => p.NotificationUser).HasForeignKey(p => p.NotificationId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasMany(p => p.NotificationUser).WithOne(u => u.Notification).HasForeignKey(u => u.NotificationId);
                 entity.HasKey(p => p.Id);
             });
 

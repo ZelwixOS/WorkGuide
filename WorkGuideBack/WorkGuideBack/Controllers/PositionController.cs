@@ -1,12 +1,8 @@
 using BLL.DTO.Request.Position;
-using BLL.DTO.Request.Lesson;
-using BLL.DTO.Request;
 using BLL.DTO.Response;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using BLL.Helpers;
 
 namespace WorkGuideBack.Controllers

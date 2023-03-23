@@ -90,6 +90,10 @@ namespace WorkGuideBack
                 new PositionRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
             services.AddScoped<IUserCourseRepository, UserCourseRepository>(provider =>
                 new UserCourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<INotificationRepository, NotificationRepository>(provider =>
+                new NotificationRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<INotificationUserRepository, NotificationUserRepository>(provider =>
+                new NotificationUserRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
 
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ICourseService, CourseService>();
@@ -100,6 +104,7 @@ namespace WorkGuideBack
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }
