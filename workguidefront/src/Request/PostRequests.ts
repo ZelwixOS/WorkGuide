@@ -74,6 +74,10 @@ async function createLesson(orderNumber: number, name: string, isComplexTest: bo
   return await post(`/api/Lesson/`, { orderNumber, name, isComplexTest, courseId })
 }
 
+async function createTheoryPage(lessonId: string, pageNumber: number, content: string) {
+  return await post(`/api/Theory/`, { pageNumber, content, lessonId })
+}
+
 export default post
 
 export {
@@ -87,5 +91,6 @@ export {
   createCourse,
   createPosition,
   addCoursePosition,
-  createLesson
+  createLesson,
+  createTheoryPage
 }
