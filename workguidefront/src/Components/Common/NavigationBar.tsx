@@ -5,6 +5,7 @@ import { makeStyles } from '../../theme'
 import Roles from '../../Types/Roles'
 import UserMiniPanel from '../User/UserMiniPanel'
 import LoginModal from './LoginModal'
+import Notifications from './Notifications'
 import SearchBar from './SearchBar'
 
 const useStyles = makeStyles()((theme) => ({
@@ -75,6 +76,7 @@ const NavigationBar: React.FC = () => {
       </Container>
       <Container style={{justifyContent: 'end'}}>
         {loaded && isAuth ? <SearchBar /> : null}
+        {loaded && isAuth ? <Notifications /> : null}
         {loaded && (isAuth ? <UserMiniPanel /> : <LoginModal />)}
       </Container>
     </Navbar>
