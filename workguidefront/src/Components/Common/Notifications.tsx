@@ -4,6 +4,8 @@ import { makeStyles } from '../../theme'
 import NotificationIcon from '../Notifications/NotificationIcon'
 import Notification from '../../Types/Notification'
 import NotificationCard from '../Notifications/NotificationCard'
+import { getNotifications } from '../../Request/GetRequests'
+import { readNotification } from '../../Request/PostRequests'
 
 
 
@@ -40,7 +42,7 @@ const Notifications = () => {
 
   const loadNotifications = async () => {
     setLoading(false);
-    const newNotifications: Notification[] = [/*pass request here*/];
+    const newNotifications: Notification[] = await getNotifications();
 
     setNotifications(newNotifications);
     setHasNotifications(newNotifications.length > 0);
@@ -50,13 +52,12 @@ const Notifications = () => {
     setOpened(nextShow);
   }
 
-  const onNotificationClose = (id: string) => {
-    /*pass request to delete notification here*/
+  const onNotificationClose = async (id: string) => {
+    await readNotification(id);
+
     const newNotifications = notifications.filter(n => n.id !== id);
     setNotifications(newNotifications);
     setHasNotifications(newNotifications.length > 0);
-
-
   }
 
   useEffect(() => {

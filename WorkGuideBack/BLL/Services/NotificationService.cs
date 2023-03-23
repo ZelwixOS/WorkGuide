@@ -133,7 +133,7 @@ namespace BLL.Services
 
         public NotificationUserDto ReadNotification(Guid id, Guid userId)
         {
-            var notificationUser = this.notificationUserRepository.GetItems()
+            var notificationUser = this.notificationUserRepository.GetItems().Include(x => x.Notification)
                 .FirstOrDefault(i => i.Id == id && i.UserId == userId);
             if (notificationUser == null)
             {
@@ -147,7 +147,7 @@ namespace BLL.Services
 
         public NotificationUserDto ReadNotNotification(Guid id, Guid userId)
         {
-            var notificationUser = this.notificationUserRepository.GetItems()
+            var notificationUser = this.notificationUserRepository.GetItems().Include(x => x.Notification)
                 .FirstOrDefault(i => i.Id == id && i.UserId == userId);
             if (notificationUser == null)
             {

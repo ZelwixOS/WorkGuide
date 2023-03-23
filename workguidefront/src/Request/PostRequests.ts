@@ -70,6 +70,10 @@ async function addCoursePosition(courseId: string, positionId: string) {
   return await post(`/api/Course/${courseId}/${positionId}`, null)
 }
 
+async function readNotification(notificationId: string) {
+  return await post(`/api/Notification/readT/${notificationId}`, null)
+}
+
 export default post
 
 export {
@@ -83,4 +87,5 @@ export {
   createCourse,
   createPosition,
   addCoursePosition,
+  readNotification
 }

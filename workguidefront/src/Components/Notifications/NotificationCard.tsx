@@ -38,7 +38,7 @@ const NotificationCard = (props: INotificationCard) => {
           </Col>
           <Col md={'auto'}><X size={24} onClick={onClose}/></Col>
         </Row>
-        <Card.Text className={classes.info}>{props.notification?.content}</Card.Text>
+        <Card.Text className={classes.info}>{props.notification?.dateOfCreation}</Card.Text>
       </Card.Body>
     </Card>
   )

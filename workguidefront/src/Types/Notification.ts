@@ -1,7 +1,8 @@
 type Notification = {
   id: string;
   title: string;
-  content: string;
+  dateOfCreation: string;
+  read: boolean;
 };
 
 export default Notification;
