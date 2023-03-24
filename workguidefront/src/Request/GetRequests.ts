@@ -5,6 +5,7 @@ import Lesson from '../Types/Lesson';
 import UserMainInfo from '../Types/UserMainInfo';
 import UserInfo from '../Types/UserInfo';
 import Position from '../Types/Position';
+import Theory from '../Types/Theory';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -62,6 +63,10 @@ async function getAllLessons() : Promise<Lesson[]> {
   return await getRequest(`/api/Lesson/`);
 }
 
+async function getTheory(id: string): Promise<Theory> {
+  return await getRequest(`/api/Theory/id/${id}`);
+}
+
 export default getRequest
 
 export {
@@ -78,5 +83,6 @@ export {
   getPosition,
   getCoursePositions,
   getLessonById,
-  getAllLessons
+  getAllLessons,
+  getTheory
 }

@@ -1,3 +1,4 @@
+import { SliderTypeMap } from '@mui/material';
 import axios from 'axios'
 import ServerResponse from '../Types/ServerResponse';
 import UserInfo from '../Types/UserInfo';
@@ -51,6 +52,10 @@ async function updateLesson(
   return await put(`/api/Lesson/`, { id, orderNumber, name, isComplexTest,  courseId })
 }
 
+async function updateTheory(pageNumber: number, content: string, lessonId: string, id: string) {
+  return await put(`/api/Theory/`, { pageNumber, content, lessonId, id })
+}
+
 export default put
 
 export {
@@ -58,5 +63,6 @@ export {
   updateCourse,
   updatePosition,
   updateUserLinks,
-  updateLesson
+  updateLesson,
+  updateTheory
 }

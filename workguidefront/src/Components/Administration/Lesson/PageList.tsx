@@ -18,6 +18,11 @@ const useStyles = makeStyles()((theme) => ({
     border: '1px solid #ee82ee',
     padding: theme.spacing(1),
   },
+  itemField: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute'
+  }
 }))
 
 interface IPageList {
@@ -48,10 +53,8 @@ const PageList: React.FC<IPageList> = (props) => {
     )
   }
 
-  const onEditClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, number: number) => {
-    if (event.currentTarget.tagName == 'li') {
-      navigate(`/admin/lessons/${props.lessonId}/${number}`)
-    }
+  const onEditClick = (number: number, id: string, type: string) => {
+      navigate(`/admin/lessons/${props.lessonId}/${number}?id=${id}&type=${type}`)
   }
 
   const mergeSort = (theories: Theory[], tests: Test[]): (Test | Theory)[] => {
@@ -71,8 +74,9 @@ const PageList: React.FC<IPageList> = (props) => {
           <MenuItem
             key={item.id}
             className={classes.deleteBt}
-            onClick={(event) => onEditClick(event, item.pageNumber)}
+            
           >
+            <div className={classes.itemField} onClick={() => onEditClick(item.pageNumber, item.id, props.testPages.find((p) => p.id == item.id) ? 'test' : 'theory')}></div>
             {`${item.pageNumber}. `}
             {props.testPages.find((p) => p.id == item.id) ? 'Вопрос' : 'Теория'}
             <Button onClick={() => onDeletedClick(item.id)}>X</Button>
