@@ -164,7 +164,7 @@
 
         public async Task<IList<UserInfo>> GetWorkers()
         {
-            return (await GetByRole(Constants.RoleManager.Worker))?.Select(u => new UserInfo(u))?.ToList();
+            return (await GetByRole(Constants.RoleManager.Worker))?.Select(u => new UserInfo(userRepository.GetItem(u.Id)))?.ToList();
         }
 
         public async Task<UserInfo> GetCurrentUserInfo(HttpContext httpCont)
