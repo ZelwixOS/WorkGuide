@@ -3,7 +3,6 @@ using BLL.DTO.Request.Test;
 using BLL.DTO.Response;
 using BLL.Interfaces;
 using DAL.Interfaces;
-using System.Runtime.CompilerServices;
 using DAL.Entities;
 
 namespace BLL.Services
@@ -74,10 +73,8 @@ namespace BLL.Services
             {
                 return this.testService.DeleteItem(test);
             }
-            else
-            {
-                return 0;
-            }
+            
+            return 0;
         }
 
         public TestResultDto CheckComplexTest(ComplexTestAnswersDto complexTest, Guid userId)
@@ -108,7 +105,7 @@ namespace BLL.Services
                     {
                         correct++;
                         this.userTestAnswerRepository.CreateItem(
-                            new DAL.Entities.UserTestAnswer()
+                            new UserTestAnswer()
                             {
                                 TestId = testAnswer.TestId,
                                 CorrectAnswer = true,
@@ -118,7 +115,7 @@ namespace BLL.Services
                     else
                     {
                         this.userTestAnswerRepository.CreateItem(
-                            new DAL.Entities.UserTestAnswer()
+                            new UserTestAnswer()
                             {
                                 TestId = testAnswer.TestId,
                                 CorrectAnswer = false,
@@ -129,7 +126,7 @@ namespace BLL.Services
             }
 
             this.userLessonScoreRepository.CreateItem(
-                new DAL.Entities.UserLessonScore()
+                new UserLessonScore()
                 {
                     UserId= userId,
                     LessonId = complexTest.LessonId,
@@ -138,10 +135,10 @@ namespace BLL.Services
                 });
 
             int completedTests = userLessonScoreRepository.GetItems().
-                Where(u => u.UserId == userId && u.Lesson.CourseId == lesson.CourseId).Count();
+                Count(u => u.UserId == userId && u.Lesson.CourseId == lesson.CourseId);
 
             int totalTests = lessonRepository.GetItems().
-                Where(l => l.CourseId == lesson.Id && l.IsComplexTest).Count();
+                Count(l => l.CourseId == lesson.Id && l.IsComplexTest);
 
             var userCour = userCourseRepository.GetItems()
                 .FirstOrDefault(c => c.CourseId == lesson.CourseId && c.UserId == userId);

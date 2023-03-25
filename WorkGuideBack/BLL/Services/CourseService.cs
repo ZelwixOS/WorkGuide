@@ -37,7 +37,7 @@ namespace BLL.Services
             this.notificationUserRepository = notificationUserRepository;
         }
 
-        public PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string search, bool published, User user)
+        public PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string? search, bool published, User user)
         {
             if (user == null)
             {
@@ -66,10 +66,8 @@ namespace BLL.Services
                 {
                    return new CourseDto(s);
                 }
-                else
-                {
-                   return new CourseDto(s, userCourse);
-                }
+                
+                return new CourseDto(s, userCourse);
             }).ToList(), result.CurrentPage, result.MaxPage);
 
             return paginatedData;
@@ -146,7 +144,7 @@ namespace BLL.Services
                             Title = "Опубликован новый курс: " + course.Name,
                         };
 
-                        var notificationCreate = this.notificationRepository.CreateItem(notificationMod);
+                        this.notificationRepository.CreateItem(notificationMod);
 
                         foreach (var i in users)
                         {
@@ -237,7 +235,7 @@ namespace BLL.Services
                 return null;
             }
 
-            PositionCourse positionCourse = positionCourseRepository.GetItems()
+            PositionCourse? positionCourse = positionCourseRepository.GetItems()
                 .FirstOrDefault(i => i.CourseId == id && i.PositionId == positionId);
 
             if (positionCourse != null)
@@ -266,10 +264,10 @@ namespace BLL.Services
                 var notificationMod = new Notification()
                 {
                     DateOfCreation = DateTime.Now,
-                    Title = "Опубликован новый курс: " + course.Name,
+                    Title = "Получен доступ к новому курсу: " + course.Name,
                 };
 
-                var notificationCreate = this.notificationRepository.CreateItem(notificationMod);
+                this.notificationRepository.CreateItem(notificationMod);
 
                 foreach (var i in users)
                 {
@@ -296,7 +294,7 @@ namespace BLL.Services
                 return false;
             }
 
-            PositionCourse positionCourse = positionCourseRepository.GetItems()
+            PositionCourse? positionCourse = positionCourseRepository.GetItems()
                 .FirstOrDefault(i => i.CourseId == id && i.PositionId == positionId);
 
             if (positionCourse == null)

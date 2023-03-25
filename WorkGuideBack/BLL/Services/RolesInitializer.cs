@@ -2,11 +2,10 @@
 {
     using System;
     using System.Threading.Tasks;
-    using BLL.Helpers;
-    using BLL.Interfaces;
+    using Helpers;
+    using Interfaces;
     using DAL.Entities;
     using DAL.Interfaces;
-    using DAL.Repositories;
     using Microsoft.AspNetCore.Identity;
 
     public class RolesInitializer : IRolesInitializer
