@@ -1,5 +1,8 @@
+import { Fab } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Container, Row } from 'react-bootstrap'
+import { ArrowLeft } from 'react-bootstrap-icons'
+import { useNavigate } from 'react-router-dom'
 import { checkAnswer } from '../../Request/PostRequests'
 import { makeStyles } from '../../theme'
 import Lesson from '../../Types/Lesson'
@@ -19,6 +22,14 @@ const useStyles = makeStyles()((theme) => ({
     flexDirection: 'column',
     minHeight: '100vh',
   },
+  toCoursesButton: {
+    position: 'fixed',
+    left: '20px',
+    bottom: '20px'
+  },
+  toCoursesButtonArrow: {
+    marginRight: '10px'
+  }
 }))
 
 interface ICommonLesson {
@@ -29,6 +40,7 @@ interface ICommonLesson {
 
 const CommonLesson = (props: ICommonLesson) => {
   const { classes, cx } = useStyles()
+  const navigate = useNavigate();
 
   const [page, setPage] = useState<number>(1);
   const [lessonPage, setLessonPage] = useState<any>(null)
@@ -94,13 +106,29 @@ const CommonLesson = (props: ICommonLesson) => {
     return true
   }
 
+  const returnToCourses = () => {
+    const theory = props.lesson?.theoryPages.find(
+      (p) => p.pageNumber === page,
+    )
+    const test = props.lesson?.testPages.find((p) => p.pageNumber === page)
+
+    if (theory) {
+      navigate('./../');
+    } else if (test) {
+      checkAnswerCorrectness().then((isCorrect: boolean) => {
+        if (isCorrect) navigate('./../');
+        else setAnsweredCorrectly(false);
+      })
+    }
+  }
+
   const onTestAnswerChanged = (testId: string, answerId: string, hasManyAnswers: boolean) => {
     const answers = [...currentAnswers]
-    if(hasManyAnswers) {
-      if(answers[page] && answers[page].find((i: string) => i === answerId)) {
+    if (hasManyAnswers) {
+      if (answers[page] && answers[page].find((i: string) => i === answerId)) {
         answers[page] = answers[page].filter((i: string) => i !== answerId);
       } else {
-        if(answers[page]) {
+        if (answers[page]) {
           answers[page] = [...answers[page], answerId];
         } else {
           answers[page] = [answerId];
@@ -145,6 +173,10 @@ const CommonLesson = (props: ICommonLesson) => {
         ) : (
           <></>
         )}
+        {page === props.maxPage ? <Fab color="primary" className={classes.toCoursesButton} variant="extended" onClick={returnToCourses}>
+          <ArrowLeft className={classes.toCoursesButtonArrow} />
+          К урокам
+        </Fab> : null}
       </Row>
     </Container>
   )
