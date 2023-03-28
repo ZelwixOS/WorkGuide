@@ -8,6 +8,7 @@ type UserMainInfo = {
   phoneNumber: string;
   avatar: string;
   banned: boolean;
+  position: string;
 };
 
 export default UserMainInfo;
