@@ -1,4 +1,5 @@
 import axios from 'axios'
+import TestAnswer from '../Types/TestAnswer'
 
 async function post<T>(url: string, data: T) {
   return (await axios.post(url, data)).data
@@ -37,10 +38,9 @@ async function createCourse(
   description: string,
   picFile: File | null,
 ) {
-
   const formData = new FormData()
   formData.append('name', name)
-  formData.append('url', url);
+  formData.append('url', url)
   formData.append('description', description)
 
   if (picFile) {
@@ -70,12 +70,42 @@ async function addCoursePosition(courseId: string, positionId: string) {
   return await post(`/api/Course/${courseId}/${positionId}`, null)
 }
 
-async function createLesson(orderNumber: number, name: string, isComplexTest: boolean, courseId: string) {
-  return await post(`/api/Lesson/`, { orderNumber, name, isComplexTest, courseId })
+async function createLesson(
+  orderNumber: number,
+  name: string,
+  isComplexTest: boolean,
+  courseId: string,
+) {
+  return await post(`/api/Lesson/`, {
+    orderNumber,
+    name,
+    isComplexTest,
+    courseId,
+  })
 }
 
-async function createTheoryPage(lessonId: string, pageNumber: number, content: string) {
+async function createTheoryPage(
+  lessonId: string,
+  pageNumber: number,
+  content: string,
+) {
   return await post(`/api/Theory/`, { pageNumber, content, lessonId })
+}
+
+async function createQuestionPage(
+  lessonId: string,
+  pageNumer: number,
+  isManyAnswer: boolean,
+  content: string,
+  answers: TestAnswer[],
+) {
+  return await post(`/api/Test/`, {
+    pageNumer,
+    content,
+    isManyAnswer,
+    lessonId,
+    answers,
+  })
 }
 
 export default post
@@ -92,5 +122,6 @@ export {
   createPosition,
   addCoursePosition,
   createLesson,
-  createTheoryPage
+  createTheoryPage,
+  createQuestionPage,
 }

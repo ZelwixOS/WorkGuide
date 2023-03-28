@@ -31,14 +31,14 @@ namespace WorkGuideBack.Controllers
 
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<TestDto> Create([FromForm] TestCreateRequestDto test)
+        public ActionResult<TestDto> Create([FromBody] TestCreateRequestDto test)
         {
             return this.Ok(this.testService.CreateTest(test));
         }
 
         [HttpPut]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<TestDto> Update([FromForm] TestUpdateRequestDto test)
+        public ActionResult<TestDto> Update([FromBody] TestUpdateRequestDto test)
         {
             return this.Ok(this.testService.UpdateTest(test));
         }

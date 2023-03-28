@@ -2,11 +2,13 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@m
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getTheory } from "../../../Request/GetRequests";
-import { createTheoryPage } from "../../../Request/PostRequests";
+import { createQuestionPage, createTheoryPage } from "../../../Request/PostRequests";
 import { updateTheory } from "../../../Request/PutRequests";
+import TestAnswer from "../../../Types/TestAnswer";
 import Theory from "../../../Types/Theory";
 import Loading from "../../Common/Loading";
 import NavigationBar from "../Common/NavigationBar";
+import QuestionPageForm from "./QuestionPageForm";
 import TheoryPageForm from "./TheoryPageForm";
 
 
@@ -56,10 +58,19 @@ const CreatePage = () => {
     navigate('../')
   }
 
+  const handleSaveQuestion = async (hasManyAnswers: boolean, content: string, answers: TestAnswer[]) => {
+    const lessonId: string = params?.id!;
+    const pageNumber: string = params?.pageNumber!;
+
+    console.log(answers)
+    await createQuestionPage(lessonId, +pageNumber, hasManyAnswers, content, answers);
+    navigate('../')
+  }
+
   const renderSwitch = () => {
     switch (type) {
       case TEST:
-        return <h4>Тест</h4>;
+        return <QuestionPageForm save={handleSaveQuestion} />;
       default:
         return <TheoryPageForm save={edit ? handleEditTheory : handleSaveTheory} initialData={theory} />;
     }
@@ -94,8 +105,8 @@ const CreatePage = () => {
             label="Age"
             onChange={handleTypeChange}
           >
-            <MenuItem value={THEORY}>THEORY</MenuItem>
-            <MenuItem value={TEST}>TEST</MenuItem>
+            <MenuItem value={THEORY}>ТЕОРИЯ</MenuItem>
+            <MenuItem value={TEST}>ВОПРОС</MenuItem>
           </Select>
         </FormControl>
         {renderSwitch()}
