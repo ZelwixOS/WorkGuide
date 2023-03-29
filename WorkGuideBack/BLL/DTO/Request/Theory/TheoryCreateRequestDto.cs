@@ -6,7 +6,7 @@
         {
             return new DAL.Entities.Theory()
             {
-                PageNumer = this.PageNumer,
+                PageNumer = this.PageNumber,
                 Content = this.Content,
                 LessonId = this.LessonId,
             };

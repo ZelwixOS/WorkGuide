@@ -5,6 +5,9 @@ import Lesson from '../Types/Lesson';
 import UserMainInfo from '../Types/UserMainInfo';
 import UserInfo from '../Types/UserInfo';
 import Position from '../Types/Position';
+import Theory from '../Types/Theory';
+import Test from '../Types/Test';
+import TestValidAnswers from '../Types/TestValidAnswers';
 import Notification from '../Types/Notification'
 
 async function getRequest(url: string) {
@@ -55,6 +58,26 @@ async function getCoursePositions(id: string): Promise<Position[]>  {
   return await getRequest(`/api/Course/positions/${id}`);
 }
 
+async function getLessonById(id: string) : Promise<Lesson> {
+  return await getRequest(`/api/Lesson/id/${id}`);
+}
+
+async function getAllLessons() : Promise<Lesson[]> {
+  return await getRequest(`/api/Lesson/`);
+}
+
+async function getTheory(id: string): Promise<Theory> {
+  return await getRequest(`/api/Theory/id/${id}`);
+}
+
+async function getTest(id: string): Promise<Test> {
+  return await getRequest(`/api/Test/id/${id}`);
+}
+
+async function getTestAnswers(id: string): Promise<TestValidAnswers> {
+  return await getRequest(`/api/Test/answers/${id}`);
+}
+
 async function getNotifications(): Promise<Notification[]>  {
   return await getRequest(`/api/Notification/user/`);
 }
@@ -74,5 +97,10 @@ export {
   getAllPositions,
   getPosition,
   getCoursePositions,
+  getLessonById,
+  getAllLessons,
+  getTheory,
+  getTest,
+  getTestAnswers,
   getNotifications
 }

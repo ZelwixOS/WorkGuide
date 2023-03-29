@@ -5,6 +5,7 @@ using BLL.Interfaces;
 using DAL.Interfaces;
 using System.Runtime.CompilerServices;
 using DAL.Entities;
+using DAL.Migrations;
 
 namespace BLL.Services
 {
@@ -16,6 +17,7 @@ namespace BLL.Services
         private IUserTestAnswerRepository userTestAnswerRepository;
         private IUserCourseRepository userCourseRepository;
         private IUserRepository userRepository;
+        private IAnswerRepository answerRepository;
 
         public TestService(
             ITestRepository testRepository,
@@ -23,7 +25,8 @@ namespace BLL.Services
             IUserLessonScoreRepository userLessonScoreRepository,
             IUserTestAnswerRepository userTestAnswerRepository,
             IUserCourseRepository userCourseRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IAnswerRepository answerRepository)
         {
             this.testService = testRepository;
             this.lessonRepository = lessonRepository;
@@ -31,6 +34,7 @@ namespace BLL.Services
             this.userTestAnswerRepository = userTestAnswerRepository;
             this.userCourseRepository = userCourseRepository;
             this.userRepository = userRepository;
+            this.answerRepository = answerRepository;
         }
 
         public TestDto GetTest(Guid id)
@@ -59,6 +63,11 @@ namespace BLL.Services
             if (tEntity == null)
             {
                 return null;
+            }
+
+            foreach(var answer in tEntity.Answers)
+            {
+                answerRepository.DeleteItem(answer);
             }
 
             var testMod = test.ToModel();
@@ -194,6 +203,22 @@ namespace BLL.Services
             }
 
             return answerUser.All(a => a.IsValid);
+        }
+
+        public TestValidAnswersDto GetValidAnswers(Guid id)
+        {
+            var result = new TestValidAnswersDto();
+            var test = this.testService.GetItem(id);
+
+            if (test == null)
+            {
+                result.Answers = new List<AnswerDto>();
+                return result;
+            }
+
+            result.Answers = test.Answers.Where(t => t.TestId == id && t.IsValid)?.Select(t => new AnswerDto(t)).ToList() ?? new List<AnswerDto>();
+
+            return result;
         }
     }
 }

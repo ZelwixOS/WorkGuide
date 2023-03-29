@@ -28,7 +28,7 @@ namespace DAL.Repositories
         public Test GetItem(Guid id)
         {
             var tests = this.Context.Tests
-                .Include(t => t.Answers)
+                .Include(t => t.Answers).AsNoTracking()
                 .FirstOrDefault(c => c.Id == id);
 
             return tests;

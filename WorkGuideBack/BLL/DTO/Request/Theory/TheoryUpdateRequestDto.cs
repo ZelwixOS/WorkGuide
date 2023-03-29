@@ -9,7 +9,7 @@
             return new DAL.Entities.Theory()
             {
                 Id = this.Id,
-                PageNumer = this.PageNumer,
+                PageNumer = this.PageNumber,
                 Content = this.Content,
                 LessonId = this.LessonId,
 

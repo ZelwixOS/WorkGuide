@@ -7,7 +7,7 @@
             return new DAL.Entities.Answer()
             {
                 Content = this.Content,
-                IsValid = this.IsValide,
+                IsValid = this.IsValid,
                 TestId = this.TestId
             };
         }
