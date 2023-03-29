@@ -16,16 +16,25 @@ namespace BLL.Services
         private IPositionRepository positionRepository;
         private IPositionCourseRepository positionCourseRepository;
         private IUserCourseRepository userCourseRepository;
+        private INotificationRepository notificationRepository;
+        private IUserRepository userRepository;
+        private INotificationUserRepository notificationUserRepository;
 
         public CourseService(ICourseRepository categoryRepository, 
             IPositionRepository positionRepository, 
             IPositionCourseRepository positionCourseRepository,
-            IUserCourseRepository userCourseRepository)
+            IUserCourseRepository userCourseRepository,
+            INotificationRepository notificationRepository,
+            IUserRepository userRepository,
+            INotificationUserRepository notificationUserRepository)
         {
             this.courseRepository = categoryRepository;
             this.positionRepository = positionRepository;
             this.positionCourseRepository = positionCourseRepository;
             this.userCourseRepository = userCourseRepository;
+            this.notificationRepository = notificationRepository;
+            this.userRepository = userRepository;
+            this.notificationUserRepository = notificationUserRepository;
         }
 
         public PaginatedData<CourseDto> GetCourses(int page, int itemsOnPage, string search, bool published, User user)
@@ -119,6 +128,38 @@ namespace BLL.Services
             if (course != null)
             {
                 course.Published = true;
+
+                if (course.PositionCourses != null)
+                    foreach (var position in course.PositionCourses)
+                    {
+                        var positionId = position.PositionId;
+                        var users = this.userRepository.GetItems()
+                            .Where(i => i.Position.Id == positionId)?.ToList();
+                        if (users == null)
+                        {
+                            continue;
+                        }
+
+                        var notificationMod = new Notification()
+                        {
+                            DateOfCreation = DateTime.Now,
+                            Title = "Опубликован новый курс: " + course.Name,
+                        };
+
+                        var notificationCreate = this.notificationRepository.CreateItem(notificationMod);
+
+                        foreach (var i in users)
+                        {
+                            this.notificationUserRepository.CreateItem(
+                                new NotificationUser()
+                                {
+                                    UserId = i.Id,
+                                    Read = false,
+                                    NotificationId = notificationMod.Id
+                                });
+                        }
+                    }
+
                 return new CourseDto(courseRepository.UpdateItem(course));
             }
 
@@ -212,6 +253,35 @@ namespace BLL.Services
 
             positionCourseRepository.CreateItem(positionCourse);
             course.PositionCourses.Add(positionCourse);
+
+            if (course.Published)
+            {
+                var users = this.userRepository.GetItems()
+                    .Where(i => i.Position.Id == positionId)?.ToList();
+                if (users == null)
+                {
+                    return new CourseDto(course);
+                }
+
+                var notificationMod = new Notification()
+                {
+                    DateOfCreation = DateTime.Now,
+                    Title = "Опубликован новый курс: " + course.Name,
+                };
+
+                var notificationCreate = this.notificationRepository.CreateItem(notificationMod);
+
+                foreach (var i in users)
+                {
+                    this.notificationUserRepository.CreateItem(
+                        new NotificationUser()
+                        {
+                            UserId = i.Id,
+                            Read = false,
+                            NotificationId = notificationMod.Id
+                        });
+                }
+            }
 
             return new CourseDto(course);
         }

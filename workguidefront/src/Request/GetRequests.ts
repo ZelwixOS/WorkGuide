@@ -8,6 +8,7 @@ import Position from '../Types/Position';
 import Theory from '../Types/Theory';
 import Test from '../Types/Test';
 import TestValidAnswers from '../Types/TestValidAnswers';
+import Notification from '../Types/Notification'
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -77,6 +78,10 @@ async function getTestAnswers(id: string): Promise<TestValidAnswers> {
   return await getRequest(`/api/Test/answers/${id}`);
 }
 
+async function getNotifications(): Promise<Notification[]>  {
+  return await getRequest(`/api/Notification/user/`);
+}
+
 export default getRequest
 
 export {
@@ -96,5 +101,6 @@ export {
   getAllLessons,
   getTheory,
   getTest,
-  getTestAnswers
+  getTestAnswers,
+  getNotifications
 }

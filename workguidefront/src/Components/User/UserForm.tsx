@@ -70,7 +70,7 @@ const UserForm: React.FC<IUserForm> = (props: IUserForm) => {
   }
 
   const redirectTo = async (response: ServerResponse) => {
-    return '/';
+    window.location.reload();
   }
 
   useEffect(() => {

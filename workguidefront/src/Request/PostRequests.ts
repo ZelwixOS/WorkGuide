@@ -106,6 +106,10 @@ async function createQuestionPage(
     answers,
   })
 }
+  
+async function readNotification(notificationId: string) {
+  return await post(`/api/Notification/readT/${notificationId}`, null)
+}
 
 export default post
 
@@ -123,4 +127,5 @@ export {
   createLesson,
   createTheoryPage,
   createQuestionPage,
+  readNotification
 }

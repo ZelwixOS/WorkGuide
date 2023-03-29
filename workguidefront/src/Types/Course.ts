@@ -8,6 +8,8 @@ type Course = {
   picUrl: string;
   description: string;
   lessons: Lesson[];
+  completedTests: number;
+  totalTests: number;
 };
 
 export default Course;
