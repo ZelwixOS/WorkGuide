@@ -1,4 +1,4 @@
-import { Container } from 'react-bootstrap'
+import { Col, Container, Row } from 'react-bootstrap'
 import {
   Button,
   Checkbox,
@@ -8,9 +8,11 @@ import {
   TextField,
 } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Test from '../../../Types/Test'
 import TestAnswer from '../../../Types/TestAnswer'
+import { X } from 'react-bootstrap-icons'
+import TestValidAnswers from '../../../Types/TestValidAnswers'
 
 interface IQuestionPageForm {
   save: (
@@ -18,7 +20,8 @@ interface IQuestionPageForm {
     content: string,
     answers: TestAnswer[],
   ) => void
-  question?: Test
+  question?: Test | null,
+  answers?: TestAnswer[]
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -28,8 +31,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
+
   const { classes, cx } = useStyles()
-  
+
   const onSave = async () => {
     props.save(hasManyAnswers, content, answers)
   }
@@ -38,9 +42,7 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
     props.question?.isManyAnswer ?? false,
   )
   const [content, setContent] = useState(props.question?.content ?? '')
-  const [answers, setAnswers] = useState<TestAnswer[]>(
-    (props.question?.answers as TestAnswer[]) ?? [],
-  )
+  const [answers, setAnswers] = useState<TestAnswer[]>(props.answers ?? [])
   const [answer, setAnswer] = useState('')
 
   const handleContentChanged = (
@@ -77,6 +79,12 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
     }
   }
 
+  const handleDeleteAnswer = (content: string) => {
+    const newAnswers = answers.filter(a => a.content !== content);
+
+    setAnswers(newAnswers)
+  }
+
   const handleRadioChanged = (
     event: React.SyntheticEvent<Element, Event>,
     checked: boolean,
@@ -90,12 +98,12 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
   }
 
   const handleCheckBoxChanged = (
-    event: React.SyntheticEvent<Element, Event>,
+    content: string,
     checked: boolean,
   ) => {
     const newAnswers = [...answers]
     const id = newAnswers.findIndex(
-      (t) => t.content == (event.target as any).id,
+      (t) => t.content == content,
     )
     newAnswers[id].isValid = checked
     setAnswers(newAnswers)
@@ -108,6 +116,7 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
           className={classes.spaces}
           control={
             <Checkbox
+              checked={hasManyAnswers}
               value={hasManyAnswers}
               onChange={handleHasManyAnswersChanged}
             />
@@ -125,29 +134,37 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
         />
         <Grid direction="column" className={classes.spaces} container justifyContent="center">
           {answers.map((item, key) =>
-            hasManyAnswers ? (
-              <FormControlLabel
-                key={key}
-                control={<Checkbox value={item.isValid} />}
-                id={item.content}
-                onChange={handleCheckBoxChanged}
-                label={item.content}
-              />
-            ) : (
-              <FormControlLabel
-              key={key}
-                control={
-                  <Radio
+            <Row>
+              <Col className='d-flex justify-content-start align-items-center'>
+                {hasManyAnswers ? (
+                  <FormControlLabel
+                    checked={item.isValid || false}
+                    key={key}
+                    control={<Checkbox value={item.isValid || false} />}
                     id={item.content}
-                    checked={item.isValid}
-                    value={item.isValid}
-                    onChange={handleRadioChanged}
-                    name="radio-buttons"
+                    onChange={(e, checked) => handleCheckBoxChanged(item.content, checked)}
+                    label={item.content}
                   />
-                }
-                label={item.content}
-              />
-            ),
+                ) : (
+                  <FormControlLabel
+                    key={key}
+                    control={
+                      <Radio
+                        id={item.content}
+                        checked={item.isValid || false}
+                        value={item.isValid || false}
+                        onChange={handleRadioChanged}
+                        name="radio-buttons"
+                      />
+                    }
+                    label={item.content}
+                  />
+                )}
+              </Col>
+              <Col key={'b-' + key} md='auto' className='d-flex align-items-center'>
+                <X size={32} onClick={() => handleDeleteAnswer(item.content)}/>
+              </Col>
+            </Row>
           )}
         </Grid>
         <TextField

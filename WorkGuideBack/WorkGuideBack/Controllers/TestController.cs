@@ -29,6 +29,12 @@ namespace WorkGuideBack.Controllers
             return this.Ok(this.testService.GetTest(id));
         }
 
+        [HttpGet("answers/{id}")]
+        public ActionResult<TestValidAnswersDto> GetAnswers(Guid id)
+        {
+            return this.Ok(this.testService.GetValidAnswers(id));
+        }
+
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public ActionResult<TestDto> Create([FromBody] TestCreateRequestDto test)

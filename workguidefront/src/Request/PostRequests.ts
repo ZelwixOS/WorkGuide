@@ -21,7 +21,6 @@ async function checkComplexTest(lessonId: string, answers: any) {
     }
   })
 
-  console.log(testAnswers)
   return await post(`/api/Test/checkTest/`, {
     lessonId: lessonId,
     answers: testAnswers,

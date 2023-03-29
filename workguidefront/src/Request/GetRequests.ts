@@ -6,6 +6,8 @@ import UserMainInfo from '../Types/UserMainInfo';
 import UserInfo from '../Types/UserInfo';
 import Position from '../Types/Position';
 import Theory from '../Types/Theory';
+import Test from '../Types/Test';
+import TestValidAnswers from '../Types/TestValidAnswers';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -67,6 +69,14 @@ async function getTheory(id: string): Promise<Theory> {
   return await getRequest(`/api/Theory/id/${id}`);
 }
 
+async function getTest(id: string): Promise<Test> {
+  return await getRequest(`/api/Test/id/${id}`);
+}
+
+async function getTestAnswers(id: string): Promise<TestValidAnswers> {
+  return await getRequest(`/api/Test/answers/${id}`);
+}
+
 export default getRequest
 
 export {
@@ -84,5 +94,7 @@ export {
   getCoursePositions,
   getLessonById,
   getAllLessons,
-  getTheory
+  getTheory,
+  getTest,
+  getTestAnswers
 }

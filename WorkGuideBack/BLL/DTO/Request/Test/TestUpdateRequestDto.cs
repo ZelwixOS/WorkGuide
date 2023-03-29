@@ -8,6 +8,7 @@
         {
             return new DAL.Entities.Test()
             {
+                Id = this.Id,
                 Content = this.Content,
                 PageNumer = this.PageNumer,
                 LessonId = this.LessonId,

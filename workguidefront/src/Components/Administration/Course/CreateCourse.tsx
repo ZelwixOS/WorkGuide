@@ -95,7 +95,6 @@ const CreateCourse: React.FC<ICreateCourse> = (props) => {
   const handlePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0]
     if (file) {
-      console.log(file)
       setPic(file)
       setPicUrl(URL.createObjectURL(file))
     }
