@@ -49,7 +49,7 @@ export const PositionPage = () => {
   return (
     <React.Fragment>
       <TableBasement
-        name="Категории"
+        name="Должности"
         getData={getAllPositions}
         columns={columns}
         pageSize={10}
