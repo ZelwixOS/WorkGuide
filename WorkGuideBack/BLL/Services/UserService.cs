@@ -4,6 +4,7 @@ using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
@@ -29,7 +30,7 @@ namespace BLL.Services
                 words[i] = words[i].ToLower();
             }
 
-            var users = this.userRepository.GetItems()
+            var users = this.userRepository.GetItems().Include(i => i.Position)
                 .ToList()
                 .Where(u => words.Any(u.FirstName.ToLower().Contains) || words.Any(u.SecondName.ToLower().Contains) ||
                             words.Any(u.PhoneNumber.ToLower().Contains) || words.Any(u.Email.ToLower().Contains))
