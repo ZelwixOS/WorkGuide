@@ -23,10 +23,3 @@ jobs:
     - with:
         username: ${{ secrets.DH_LOGIN }}
         password: ${{ secrets.DH_PASSWORD }}
-      
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Push the Docker image
-      run: docker-compose push
