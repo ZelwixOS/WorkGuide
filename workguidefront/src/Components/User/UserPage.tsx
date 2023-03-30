@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
   },
   info: {
     fontSize: '1.0rem',
-    marginBottom: '0.25rem',
+    marginBottom: '1.25rem',
     paddingBottom: '0.25rem',
     borderBottom: '1px solid lightgray'
   },
@@ -72,8 +72,7 @@ const UserPage = () => {
                     <Col>
                       <Card.Body>
                         <Card.Title className={classes.title}>{user.firstName} {user.secondName} <UserModal user={user} /></Card.Title>
-                        <Card.Text className={classes.info}><ShieldLock size={18} className={classes.icon} />Отдел: ???</Card.Text>
-                        <Card.Text className={classes.info}><PersonLinesFill size={18} className={classes.icon} />Должность: ???</Card.Text>
+                        <Card.Text className={classes.info}><PersonLinesFill size={18} className={classes.icon} />Должность: {user.position}</Card.Text>
                         <Card.Text className={classes.info}><Globe size={18} className={classes.icon} />{user.email}</Card.Text>
                         <Card.Text className={classes.info}><TelephoneFill size={18} className={classes.icon} />{user.phoneNumber}</Card.Text>
                       </Card.Body>

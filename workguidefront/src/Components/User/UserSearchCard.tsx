@@ -43,15 +43,12 @@ const UserSearchCard = (props: IUserSearchCard) => {
             <Card.Title className={classes.title}>{props.user?.firstName} {props.user?.secondName}</Card.Title>
             <Row className='mb-2'>
               <Col>
-                <Card.Text className={classes.info}><ShieldLock size={20} className={classes.icon} />Отдел: ???</Card.Text>
-              </Col>
-              <Col>
-                <Card.Text className={classes.info}><Globe size={20} className={classes.icon} />{props.user.email}</Card.Text>
+                <Card.Text className={classes.info}><ShieldLock size={20} className={classes.icon} />Должность: {props.user.position}</Card.Text>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Card.Text className={classes.info}><PersonLinesFill size={20} className={classes.icon} />Должность: ???</Card.Text>
+                <Card.Text className={classes.info}><Globe size={20} className={classes.icon} />{props.user.email}</Card.Text>
               </Col>
               <Col>
                 <Card.Text className={classes.info}><TelephoneFill size={20} className={classes.icon} />{props.user.phoneNumber}</Card.Text>

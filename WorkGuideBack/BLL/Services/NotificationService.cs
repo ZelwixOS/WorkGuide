@@ -44,7 +44,13 @@ namespace BLL.Services
         {
             var notificationUser = notificationUserRepository.GetItems().Include(i => i.Notification)
                 .Where(i => i.UserId == userId && !i.Read)?.ToList();
-            return notificationUser.Select(i => new NotificationUserDto(i))?.ToList();
+
+            if (notificationUser == null)
+            {
+                return null;
+            }
+
+            return notificationUser?.Select(i => new NotificationUserDto(i))?.ToList();
         }
 
         public NotificationDto CreateNotificationUser(NotificationCreateRequestDto notification, Guid userid)
@@ -112,6 +118,8 @@ namespace BLL.Services
         public int DeleteNotification(Guid id)
         {
             var notification = this.notificationRepository.GetItem(id);
+
+            int count = 0;
             if (notification != null)
             {
                 var notificationUsers = notificationUserRepository.GetItems()
@@ -120,15 +128,13 @@ namespace BLL.Services
                 {
                     foreach (var notificationUser in notificationUsers)
                     {
-                        this.notificationUserRepository.DeleteItem(notificationUser);
+                        count += this.notificationUserRepository.DeleteItem(notificationUser);
                     }
                 }
-                return this.notificationRepository.DeleteItem(notification);
+                return count + this.notificationRepository.DeleteItem(notification);
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         public NotificationUserDto ReadNotification(Guid id, Guid userId)

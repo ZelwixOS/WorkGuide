@@ -55,10 +55,8 @@ namespace BLL.Services
             {
                 return this.theoryService.DeleteItem(Theory);
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
     }
 }

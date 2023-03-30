@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using BLL.DTO.Request.Account;
-    using BLL.DTO.Response.Account;
-    using BLL.Helpers;
-    using BLL.Interfaces;
+    using DTO.Request.Account;
+    using DTO.Response.Account;
+    using Helpers;
+    using Interfaces;
     using DAL.Entities;
     using DAL.Interfaces;
     using Microsoft.AspNetCore.Http;
@@ -149,12 +149,10 @@
             {
                 return await this.userManager.GetRolesAsync(usr);
             }
-            else
-            {
-                var rolesList = new List<string>();
-                rolesList.Add(Constants.RoleManager.Guest);
-                return rolesList;
-            }
+
+            var rolesList = new List<string>();
+            rolesList.Add(Constants.RoleManager.Guest);
+            return rolesList;
         }
 
         public Task<IList<User>> GetByRole(string role)
@@ -164,7 +162,7 @@
 
         public async Task<IList<UserInfo>> GetWorkers()
         {
-            return (await GetByRole(Constants.RoleManager.Worker))?.Select(u => new UserInfo(u))?.ToList();
+            return (await GetByRole(Constants.RoleManager.Worker))?.Select(u => new UserInfo(userRepository.GetItem(u.Id)))?.ToList();
         }
 
         public async Task<UserInfo> GetCurrentUserInfo(HttpContext httpCont)
