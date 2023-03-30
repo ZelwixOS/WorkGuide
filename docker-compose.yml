@@ -13,7 +13,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: workguideserver
+    image: zelwix/workguide:workguideapp
     ports:
       - 6001:80
     depends_on:
