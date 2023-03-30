@@ -8,10 +8,12 @@
         {
             return new DAL.Entities.Test()
             {
+                Id = this.Id,
                 Content = this.Content,
                 PageNumer = this.PageNumer,
                 LessonId = this.LessonId,
-                IsManyAnswer = this.IsManyAnswer
+                IsManyAnswer = this.IsManyAnswer,
+                Answers = this.Answers.Select(s => s.ToModel()).ToHashSet(),
             };
         }
     }

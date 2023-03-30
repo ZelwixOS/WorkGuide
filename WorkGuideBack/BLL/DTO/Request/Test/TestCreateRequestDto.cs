@@ -1,12 +1,4 @@
-﻿using BLL.DTO.Request.Lesson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BLL.DTO.Request.Answer;
-
-namespace BLL.DTO.Request.Test
+﻿namespace BLL.DTO.Request.Test
 {
     public class TestCreateRequestDto : TestRequestDto
     {
@@ -17,7 +9,8 @@ namespace BLL.DTO.Request.Test
                 Content = this.Content,
                 PageNumer = this.PageNumer,
                 LessonId = this.LessonId,
-                IsManyAnswer = this.IsManyAnswer
+                IsManyAnswer = this.IsManyAnswer,
+                Answers = this.Answers.Select(s => s.ToModel()).ToHashSet(),
             };
         }
     }

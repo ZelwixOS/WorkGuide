@@ -25,7 +25,7 @@ namespace DAL.Repositories
 
         public Theory GetItem(Guid id)
         {
-            var theory = this.Context.TheoryPages
+            var theory = this.Context.TheoryPages.AsNoTracking()
                 .FirstOrDefault(c => c.Id == id);
 
             return theory;

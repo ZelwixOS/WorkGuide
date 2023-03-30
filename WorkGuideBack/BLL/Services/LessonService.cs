@@ -18,6 +18,11 @@ namespace BLL.Services
             this.lessonRepository = lessonRepository;
         }
 
+        public List<LessonDto> GetLessons()
+        {
+            return this.lessonRepository.GetItems()?.Select(l => new LessonDto(l)).ToList();
+        }
+
         public LessonDto GetLesson(Guid id)
         {
             var lesson = this.lessonRepository.GetItem(id);
@@ -79,9 +84,7 @@ namespace BLL.Services
 
         public LessonDto UpdateLesson(LessonUpdateRequestDto lesson)
         {
-            var lesEntity = this.lessonRepository.GetItem(lesson.Id);
-
-            if (lesEntity == null)
+            if (!this.lessonRepository.GetItems().Any(l => l.Id == lesson.Id))
             {
                 return null;
             }

@@ -12,5 +12,6 @@ namespace BLL.Interfaces
         int DeleteTest(Guid id);
         TestDto GetTest(Guid id);
         TestDto UpdateTest(TestUpdateRequestDto test);
+        TestValidAnswersDto GetValidAnswers(Guid id);
     }
 }

@@ -10,6 +10,7 @@ namespace BLL.DTO.Response
             this.Name = lesson.Name;
             this.OrderNumber = lesson.OrderNumber;
             this.IsComplexTest = lesson.IsComplexTest;
+            this.CourseId = lesson.CourseId;
             
             if (lesson.Course != null)
             {
@@ -43,11 +44,13 @@ namespace BLL.DTO.Response
 
         public int OrderNumber { get; set; }
 
+        public Guid CourseId { get; set; }
+
+        public bool IsComplexTest { get; set; }
+
         public string CourseUrl { get; set; }
 
         public string CourseName { get; set; }
-
-        public bool IsComplexTest { get; set; }
 
         public bool Finished { get; set; }
 

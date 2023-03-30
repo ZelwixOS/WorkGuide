@@ -8,7 +8,7 @@ namespace BLL.DTO.Request.Answer
 
         public Guid TestId { get; set; }
 
-        public bool IsValide { get; set; }
+        public bool IsValid { get; set; }
 
         public abstract DAL.Entities.Answer ToModel();
     }
