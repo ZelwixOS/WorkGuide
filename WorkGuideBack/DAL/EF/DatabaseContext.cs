@@ -12,8 +12,103 @@ namespace DAL.EF
         {
         }
 
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Lesson> Lessons { get; set; }
+
+        public DbSet<Test> Tests { get; set; }
+
+        public DbSet<Answer> Question { get; set; }
+
+        public DbSet<Theory> TheoryPages { get; set; }
+
+        public DbSet<UserTestAnswer> UserTestAnswers { get; set; }
+
+        public DbSet<UserLessonScore> UserLessonScores { get; set; }
+
+        public DbSet<Position> Positions { get; set; }
+
+        public DbSet<PositionCourse> PositionCourses { get; set; }
+
+        public DbSet<UserCourse> UserCourses { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<NotificationUser> NotificationUsers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Lesson>(entity =>
+            {
+                entity.HasOne(l => l.Course).WithMany(c => c.Lessons).HasForeignKey(l => l.CourseId);
+                entity.HasKey(l => l.Id);
+            });
+
+            modelBuilder.Entity<Theory>(entity =>
+            {
+                entity.HasOne(t => t.Lesson).WithMany(l => l.TheoryPages).HasForeignKey(t => t.LessonId);
+                entity.HasKey(t => t.Id);
+            });
+
+            modelBuilder.Entity<Test>(entity =>
+            {
+                entity.HasOne(t => t.Lesson).WithMany(q => q.TestPages).HasForeignKey(t => t.LessonId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.HasOne(t => t.Test).WithMany(q => q.Answers).HasForeignKey(t => t.TestId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<UserLessonScore>(entity =>
+            {
+                entity.HasOne(u => u.Lesson).WithMany(q => q.UsersLessonScores).HasForeignKey(t => t.LessonId);
+                entity.HasOne(u => u.User).WithMany(q => q.LessonsScore).HasForeignKey(t => t.UserId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<UserTestAnswer>(entity =>
+            {
+                entity.HasOne(u => u.Test).WithMany(q => q.UsersTestAnswers).HasForeignKey(t => t.TestId);
+                entity.HasOne(u => u.User).WithMany(q => q.TestsAnswers).HasForeignKey(t => t.UserId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<PositionCourse>(entity =>
+            {
+                entity.HasOne(c => c.Course).WithMany(p => p.PositionCourses).HasForeignKey(c => c.CourseId);
+                entity.HasOne(p => p.Position).WithMany(p => p.PositionCourses).HasForeignKey(p => p.PositionId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<Position>(entity =>
+            {
+                entity.HasMany(p => p.Users).WithOne(u => u.Position).HasForeignKey(u => u.PositionId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<UserCourse>(entity =>
+            {
+                entity.HasOne(c => c.Course).WithMany(p => p.UserCourses).HasForeignKey(c => c.CourseId);
+                entity.HasOne(p => p.User).WithMany(p => p.UserCourses).HasForeignKey(p => p.UserId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<NotificationUser>(entity =>
+            {
+                entity.HasOne(c => c.User).WithMany(p => p.NotificationUser).HasForeignKey(c => c.UserId);
+                entity.HasOne(p => p.Notification).WithMany(p => p.NotificationUser).HasForeignKey(p => p.NotificationId);
+                entity.HasKey(p => p.Id);
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasMany(p => p.NotificationUser).WithOne(u => u.Notification).HasForeignKey(u => u.NotificationId);
+                entity.HasKey(p => p.Id);
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }

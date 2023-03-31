@@ -1,6 +1,13 @@
 ﻿using DAL.Interfaces;
 using DAL.EF;
 using Microsoft.EntityFrameworkCore;
+using BLL.Interfaces;
+using DAL.Repositories;
+using BLL.Services;
+using DAL.Entities;
+using Microsoft.AspNetCore.Identity;
+using DAL.Repository;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WorkGuideBack
 {
@@ -19,6 +26,27 @@ namespace WorkGuideBack
 
             string dbconectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             services.AddEntityFrameworkSqlServer().AddDbContext<DatabaseContext>(options => options.UseSqlServer(dbconectionString));
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddIdentity<User, IdentityRole<Guid>>().AddEntityFrameworkStores<DatabaseContext>();
+            services.AddScoped<RoleManager<IdentityRole<Guid>>>();
+            services.AddScoped<UserManager<User>>();
+            services.AddScoped<SignInManager<User>>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IRolesInitializer, RolesInitializer>(provider =>
+                new RolesInitializer(
+                    provider.GetService<RoleManager<IdentityRole<Guid>>>(),
+                    provider.GetService<UserManager<User>>(),
+                    provider.GetService<IPositionRepository>()));
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+                options.Password.RequireNonAlphanumeric = false;
+            });
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -39,6 +67,44 @@ namespace WorkGuideBack
             });
 
             services.AddSingleton<IDatabaseContextFactory, DatabaseContextFactory>();
+
+            services.AddScoped<ICourseRepository, CourseRepository>(provider =>
+                new CourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserRepository, UserRepository>(provider =>
+                new UserRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<ILessonRepository, LessonRepository>(provider =>
+                new LessonRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<ITheoryRepository, TheoryRepository>(provider =>
+                new TheoryRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<ITestRepository, TestRepository>(provider =>
+                new TestRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IAnswerRepository, AnswerRepository>(provider =>
+                new AnswerRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserLessonScoreRepository, UserLessonScoreRepository>(provider =>
+                new UserLessonScoreRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserTestAnswerRepository, UserTestAnswerRepository>(provider =>
+                new UserTestAnswerRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IPositionCourseRepository, PositionCourseRepository>( provider =>
+                new PositionCourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IPositionRepository, PositionRepository>(provider =>
+                new PositionRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserCourseRepository, UserCourseRepository>(provider =>
+                new UserCourseRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<INotificationRepository, NotificationRepository>(provider =>
+                new NotificationRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<INotificationUserRepository, NotificationUserRepository>(provider =>
+                new NotificationUserRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IAnswerService, AnswerService>();
+            services.AddScoped<ITheoryService, TheoryService>();
+            services.AddScoped<ITestService, TestService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

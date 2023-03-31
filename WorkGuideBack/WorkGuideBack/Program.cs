@@ -1,5 +1,8 @@
+using BLL.Interfaces;
 using DAL.EF;
+using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,6 +17,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 AppConfigurator.Configure(builder);
 var app = builder.Build();
 
@@ -29,6 +37,17 @@ using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>(
     {
         logger.LogError(ex, "An error occurred while migrating the database.");
     }
+
+    try
+    {
+        var initer = serviceScope.ServiceProvider.GetRequiredService<IRolesInitializer>();
+        initer.CreateUserRoles().Wait();
+        logger.LogInformation("Roles created successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Roles can't be created because of exception.");
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -38,6 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("corsapp");
 app.UseAuthentication();
 
 app.UseHttpsRedirection();
