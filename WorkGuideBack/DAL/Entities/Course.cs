@@ -14,6 +14,8 @@
 
         public bool Published { get; set; }
 
+        public int TotalTests { get; set; }
+
         public HashSet<Lesson> Lessons { get; set; }
 
         public HashSet<PositionCourse> PositionCourses { get; set;}

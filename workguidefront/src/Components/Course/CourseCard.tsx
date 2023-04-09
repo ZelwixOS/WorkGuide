@@ -59,7 +59,7 @@ const CourseCard = (props: ICourseCard) => {
 
   return (
     <Card
-      className={`${props.listItem ? ('shadow ' + classes.listItem + ' mb-1 ' + getProgressColor(props.course.totalTests === 0 ? 100 : props.course.completedTests / props.course.totalTests)) : (classes.title + ' mb-4 mt-1')}`} onClick={() => onCardClick()}>
+      className={`${props.listItem ? ('shadow ' + classes.listItem + ' mb-1 ' + getProgressColor(props.course.totalTests === 0 ? 100 : props.course.completedTests / props.course.totalTests * 100)) : (classes.title + ' mb-4 mt-1')}`} onClick={() => onCardClick()}>
       <Row>
         <Col md='auto'>
           <Card.Img className={classes.cardImage} variant="top" src={'/coursePics/' + props.course?.picUrl} /></Col>
@@ -68,8 +68,8 @@ const CourseCard = (props: ICourseCard) => {
             <Card.Title className={classes.changeableFont}>{props.course?.name}</Card.Title>
             <Card.Text className={classes.changeableFont}>{props.course?.description}</Card.Text>
             {props.listItem ? <ProgressBar
-              variant={getProgressColor(props.course.totalTests === 0 ? 100 : props.course.completedTests / props.course.totalTests)}
-              now={props.course.totalTests === 0 ? 100 : props.course.completedTests / props.course.totalTests} 
+              variant={getProgressColor(props.course.totalTests === 0 ? 100 : props.course.completedTests / props.course.totalTests * 100)}
+              now={100} 
               label={`${props.course.completedTests} / ${props.course.totalTests}`} /> : null}
           </Card.Body>
         </Col>
