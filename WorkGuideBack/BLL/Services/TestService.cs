@@ -167,8 +167,7 @@ namespace BLL.Services
                     TotalTests = totalTests,
                     Course = lesson.Course,
                     CourseId = lesson.CourseId,
-                    UserId = userId,
-                    User = user
+                    UserId = userId
                 };
 
                 userCourseRepository.CreateItem(userCourse);

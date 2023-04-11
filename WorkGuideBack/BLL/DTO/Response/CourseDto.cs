@@ -12,6 +12,7 @@ namespace BLL.DTO.Response
             this.Url = course.Url;
             this.PicUrl = course.PicUrl;
             this.Published = course.Published;
+            this.TotalTests = course.TotalTests;
 
             if (course.Lessons != null)
             {
@@ -25,7 +26,6 @@ namespace BLL.DTO.Response
             if (userCourse != null)
             {
                 this.CompletedTests = userCourse.CompletedTests;
-                this.TotalTests = userCourse.TotalTests;
             }
         }
 
