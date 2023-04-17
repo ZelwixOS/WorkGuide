@@ -1,5 +1,6 @@
 import axios from 'axios'
 import TestAnswer from '../Types/TestAnswer'
+import WorkerRegistration from '../Types/WorkerRegistration'
 
 async function post<T>(url: string, data: T) {
   return (await axios.post(url, data)).data
@@ -111,6 +112,10 @@ async function readNotification(notificationId: string) {
   return await post(`/api/Notification/readT/${notificationId}`, null)
 }
 
+async function registerWorker(data : WorkerRegistration) {
+  return await post(`/api/Account/Register`, data)
+}
+
 export default post
 
 export {
@@ -127,5 +132,6 @@ export {
   createLesson,
   createTheoryPage,
   createQuestionPage,
-  readNotification
+  readNotification,
+  registerWorker
 }

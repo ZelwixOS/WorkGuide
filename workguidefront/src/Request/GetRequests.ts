@@ -42,6 +42,10 @@ async function getUsersBySearch(request: string, count: number): Promise<UserInf
   return await getRequest(`/api/User/searchUsers?request=${request}&count=${count}`);
 }
 
+async function getUserById(id: string): Promise<UserInfo>  {
+  return await getRequest(`/api/User/id/${id}`);
+}
+
 async function getCurrentUserInfo(): Promise<UserInfo>  {
   return await getRequest(`/api/Account/GetCurrentUserInfo`);
 }
@@ -102,5 +106,6 @@ export {
   getTheory,
   getTest,
   getTestAnswers,
-  getNotifications
+  getNotifications,
+  getUserById
 }

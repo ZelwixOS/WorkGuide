@@ -3,6 +3,9 @@ import { GridColDef } from '@mui/x-data-grid';
 import { UserTable } from '../UserTable';
 import { getAllWorkers } from '../../../Request/GetRequests';
 import { banUser, unbanUser } from '../../../Request/PostRequests';
+import ModalFormDialog from '../../Common/ModalFormDialog';
+import CreateWorker from '../Worker/CreateWorker';
+import EditWorker from '../Worker/EditWorker';
 
 export const WorkersPage = () => {
   const columns: GridColDef[] = [
@@ -58,8 +61,25 @@ export const WorkersPage = () => {
     return true;
   };
 
+  
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState('');
+  const [createOpen, setCreateOpen] = React.useState(false);
+  const [editOpen, setEditOpen] = React.useState(false);
+  const [refreshFunction, setRefrFun] = React.useState({ refresh: () => console.log('') });
+  const [selected, setSelected] = React.useState('');
+
+
+  const createNew = (refrFun: () => void) => {
+    setCreateOpen(true);
+    setRefrFun({ refresh: refrFun });
+  };
+
+  const editSelected = (selectedId: string, refrFun: () => void) => {
+    setSelected(selectedId);
+    setEditOpen(true);
+    setRefrFun({ refresh: refrFun });
+  };
 
   return (
     <React.Fragment>
@@ -72,7 +92,21 @@ export const WorkersPage = () => {
         unbanSelected={onUnban}
         open={open}
         setOpen={setOpen}
+        createNew={createNew}
+        editSelected={editSelected}
         error={error}
+      />
+      <ModalFormDialog
+        name={'Регистрация работника'}
+        open={createOpen}
+        form={<CreateWorker setOpen={setCreateOpen} refresher={refreshFunction} />}
+        setOpen={setCreateOpen}
+      />
+      <ModalFormDialog
+        name={'Изменение данных работника'}
+        open={editOpen}
+        form={<EditWorker id={selected} setOpen={setEditOpen} refresher={refreshFunction} />}
+        setOpen={setEditOpen}
       />
     </React.Fragment>
   );
