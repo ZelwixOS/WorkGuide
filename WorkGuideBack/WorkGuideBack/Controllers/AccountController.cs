@@ -6,8 +6,10 @@
     using BLL.DTO.Response.Account;
     using BLL.Helpers;
     using BLL.Interfaces;
+    using DAL.EF;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
     [ApiController]
@@ -84,6 +86,33 @@
         {
             var res = await this.accountService.GetWorkers();
             return Ok(res);
+        }
+
+        [HttpPost("dbUp")]
+        public ActionResult<string> InitDB()
+        {
+            try
+            {
+                databaseContext.Database.EnsureCreated();
+                databaseContext.Database.Migrate();
+                logger.LogInformation("Database migrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while migrating the database.");
+            }
+
+            try
+            {
+                rolesInitializer.CreateUserRoles().Wait();
+                logger.LogInformation("Roles created successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Roles can't be created because of exception.");
+            }
+
+            return Ok("Ready");
         }
     }
 }

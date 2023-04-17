@@ -92,8 +92,6 @@
             {
                 await this.userManager.AddToRoleAsync(user, Role.Worker);
 
-                await this.signInManager.SignInAsync(user, false);
-
                 var msg = Answer.RegisteredSuccessfully + user.UserName;
 
                 return new MessageResultDto(msg, null, Constants.AnswerCodes.SignedIn);
@@ -138,6 +136,40 @@
             var res = this.userRepository.UpdateUser(user);
 
             return res == null ? 0 : 1;
+        }
+
+        public async Task<UserInfo> UpdateUserAsync(Guid userId, WorkerRegistrationDto model)
+        {
+            var user = await this.userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var us = model;
+
+            user.FirstName = us.FirstName;
+            user.SecondName = us.SecondName;
+            user.PositionId = us.PositionId;
+            user.PhoneNumber = us.PhoneNumber;
+            user.Email = us.Email;
+
+            await this.userManager.UpdateAsync(user);
+
+            if (user.UserName != us.Login)
+            {
+                await this.userManager.SetUserNameAsync(user, us.Login);
+            }
+
+            if (us.Password != string.Empty)
+            {
+                await this.userManager.RemovePasswordAsync(user);
+                await this.userManager.AddPasswordAsync(user, us.Password);
+            }
+
+
+            return new UserInfo(user);
         }
 
         public Task<User> GetCurrentUserAsync(HttpContext httpCont) => this.userManager.GetUserAsync(httpCont?.User);
