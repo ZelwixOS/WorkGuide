@@ -3,7 +3,7 @@ import React from 'react'
 import ServerResponse from '../../Types/ServerResponse'
 import Login from '../../Types/Login'
 import { logInRequest, serverAnswers } from '../../Request/AccountRequests'
-import { Button, Container, FloatingLabel, Form, Row } from 'react-bootstrap'
+import { Button, Container, Form, Row } from 'react-bootstrap'
 import ErrorSnackBar from '../Common/ErrorSnackBar'
 import { makeStyles } from '../../theme'
 
@@ -74,37 +74,31 @@ const LoginForm: React.FC = () => {
 
   return (
     <Container>
-      <Row>
-        <FloatingLabel
-          controlId="login-tf"
-          className={`mb-3 ${classes.spaces}`}
-          label="Логин"
-        >
-          <Form.Control onChange={handleLoginChange} value={loginData.login} />
-        </FloatingLabel>
-      </Row>
-      <Row>
-        <FloatingLabel
-          controlId="password-tf"
-          className={`mb-3 ${classes.spaces}`}
-          label="Пароль"
-        >
+      <Form.Floating className={`mb-3 ${classes.spaces}`}>
+        <Form.Control
+          id="userLogin"
+          onChange={handleLoginChange}
+          value={loginData.login}
+        />
+        <label htmlFor="userLogin">Логин</label>
+      </Form.Floating>
+      <Form.Floating className={`mb-3 ${classes.spaces}`}>
           <Form.Control
+            id="userPassword"
             type="password"
             onChange={handlePasswordChange}
             value={loginData.password}
           />
-        </FloatingLabel>
-      </Row>
-      <Row>
+           <label htmlFor="userPassword">Пароль</label>
+        </Form.Floating>
         <Form.Check
           type="checkbox"
           className={`mb-3 ${classes.spaces}`}
           id="rememberMe=cb"
+          defaultChecked
           name="rememberMe"
           label="Запомнить меня"
         />
-      </Row>
       <Row className={classes.buttons}>
         <Button
           type="button"
