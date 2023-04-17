@@ -57,30 +57,32 @@ const TestQuestion = (props: ITestQuestion) => {
         </Row>
       </Card.Header>
       <Card.Body>
-        <Form className="d-flex flex-column">
+        <Form>
           {props.test.answers.map((answer) => (
             props.test.isManyAnswer ? 
-            <Form.Check
-              id={answer.id}
-              key={answer.id}
-              checked={props.pickedAnswers.find(i => i === answer.id) !== undefined}
-              type="checkbox"
-              name={props.test.id}
-              label={answer.content}
-              className="d-flex justify-content-start"
-              onChange={onChangeMulti}
-            />
+            <div className="d-flex justify-content-start">
+              <Form.Check
+                id={answer.id}
+                key={answer.id}
+                checked={props.pickedAnswers.find(i => i === answer.id) !== undefined}
+                type="checkbox"
+                name={props.test.id}
+                onChange={onChangeMulti}
+              />
+              <label className="mx-2">{answer.content}</label>
+            </div>
             :
-            <Form.Check
-              id={answer.id}
-              key={answer.id}
-              checked={props.pickedAnswers.find(i => i === answer.id) !== undefined}
-              type="radio"
-              name={props.test.id}
-              label={answer.content}
-              className="d-flex justify-content-start"
-              onChange={onChange}
-            />
+            <div className="d-flex justify-content-start">
+              <Form.Check
+                id={answer.id}
+                key={answer.id}
+                checked={props.pickedAnswers.find(i => i === answer.id) !== undefined}
+                type="radio"
+                name={props.test.id}
+                onChange={onChange}
+              />
+              <label className="mx-2">{answer.content}</label>
+            </div>
           ))}
         </Form>
       </Card.Body>
