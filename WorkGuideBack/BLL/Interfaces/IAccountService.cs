@@ -28,5 +28,6 @@
 
         public int UnBanUser(Guid id);
         Task<IList<UserInfo>> GetWorkers();
+        Task<UserInfo> UpdateUserAsync(Guid userId, WorkerRegistrationDto model);
     }
 }

@@ -17,12 +17,16 @@
     public class AccountController : ControllerBase
     {
         private readonly IAccountService accountService;
+        private readonly DatabaseContext databaseContext;
+        private readonly IRolesInitializer rolesInitializer;
         private readonly ILogger logger;
 
-        public AccountController(IAccountService accountService, ILogger<AccountController> logger)
+        public AccountController(IAccountService accountService, ILogger<AccountController> logger, DatabaseContext databaseContext, IRolesInitializer rolesInitializer)
         {
             this.accountService = accountService;
             this.logger = logger;
+            this.databaseContext = databaseContext;
+            this.rolesInitializer = rolesInitializer;
         }
 
         [HttpPost]
@@ -30,6 +34,14 @@
         public async Task<ActionResult<MessageResultDto>> Register([FromBody] WorkerRegistrationDto model)
         {
             return this.Ok(await accountService.Register(model));
+        }
+
+        [HttpPut]
+        [Route("UpdateUserInfo/{id}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public async Task<ActionResult<MessageResultDto>> UpdateUserInfo(Guid id, [FromBody] WorkerRegistrationDto model)
+        {
+            return this.Ok(await accountService.UpdateUserAsync(id, model));
         }
 
         [HttpPost]

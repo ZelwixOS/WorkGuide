@@ -9,6 +9,7 @@ type UserInfo = {
   avatar: string;
   banned: boolean;
   position: string;
+  positionId: string;
 };
 
 export default UserInfo;
