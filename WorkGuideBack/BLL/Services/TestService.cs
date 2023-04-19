@@ -5,6 +5,7 @@ using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Migrations;
+using Activity = DAL.Entities.Activity;
 
 namespace BLL.Services
 {
@@ -17,6 +18,7 @@ namespace BLL.Services
         private IUserCourseRepository userCourseRepository;
         private IUserRepository userRepository;
         private IAnswerRepository answerRepository;
+        private IActivityRepository activityRepository;
 
         public TestService(
             ITestRepository testRepository,
@@ -25,7 +27,8 @@ namespace BLL.Services
             IUserTestAnswerRepository userTestAnswerRepository,
             IUserCourseRepository userCourseRepository,
             IUserRepository userRepository,
-            IAnswerRepository answerRepository)
+            IAnswerRepository answerRepository,
+            IActivityRepository activityRepository)
         {
             this.testService = testRepository;
             this.lessonRepository = lessonRepository;
@@ -34,6 +37,7 @@ namespace BLL.Services
             this.userCourseRepository = userCourseRepository;
             this.userRepository = userRepository;
             this.answerRepository = answerRepository;
+            this.activityRepository = activityRepository;
         }
 
         public TestDto GetTest(Guid id)
@@ -141,6 +145,16 @@ namespace BLL.Services
                     LessonId = complexTest.LessonId,
                     RightAnswer = correct,
                     TestsCount = total
+                });
+
+            activityRepository.CreateItem(
+                new Activity()
+                {
+                    UserId = userId,
+                    Title = $"Курс \"{lesson.Course.Name}\"",
+                    Content = $"Урок \"{lesson.Name}\"",
+                    AdditContent = $"Ваш результат: {correct}/{total}",
+                    DateOfCreation = DateTime.Now
                 });
 
             int completedTests = userLessonScoreRepository.GetItems().
