@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Container } from 'react-bootstrap'
+import { Card, Container } from 'react-bootstrap'
 import { makeStyles } from '../../theme'
 import Activity from '../../Types/Activity'
 import Loading from '../Common/Loading'
 import ActivityCard from './ActivityCard'
+import { getActivities } from '../../Request/GetRequests'
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -21,6 +22,14 @@ const useStyles = makeStyles()((theme) => ({
     '&:hover': {
       color: '#000'
     }
+  },
+  noActivities: {
+    height: '350px',
+    border: '1px solid #5227CC',
+  },
+  noActivitiesText: {
+    color: '#BABABA',
+    fontWeight: 'bolder'
   }
 }))
 
@@ -34,11 +43,8 @@ const ActivityList = () => {
 
   const getActivitysForPage = async (isMounted: boolean) => {
     setLoading(true)
-    const res: Activity[] = [
-      { id: '123', title: 'Разработка', content: 'Активность в разработке ⚒️', date: '1 день назад', action: 'Продолжено' } as Activity,
-      { id: '1233', title: 'Разработка', content: 'Активность в разработке ⚒️', date: '2 дня назад', action: 'Продолжено' } as Activity,
-      { id: '12333', title: 'Разработка', content: 'Активность в разработке ⚒️', date: '3 дня назад', action: 'Продолжено' } as Activity,
-    ];
+    const cardCount = 3;
+    const res: Activity[] = await getActivities(cardCount);
     setActivities(res)
     setLoading(false)
 
@@ -62,13 +68,17 @@ const ActivityList = () => {
       {isLoading ? (
         <Loading />
       ) :
+        activities.length > 0 ?
         activities.map((activity, index) =>
           <ActivityCard
             key={activity.id}
             activity={activity}
-            first={activities.length > 1 && index === 0}
-            last={activities.length > 1 && index === activities.length - 1}
-          />)
+            first={index === 0}
+            last={index === activities.length - 1}
+          />) : 
+          <Card className={`${classes.noActivities} d-flex align-items-center justify-content-center`}>
+            <h6 className={classes.noActivitiesText}>Активностей нет 😴</h6>
+          </Card>
       }
     </Container>
   )

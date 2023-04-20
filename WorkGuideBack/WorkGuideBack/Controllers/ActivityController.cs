@@ -28,7 +28,7 @@ namespace WorkGuideBack.Controllers
             return this.Ok(this.activityService.GetActivity(id));
         }
 
-        [HttpGet("id/count/{id}")]
+        [HttpGet("count/{count}")]
         public async Task<ActionResult<List<ActivityDto>>> GetLast(int count)
         {
             var user = await this.accountService.GetCurrentUserAsync(HttpContext);
