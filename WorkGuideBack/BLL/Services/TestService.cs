@@ -5,6 +5,7 @@ using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Migrations;
+using Activity = DAL.Entities.Activity;
 
 namespace BLL.Services
 {
@@ -12,20 +13,24 @@ namespace BLL.Services
     {
         private ITestRepository testService;
         private ILessonRepository lessonRepository;
+        private ICourseRepository courseRepository;
         private IUserLessonScoreRepository userLessonScoreRepository;
         private IUserTestAnswerRepository userTestAnswerRepository;
         private IUserCourseRepository userCourseRepository;
         private IUserRepository userRepository;
         private IAnswerRepository answerRepository;
+        private IActivityRepository activityRepository;
 
         public TestService(
             ITestRepository testRepository,
             ILessonRepository lessonRepository,
+            ICourseRepository courseRepository,
             IUserLessonScoreRepository userLessonScoreRepository,
             IUserTestAnswerRepository userTestAnswerRepository,
             IUserCourseRepository userCourseRepository,
             IUserRepository userRepository,
-            IAnswerRepository answerRepository)
+            IAnswerRepository answerRepository,
+            IActivityRepository activityRepository)
         {
             this.testService = testRepository;
             this.lessonRepository = lessonRepository;
@@ -34,6 +39,8 @@ namespace BLL.Services
             this.userCourseRepository = userCourseRepository;
             this.userRepository = userRepository;
             this.answerRepository = answerRepository;
+            this.activityRepository = activityRepository;
+            this.courseRepository = courseRepository;
         }
 
         public TestDto GetTest(Guid id)
@@ -89,6 +96,7 @@ namespace BLL.Services
         public TestResultDto CheckComplexTest(ComplexTestAnswersDto complexTest, Guid userId)
         {
             var lesson = this.lessonRepository.GetItem(complexTest.LessonId);
+            var course = this.courseRepository.GetItems().Where(c => c.Id == lesson.CourseId).First();
 
             if (lesson == null)
             {
@@ -141,6 +149,16 @@ namespace BLL.Services
                     LessonId = complexTest.LessonId,
                     RightAnswer = correct,
                     TestsCount = total
+                });
+
+            activityRepository.CreateItem(
+                new Activity()
+                {
+                    UserId = userId,
+                    Title = $"Курс \"{course.Name}\"",
+                    Content = $"Урок \"{lesson.Name}\"",
+                    AdditContent = $"Ваш результат: {correct}/{total}",
+                    DateOfCreation = DateTime.Now
                 });
 
             int completedTests = userLessonScoreRepository.GetItems().
