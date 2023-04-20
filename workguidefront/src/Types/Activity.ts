@@ -2,8 +2,8 @@ type Activity = {
   id: string;
   title: string;
   content: string;
-  date: string;
-  action: string;
+  additContent: string;
+  dateOfCreation: string;
 };
 
 export default Activity;

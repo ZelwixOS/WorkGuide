@@ -9,6 +9,7 @@ import Theory from '../Types/Theory';
 import Test from '../Types/Test';
 import TestValidAnswers from '../Types/TestValidAnswers';
 import Notification from '../Types/Notification'
+import Activity from '../Types/Activity';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -86,6 +87,10 @@ async function getNotifications(): Promise<Notification[]>  {
   return await getRequest(`/api/Notification/user/`);
 }
 
+async function getActivities(count: number): Promise<Activity[]>  {
+  return await getRequest(`/api/Activity/count/${count}`);
+}
+
 export default getRequest
 
 export {
@@ -107,5 +112,6 @@ export {
   getTest,
   getTestAnswers,
   getNotifications,
-  getUserById
+  getUserById,
+  getActivities
 }
