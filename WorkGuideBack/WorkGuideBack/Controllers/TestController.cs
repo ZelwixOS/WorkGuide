@@ -73,5 +73,17 @@ namespace WorkGuideBack.Controllers
 
             return this.Ok(this.testService.CheckComplexTest(testAnswers, user.Id));
         }
+
+        [HttpGet("userLessonScore")]
+        public async Task<ActionResult<UserLessonScoreDto>> GetUserLessonScore(Guid lessonId)
+        {
+            var user = await this.accountService.GetCurrentUserAsync(HttpContext);
+            if (user == null)
+            {
+                return this.Ok(null);
+            }
+
+            return this.Ok(this.testService.GetUserLessonScore(user.Id, lessonId));
+        }
     }
 }

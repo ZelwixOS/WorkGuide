@@ -234,5 +234,18 @@ namespace BLL.Services
 
             return result;
         }
+
+        public UserLessonScoreDto GetUserLessonScore(Guid userId, Guid lessonId)
+        {
+            var userLessonScore = userLessonScoreRepository.GetItems()
+                .FirstOrDefault(i => i.UserId == userId && i.LessonId == lessonId);
+
+            if (userLessonScore == null)
+            {
+                return null;
+            }
+
+            return new UserLessonScoreDto(userLessonScore);
+        }
     }
 }
