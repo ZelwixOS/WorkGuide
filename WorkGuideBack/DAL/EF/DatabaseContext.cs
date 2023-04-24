@@ -38,6 +38,8 @@ namespace DAL.EF
 
         public DbSet<Activity> Activitys { get; set; }
 
+        public DbSet<TheoryFile> TheoryFiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lesson>(entity =>
@@ -114,6 +116,12 @@ namespace DAL.EF
             modelBuilder.Entity<Activity>(entity =>
             {
                 entity.HasOne(t => t.User).WithMany(q => q.Activity).HasForeignKey(t => t.UserId);
+                entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<TheoryFile>(entity =>
+            {
+                entity.HasOne(t => t.Theory).WithMany(q => q.TheoryFiles).HasForeignKey(t => t.TheoryId);
                 entity.HasKey(q => q.Id);
             });
 

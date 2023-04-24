@@ -1,17 +1,27 @@
-﻿using BLL.DTO.Request.Theory;
+﻿using BLL.DTO.Request;
+using BLL.DTO.Request.Theory;
 using BLL.DTO.Response;
 using BLL.Interfaces;
+using DAL.Entities;
 using DAL.Interfaces;
+using DAL.Migrations;
+using Microsoft.AspNetCore.Http;
+using System.Security.Policy;
 
 namespace BLL.Services
 {
     public class TheoryService : ITheoryService
     {
+        public const string fileFolder = "./ClientApp/lessonContent/";
+
         private ITheoryRepository theoryService;
 
-        public TheoryService(ITheoryRepository TheoryRepository)
+        private ITheoryFileRepository theoryFileRepository;
+
+        public TheoryService(ITheoryRepository TheoryRepository, ITheoryFileRepository theoryFileRepository)
         {
             this.theoryService = TheoryRepository;
+            this.theoryFileRepository = theoryFileRepository;
         }
 
         public TheoryDto GetTheory(Guid id)
@@ -25,12 +35,58 @@ namespace BLL.Services
             return null;
         }
 
-        public TheoryDto CreateTheory(TheoryCreateRequestDto Theory)
+        public async Task<TheoryDto> CreateTheoryAsync(TheoryCreateRequestDto theory)
         {
-            var les = Theory.ToModel();
+            var les = theory.ToModel();
+            string url;
+            TheoryFile theoryFile;
+
             var res = this.theoryService.CreateItem(les);
 
+            if (!Directory.Exists(fileFolder + theory.LessonId.ToString()))
+            {
+                Directory.CreateDirectory(fileFolder + theory.LessonId.ToString());
+            }
+
+            if (theory.Files != null)
+            {
+                foreach (var item in theory.Files)
+                {
+                    await SaveTheoryFileAsync(item, res.LessonId, res.Id);
+                }
+            }
+
             return new TheoryDto(res);
+        }
+
+        public async Task<FileDescriptor> CreateTheoryFile(Guid theoryId, CreateFileRequestDto file)
+        {
+            var theory = this.theoryService.GetItem(theoryId);
+
+            if (theory != null)
+            {
+                var res = await SaveTheoryFileAsync(file.File, theory.LessonId, theoryId);
+
+                if (res != null)
+                {
+                    return new FileDescriptor(res.Id, res.Url);
+                }
+            }
+
+            return null;
+        }
+
+        public int DeleteTheoryFile(Guid fileId)
+        {
+            var file = this.theoryFileRepository.GetItem(fileId);
+
+            if (file != null)
+            {
+                File.Delete(fileFolder + file.Url);
+                this.theoryFileRepository.DeleteItem(file);
+            }
+
+            return 0;
         }
 
         public TheoryDto UpdateTheory(TheoryUpdateRequestDto Theory)
@@ -50,13 +106,36 @@ namespace BLL.Services
 
         public int DeleteTheory(Guid id)
         {
-            var Theory = this.theoryService.GetItem(id);
-            if (Theory != null)
+            var theory = this.theoryService.GetItem(id);
+            if (theory != null)
             {
-                return this.theoryService.DeleteItem(Theory);
+                Directory.Delete(fileFolder + theory.LessonId, true);
+                return this.theoryService.DeleteItem(theory);
             }
 
             return 0;
+        }
+
+        protected async Task<TheoryFile> SaveTheoryFileAsync(IFormFile item, Guid lessonId, Guid theoryId)
+        {
+            var format = item.FileName.Substring(item.FileName.LastIndexOf('.'));
+
+            string url = Path.Combine(lessonId.ToString(), item.FileName);
+
+            using (var fs = File.Create(fileFolder + url))
+            {
+                await item.CopyToAsync(fs);
+            }
+
+            var theoryFile = new TheoryFile()
+            {
+                TheoryId = theoryId,
+                Format = format,
+                Url = url,
+            };
+
+            // Сохранение информации в репозиторий файлов теории
+            return this.theoryFileRepository.CreateItem(theoryFile);
         }
     }
 }
