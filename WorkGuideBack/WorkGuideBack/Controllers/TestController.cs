@@ -74,7 +74,7 @@ namespace WorkGuideBack.Controllers
             return this.Ok(this.testService.CheckComplexTest(testAnswers, user.Id));
         }
 
-        [HttpGet("userLessonScore")]
+        [HttpGet("userLessonScore/{lessonId}")]
         public async Task<ActionResult<UserLessonScoreDto>> GetUserLessonScore(Guid lessonId)
         {
             var user = await this.accountService.GetCurrentUserAsync(HttpContext);

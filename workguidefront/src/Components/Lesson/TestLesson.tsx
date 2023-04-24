@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Container, Row } from 'react-bootstrap'
 import { checkComplexTest } from '../../Request/PostRequests'
 import { makeStyles } from '../../theme'
@@ -7,6 +7,8 @@ import Loading from '../Common/Loading'
 import LessonCard from '../Lesson/LessonCard'
 import TestQuestion from './TestQuestion'
 import TestResults from './TestResults'
+import { getUserTestScore } from '../../Request/GetRequests'
+import React from 'react'
 
 const useStyles = makeStyles()((theme) => ({
   paginator: {
@@ -33,17 +35,48 @@ const TestLesson = (props: ITestLesson) => {
   const [currentAnswers, setCurrentAnswers] = useState<any>({})
   const [correctAnswers, setCorrectAnswers] = useState(0)
   const [totalQuestions, setTotalQuestions] = useState(0)
+  const [loading, setLoading] = useState(true)
 
-  const onTestAnswerChanged = (testId: string, answerId: string, hasManyAnswers: boolean) => {
+  let isMounted = true
+
+  const getResult = async () => {
+    const res = await getUserTestScore(props.lesson!.id)
+
+    if (isMounted) {
+      if (res) {
+        setCorrectAnswers(res.rightAnswer)
+        setTotalQuestions(res.testsCount)
+      }
+
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getResult()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const onTestAnswerChanged = (
+    testId: string,
+    answerId: string,
+    hasManyAnswers: boolean,
+  ) => {
     const answers = JSON.parse(JSON.stringify(currentAnswers))
-    if(hasManyAnswers) {
-      if(answers[testId] && answers[testId].find((i: string) => i === answerId)) {
-        answers[testId] = answers[testId].filter((i: string) => i !== answerId);
+    if (hasManyAnswers) {
+      if (
+        answers[testId] &&
+        answers[testId].find((i: string) => i === answerId)
+      ) {
+        answers[testId] = answers[testId].filter((i: string) => i !== answerId)
       } else {
-        if(answers[testId]) {
-          answers[testId] = [...answers[testId], answerId];
+        if (answers[testId]) {
+          answers[testId] = [...answers[testId], answerId]
         } else {
-          answers[testId] = [answerId];
+          answers[testId] = [answerId]
         }
       }
     } else {
@@ -66,32 +99,38 @@ const TestLesson = (props: ITestLesson) => {
 
   return (
     <Container className={classes.container}>
-      {props.loading || !props.lesson ? (
+      {props.loading || loading || !props.lesson ? (
         <Loading />
       ) : (
-        <LessonCard lesson={props.lesson} hideCompletion dontGoTo />
-      )}
-      {!props.loading && props.lesson && totalQuestions < 1 ? (
-        props.lesson.testPages.map((test) => (
-          <TestQuestion
-            key={test.id}
-            test={test}
-            className={classes.questions}
-            onChanged={onTestAnswerChanged}
-            pickedAnswers={currentAnswers[test.id] ? currentAnswers[test.id] as string[] : []}
-          />
-        ))
-      ) : (
-        <TestResults
-          score={correctAnswers}
-          total={totalQuestions}
-          courseUrl={props.lesson!.courseUrl}
-        />
-      )}
-      {totalQuestions < 1 && (
-        <Row className={classes.paginator}>
-          <Button onClick={onTestFinished}>Завершить тест</Button>
-        </Row>
+        <React.Fragment>
+          <LessonCard lesson={props.lesson} hideCompletion dontGoTo />
+          {!props.loading && props.lesson && totalQuestions < 1 ? (
+            <React.Fragment>
+              {props.lesson.testPages.map((test) => (
+                <TestQuestion
+                  key={test.id}
+                  test={test}
+                  className={classes.questions}
+                  onChanged={onTestAnswerChanged}
+                  pickedAnswers={
+                    currentAnswers[test.id]
+                      ? (currentAnswers[test.id] as string[])
+                      : []
+                  }
+                />
+              ))}
+              <Row className={classes.paginator}>
+                <Button onClick={onTestFinished}>Завершить тест</Button>
+              </Row>
+            </React.Fragment>
+          ) : (
+            <TestResults
+              score={correctAnswers}
+              total={totalQuestions}
+              courseUrl={props.lesson!.courseUrl}
+            />
+          )}
+        </React.Fragment>
       )}
     </Container>
   )

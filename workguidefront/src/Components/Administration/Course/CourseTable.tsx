@@ -189,6 +189,7 @@ export const CourseTable = (props: ICourseTable) => {
     if (props.createNew) {
       props.createNew(refreshData.bind(this))
     }
+    refreshData()
   }
 
   const onPublish = async () => {
@@ -209,6 +210,7 @@ export const CourseTable = (props: ICourseTable) => {
     if (selectedItem && props.editSelected) {
       props.editSelected(selectedItem, refreshData.bind(this))
     }
+    refreshData()
   }
 
   const handleClose = (
