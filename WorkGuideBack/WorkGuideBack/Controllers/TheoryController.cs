@@ -43,7 +43,7 @@ namespace WorkGuideBack.Controllers
 
         [HttpPost("createFile/{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<TheoryDto>> CreateFile(Guid id, [FromForm] CreateFileRequestDto file)
+        public async Task<ActionResult<FileDescriptor>> CreateFile(Guid id, [FromForm] CreateFileRequestDto file)
         {
             return this.Ok(await this.theoryService.CreateTheoryFile(id, file));
         }
