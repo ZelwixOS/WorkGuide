@@ -83,7 +83,8 @@ namespace BLL.Services
             if (file != null)
             {
                 File.Delete(fileFolder + file.Url);
-                this.theoryFileRepository.DeleteItem(file);
+                
+                return this.theoryFileRepository.DeleteItem(file);
             }
 
             return 0;
