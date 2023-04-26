@@ -12,7 +12,7 @@ namespace BLL.Services
 {
     public class TheoryService : ITheoryService
     {
-        public const string fileFolder = "./ClientApp/lessonContent/";
+        public const string fileFolder = "./ClientApp/lessonsContent/";
 
         private ITheoryRepository theoryService;
 
@@ -42,11 +42,6 @@ namespace BLL.Services
             TheoryFile theoryFile;
 
             var res = this.theoryService.CreateItem(les);
-
-            if (!Directory.Exists(fileFolder + theory.LessonId.ToString()))
-            {
-                Directory.CreateDirectory(fileFolder + theory.LessonId.ToString());
-            }
 
             if (theory.Files != null)
             {
@@ -119,6 +114,11 @@ namespace BLL.Services
 
         protected async Task<TheoryFile> SaveTheoryFileAsync(IFormFile item, Guid lessonId, Guid theoryId)
         {
+            if (!Directory.Exists(fileFolder + lessonId.ToString()))
+            {
+                Directory.CreateDirectory(fileFolder + lessonId.ToString());
+            }
+
             var format = item.FileName.Substring(item.FileName.LastIndexOf('.'));
 
             string url = Path.Combine(lessonId.ToString(), item.FileName);
