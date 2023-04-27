@@ -28,6 +28,10 @@ async function  deleteTheory(id: string) {
   return await deleteRequest(`/api/Theory/${id}`);
 }
 
+async function  deleteTheoryFile(id: string) {
+  return await deleteRequest(`/api/Theory/deleteFile/${id}`);
+}
+
 export default deleteRequest
 
 export {
@@ -37,5 +41,6 @@ export {
   removeCoursePosition,
   deleteLesson,
   deleteTest,
-  deleteTheory
+  deleteTheory,
+  deleteTheoryFile
 };
