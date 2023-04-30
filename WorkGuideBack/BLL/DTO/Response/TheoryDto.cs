@@ -20,6 +20,17 @@ namespace BLL.DTO.Response
                     this.CourseUrl = theory.Lesson.Course.Url;
                 }
             }
+
+            if (theory.TheoryFiles != null)
+            {
+                this.Files = new List<FileDescriptor>();
+                foreach (var file in theory.TheoryFiles)
+                {
+                    this.Files.Add(new FileDescriptor(file.Id, file.Url));
+                }
+            }
         }
+
+        public List<FileDescriptor> Files { get; set; }
     }
 }

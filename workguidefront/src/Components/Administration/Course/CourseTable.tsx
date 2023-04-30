@@ -109,6 +109,7 @@ export const CourseTable = (props: ICourseTable) => {
     search: string,
   ) => {
     const res = await getSearchedCourses(page, pageOnCount, search)
+
     if (isMounted) {
       const d = [...data]
       for (let i = 0; i < pageOnCount && i < res.data.length; i++) {
@@ -188,18 +189,19 @@ export const CourseTable = (props: ICourseTable) => {
     if (props.createNew) {
       props.createNew(refreshData.bind(this))
     }
+    refreshData()
   }
 
   const onPublish = async () => {
     const res = await publishCourse(selectedItem as string)
-    if (res > 0) {
+    if (res) {
       refreshData()
     }
   }
 
   const onUnpublish = async () => {
     const res = await unpublishCourse(selectedItem as string)
-    if (res > 0) {
+    if (res) {
       refreshData()
     }
   }
@@ -208,6 +210,7 @@ export const CourseTable = (props: ICourseTable) => {
     if (selectedItem && props.editSelected) {
       props.editSelected(selectedItem, refreshData.bind(this))
     }
+    refreshData()
   }
 
   const handleClose = (

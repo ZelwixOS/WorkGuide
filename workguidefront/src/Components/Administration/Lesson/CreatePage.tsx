@@ -65,14 +65,14 @@ const CreatePage = () => {
     setLoading(false);
   }
 
-  const handleSaveTheory = async (content: string) => {
+  const handleSaveTheory = async (content: string, files: File[]) => {
     const lessonId: string = params?.id!;
     const pageNumber: string = params?.pageNumber!;
-    await createTheoryPage(lessonId, +pageNumber, content);
+    await createTheoryPage(lessonId, pageNumber, content, files);
     navigate('../')
   }
 
-  const handleEditTheory = async (content: string) => {
+  const handleEditTheory = async (content: string, _: File[]) => {
     const lessonId: string = params?.id!;
     const pageNumber: string = params?.pageNumber!;
     const id: string = searchParams.get('id')!;

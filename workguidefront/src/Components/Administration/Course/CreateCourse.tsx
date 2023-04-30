@@ -113,7 +113,7 @@ const CreateCourse: React.FC<ICreateCourse> = (props) => {
     } else {
       const res = await createCourse(
         courseData.url,
-        courseData.description,
+        courseData.name,
         courseData.description,
         pic ?? null,
       )

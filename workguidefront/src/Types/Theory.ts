@@ -1,3 +1,5 @@
+import CustomFile from "./CustomFile";
+
 type Theory = {
   id: string;
   pageNumber: number;
@@ -5,6 +7,7 @@ type Theory = {
   lessonName: string;
   courseUrl: string;
   lessonNumber: number;
+  files: CustomFile[];
 };
 
 export default Theory;

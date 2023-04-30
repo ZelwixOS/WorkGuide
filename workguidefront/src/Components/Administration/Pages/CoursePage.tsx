@@ -27,12 +27,14 @@ export const CoursePage = () => {
   const createNew = (refrFun: () => void) => {
     setCreateOpen(true);
     setRefrFun({ refresh: refrFun });
+    refrFun()
   };
 
   const editSelected = (selectedId: string, refrFun: () => void) => {
     setSelected(selectedId);
     setEditOpen(true);
     setRefrFun({ refresh: refrFun });
+    refrFun()
   };
 
   return (

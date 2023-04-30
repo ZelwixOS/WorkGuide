@@ -9,6 +9,8 @@ import Theory from '../Types/Theory';
 import Test from '../Types/Test';
 import TestValidAnswers from '../Types/TestValidAnswers';
 import Notification from '../Types/Notification'
+import Activity from '../Types/Activity';
+import TestScore from '../Types/TestScore';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -40,6 +42,10 @@ async function getAllWorkers(): Promise<UserMainInfo[]>  {
 
 async function getUsersBySearch(request: string, count: number): Promise<UserInfo[]>  {
   return await getRequest(`/api/User/searchUsers?request=${request}&count=${count}`);
+}
+
+async function getUserById(id: string): Promise<UserInfo>  {
+  return await getRequest(`/api/User/id/${id}`);
 }
 
 async function getCurrentUserInfo(): Promise<UserInfo>  {
@@ -82,6 +88,14 @@ async function getNotifications(): Promise<Notification[]>  {
   return await getRequest(`/api/Notification/user/`);
 }
 
+async function getActivities(count: number): Promise<Activity[]>  {
+  return await getRequest(`/api/Activity/count/${count}`);
+}
+
+async function getUserTestScore(id: string): Promise<TestScore>  {
+  return await getRequest(`/api/Test/userLessonScore/${id}`);
+}
+
 export default getRequest
 
 export {
@@ -102,5 +116,8 @@ export {
   getTheory,
   getTest,
   getTestAnswers,
-  getNotifications
+  getNotifications,
+  getUserById,
+  getActivities,
+  getUserTestScore
 }

@@ -6,8 +6,10 @@
     using BLL.DTO.Response.Account;
     using BLL.Helpers;
     using BLL.Interfaces;
+    using DAL.EF;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
     [ApiController]
@@ -15,12 +17,16 @@
     public class AccountController : ControllerBase
     {
         private readonly IAccountService accountService;
+        private readonly DatabaseContext databaseContext;
+        private readonly IRolesInitializer rolesInitializer;
         private readonly ILogger logger;
 
-        public AccountController(IAccountService accountService, ILogger<AccountController> logger)
+        public AccountController(IAccountService accountService, ILogger<AccountController> logger, DatabaseContext databaseContext, IRolesInitializer rolesInitializer)
         {
             this.accountService = accountService;
             this.logger = logger;
+            this.databaseContext = databaseContext;
+            this.rolesInitializer = rolesInitializer;
         }
 
         [HttpPost]
@@ -28,6 +34,14 @@
         public async Task<ActionResult<MessageResultDto>> Register([FromBody] WorkerRegistrationDto model)
         {
             return this.Ok(await accountService.Register(model));
+        }
+
+        [HttpPut]
+        [Route("UpdateUserInfo/{id}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public async Task<ActionResult<MessageResultDto>> UpdateUserInfo(Guid id, [FromBody] WorkerRegistrationDto model)
+        {
+            return this.Ok(await accountService.UpdateUserAsync(id, model));
         }
 
         [HttpPost]
@@ -84,6 +98,33 @@
         {
             var res = await this.accountService.GetWorkers();
             return Ok(res);
+        }
+
+        [HttpPost("dbUp")]
+        public ActionResult<string> InitDB()
+        {
+            try
+            {
+                databaseContext.Database.EnsureCreated();
+                databaseContext.Database.Migrate();
+                logger.LogInformation("Database migrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while migrating the database.");
+            }
+
+            try
+            {
+                rolesInitializer.CreateUserRoles().Wait();
+                logger.LogInformation("Roles created successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Roles can't be created because of exception.");
+            }
+
+            return Ok("Ready");
         }
     }
 }

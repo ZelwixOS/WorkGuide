@@ -4,6 +4,7 @@ import ServerResponse from '../Types/ServerResponse';
 import TestAnswer from '../Types/TestAnswer';
 import UserInfo from '../Types/UserInfo';
 import UserLinks from '../Types/UserLinks';
+import WorkerRegistration from '../Types/WorkerRegistration';
 
 async function put<T>(url: string, data: T) {
   return (await axios.put(url, data)).data
@@ -57,6 +58,14 @@ async function updateTheory(pageNumber: number, content: string, lessonId: strin
   return await put(`/api/Theory/`, { pageNumber, content, lessonId, id })
 }
 
+async function updateWorker(id: string, data: WorkerRegistration) {
+  return await put(`/api/User/${id}`, data)
+}
+
+async function updateWorkerFull(id: string, data: WorkerRegistration) {
+  return await put(`/api/Account/UpdateUserInfo/${id}`, data)
+}
+
 async function updateTest(
   lessonId: string,
   pageNumer: number,
@@ -84,5 +93,7 @@ export {
   updateUserLinks,
   updateLesson,
   updateTheory,
-  updateTest
+  updateTest,
+  updateWorker,
+  updateWorkerFull
 }

@@ -1,7 +1,11 @@
-﻿namespace BLL.DTO.Request.Theory
+﻿using Microsoft.AspNetCore.Http;
+
+namespace BLL.DTO.Request.Theory
 {
     public class TheoryCreateRequestDto : TheoryRequestDto
     {
+        public List<IFormFile>? Files { get; set; }
+
         public override DAL.Entities.Theory ToModel()
         {
             return new DAL.Entities.Theory()

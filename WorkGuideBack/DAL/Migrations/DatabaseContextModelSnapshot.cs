@@ -22,6 +22,34 @@ namespace DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DAL.Entities.Activity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AdditContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Activitys");
+                });
+
             modelBuilder.Entity("DAL.Entities.Answer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -65,6 +93,9 @@ namespace DAL.Migrations
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
+
+                    b.Property<int>("TotalTests")
+                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -229,6 +260,30 @@ namespace DAL.Migrations
                     b.HasIndex("LessonId");
 
                     b.ToTable("TheoryPages");
+                });
+
+            modelBuilder.Entity("DAL.Entities.TheoryFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Format")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TheoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TheoryId");
+
+                    b.ToTable("TheoryFiles");
                 });
 
             modelBuilder.Entity("DAL.Entities.User", b =>
@@ -529,6 +584,17 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DAL.Entities.Activity", b =>
+                {
+                    b.HasOne("DAL.Entities.User", "User")
+                        .WithMany("Activity")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DAL.Entities.Answer", b =>
                 {
                     b.HasOne("DAL.Entities.Test", "Test")
@@ -609,6 +675,17 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Lesson");
+                });
+
+            modelBuilder.Entity("DAL.Entities.TheoryFile", b =>
+                {
+                    b.HasOne("DAL.Entities.Theory", "Theory")
+                        .WithMany("TheoryFiles")
+                        .HasForeignKey("TheoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Theory");
                 });
 
             modelBuilder.Entity("DAL.Entities.User", b =>
@@ -767,8 +844,15 @@ namespace DAL.Migrations
                     b.Navigation("UsersTestAnswers");
                 });
 
+            modelBuilder.Entity("DAL.Entities.Theory", b =>
+                {
+                    b.Navigation("TheoryFiles");
+                });
+
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
+                    b.Navigation("Activity");
+
                     b.Navigation("LessonsScore");
 
                     b.Navigation("NotificationUser");

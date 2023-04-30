@@ -15,7 +15,10 @@
             this.Email = user.Email;
             this.Avatar = user.Avatar;
             if (user.Position != null)
+            {
                 this.Position = user.Position.Title;
+                this.PositionId = user.Position.Id;
+            }
         }
 
         public UserInfo(User user)
@@ -29,7 +32,10 @@
             this.Avatar = user.Avatar;
             this.Banned = user.Banned;
             if (user.Position != null)
+            {
                 this.Position = user.Position.Title;
+                this.PositionId = user.Position.Id;
+            }
         }
 
         public Guid Id { get; set; }
@@ -51,5 +57,7 @@
         public bool Banned { get; set; }
 
         public string Position { get; set; }
+
+        public Guid PositionId { get; set; }
     }
 }

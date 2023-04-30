@@ -32,6 +32,8 @@
 
         public HashSet<NotificationUser> NotificationUser { get; set; }
 
+        public HashSet<Activity> Activity { get; set; }
+
         public Position Position { get; set; }
     }
 }

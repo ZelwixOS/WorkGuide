@@ -1,5 +1,7 @@
 import axios from 'axios'
 import TestAnswer from '../Types/TestAnswer'
+import WorkerRegistration from '../Types/WorkerRegistration'
+import CustomFile from '../Types/CustomFile'
 
 async function post<T>(url: string, data: T) {
   return (await axios.post(url, data)).data
@@ -85,10 +87,28 @@ async function createLesson(
 
 async function createTheoryPage(
   lessonId: string,
-  pageNumber: number,
+  pageNumber: string,
   content: string,
+  files: File[]
 ) {
-  return await post(`/api/Theory/`, { pageNumber, content, lessonId })
+  const formData = new FormData()
+  formData.append('lessonId', lessonId)
+  formData.append('pageNumber', pageNumber)
+  formData.append('content', content)
+
+  files.forEach((file : File) => formData.append('files', file));
+
+  return await post(`/api/Theory`, formData)
+}
+
+async function createTheoryFile(
+  id: string,
+  file: File
+) : Promise<CustomFile> {
+  const formData = new FormData()
+  formData.append('file', file);
+
+  return await post(`/api/Theory/createFile/${id}`, formData)
 }
 
 async function createQuestionPage(
@@ -111,6 +131,10 @@ async function readNotification(notificationId: string) {
   return await post(`/api/Notification/readT/${notificationId}`, null)
 }
 
+async function registerWorker(data : WorkerRegistration) {
+  return await post(`/api/Account/Register`, data)
+}
+
 export default post
 
 export {
@@ -127,5 +151,7 @@ export {
   createLesson,
   createTheoryPage,
   createQuestionPage,
-  readNotification
+  readNotification,
+  registerWorker,
+  createTheoryFile
 }
