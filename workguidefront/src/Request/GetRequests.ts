@@ -10,6 +10,7 @@ import Test from '../Types/Test';
 import TestValidAnswers from '../Types/TestValidAnswers';
 import Notification from '../Types/Notification'
 import Activity from '../Types/Activity';
+import TestScore from '../Types/TestScore';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -91,6 +92,10 @@ async function getActivities(count: number): Promise<Activity[]>  {
   return await getRequest(`/api/Activity/count/${count}`);
 }
 
+async function getUserTestScore(id: string): Promise<TestScore>  {
+  return await getRequest(`/api/Test/userLessonScore/${id}`);
+}
+
 export default getRequest
 
 export {
@@ -113,5 +118,6 @@ export {
   getTestAnswers,
   getNotifications,
   getUserById,
-  getActivities
+  getActivities,
+  getUserTestScore
 }

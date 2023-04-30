@@ -23,7 +23,7 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpGet]
-        public ActionResult<LessonDto> GetAll()
+        public ActionResult<List<LessonDto>> GetAll()
         {
             return this.Ok(this.lessonService.GetLessons());
         }
