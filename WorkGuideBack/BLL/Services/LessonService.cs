@@ -45,6 +45,7 @@ namespace BLL.Services
             var lesson = this.lessonRepository.GetItems()
                 .Include(l => l.Course)
                 .Include(l => l.TheoryPages)
+                    .ThenInclude(l => l.TheoryFiles)
                 .Include(l => l.TestPages)
                     .ThenInclude(t => t.Answers)
                 .FirstOrDefault(l => l.Course.Url == url && l.OrderNumber == lessonNumber);

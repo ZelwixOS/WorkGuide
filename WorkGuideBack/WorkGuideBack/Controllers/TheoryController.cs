@@ -4,6 +4,7 @@ using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BLL.Helpers;
+using BLL.DTO.Request;
 
 namespace WorkGuideBack.Controllers
 {
@@ -28,9 +29,9 @@ namespace WorkGuideBack.Controllers
 
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<TheoryDto> Create([FromBody] TheoryCreateRequestDto theory)
+        public async Task<ActionResult<TheoryDto>> Create([FromForm] TheoryCreateRequestDto theory)
         {
-            return this.Ok(this.theoryService.CreateTheory(theory));
+            return this.Ok(await this.theoryService.CreateTheoryAsync(theory));
         }
 
         [HttpPut]
@@ -38,6 +39,20 @@ namespace WorkGuideBack.Controllers
         public ActionResult<TheoryDto> Update([FromBody] TheoryUpdateRequestDto theory)
         {
             return this.Ok(this.theoryService.UpdateTheory(theory));
+        }
+
+        [HttpPost("createFile/{id}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public async Task<ActionResult<FileDescriptor>> CreateFile(Guid id, [FromForm] CreateFileRequestDto file)
+        {
+            return this.Ok(await this.theoryService.CreateTheoryFile(id, file));
+        }
+
+        [HttpDelete("deleteFile/{id}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<int> DeleteFile(Guid id)
+        {
+            return this.Ok(this.theoryService.DeleteTheoryFile(id));
         }
 
         [HttpDelete("{id}")]
