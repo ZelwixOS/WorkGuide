@@ -20,6 +20,8 @@ namespace BLL.Services
         private IUserRepository userRepository;
         private IAnswerRepository answerRepository;
         private IActivityRepository activityRepository;
+        private IUserStatsRepository userStatsRepository;
+        private IAchievementService achievemenService;
 
         public TestService(
             ITestRepository testRepository,
@@ -30,7 +32,9 @@ namespace BLL.Services
             IUserCourseRepository userCourseRepository,
             IUserRepository userRepository,
             IAnswerRepository answerRepository,
-            IActivityRepository activityRepository)
+            IActivityRepository activityRepository,
+            IUserStatsRepository userStatsRepository,
+            IAchievementService achievemenService)
         {
             this.testService = testRepository;
             this.lessonRepository = lessonRepository;
@@ -41,6 +45,8 @@ namespace BLL.Services
             this.answerRepository = answerRepository;
             this.activityRepository = activityRepository;
             this.courseRepository = courseRepository;
+            this.userStatsRepository = userStatsRepository;
+            this.achievemenService = achievemenService;
         }
 
         public TestDto GetTest(Guid id)
@@ -178,7 +184,6 @@ namespace BLL.Services
             }
             else
             {
-                User user = userRepository.GetItem(userId);
                 UserCourse userCourse = new UserCourse()
                 {
                     CompletedTests = completedTests,
@@ -191,7 +196,12 @@ namespace BLL.Services
                 userCourseRepository.CreateItem(userCourse);
             }
 
-            return new TestResultDto(correct, total);
+            UpdateUserStats(userId, lesson.CourseId, completedTests == totalTests, (float)correct / total); // Обновление статистики пользователя
+            
+            // Проверка ачивок по прохождению
+            var achs = this.achievemenService.CheckNewAchievements(userId, lesson.CourseId, completedTests == totalTests);
+
+            return new TestResultDto(correct, total, achs);
         }
 
         public bool? CheckAnswer(TestAnswerDto testAnswer)
@@ -246,6 +256,64 @@ namespace BLL.Services
             }
 
             return new UserLessonScoreDto(userLessonScore);
+        }
+
+        protected void UpdateUserStats(Guid userId, Guid courseId, bool courseCompleted, float correctAnswerPart)
+        {
+            var stats = this.userStatsRepository.GetItem(userId);
+
+            if (stats == null)
+            {
+                stats = new UserStats();
+                stats.Id = userId;
+            }
+
+            stats.PassedTests++;
+            
+            if (correctAnswerPart == 0)
+            {
+                stats.TerribleTests++;
+            }
+            else if (correctAnswerPart < 0.33)
+            {
+                stats.BadTests++;
+            } else if (correctAnswerPart < 0.66)
+            {
+                stats.MediumTests++;
+            } else if (correctAnswerPart < 1)
+            {
+                stats.GoodTests++;
+            } else
+            {
+                stats.PerfectTests++;
+            }
+
+            if (courseCompleted)
+            {
+                stats.CompletedCourses++;
+                var minCourseTestRate = this.userLessonScoreRepository.GetItems().Where(c => c.UserId == userId && c.Lesson.CourseId == courseId).Select(r => (float)r.RightAnswer / r.TestsCount).Min();
+
+                if (correctAnswerPart == 0)
+                {
+                    stats.TerribleCourses++;
+                }
+                else if (correctAnswerPart < 0.33)
+                {
+                    stats.BadCourses++;
+                }
+                else if (correctAnswerPart < 0.66)
+                {
+                    stats.MediumCourses++;
+                }
+                else if (correctAnswerPart < 1)
+                {
+                    stats.GoodCourses++;
+                }
+                else
+                {
+                    stats.PerfectCourses++;
+                }
+            }
         }
     }
 }

@@ -36,5 +36,14 @@
 
             public const string Redirection = "Перенаправление...";
         }
+
+        public static class Achievements
+        {
+            public const string TestScore = "TestScore";
+
+            public const string CoursesCount = "CoursesCount";
+
+            public const string TestsCount = "TestsCount";
+        }
     }
 }
