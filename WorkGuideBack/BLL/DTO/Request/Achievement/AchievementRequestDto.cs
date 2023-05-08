@@ -4,6 +4,7 @@ using BLL.Models.Achievements;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace BLL.DTO.Request.Achievement
 {
@@ -27,29 +28,30 @@ namespace BLL.DTO.Request.Achievement
 
         protected string GetParameters()
         {
-            XmlDocument parameters = new XmlDocument();
-            XmlElement el;
+            object?[] parameters;
+
             switch (Type)
             {
                 case AchievementType.CompletedCourses:
-                    el = parameters.CreateElement(Constants.Achievements.TestScore);
-                    el.InnerText = this.TestScore.ToString();
-                    el = parameters.CreateElement(Constants.Achievements.CoursesCount);
-                    el.InnerText = this.Count.ToString();
+                    parameters = new XElement[2];
+                    parameters[0] = new XElement(Constants.Achievements.TestScore, ((int)this.TestScore).ToString());
+                    parameters[1] = new XElement(Constants.Achievements.CoursesCount, this.Count.ToString());
                     break;
                 case AchievementType.CompletedCourse:
-                    el = parameters.CreateElement(Constants.Achievements.TestScore);
-                    el.InnerText = this.TestScore.ToString();
+                    parameters = new XElement[1];
+                    parameters[0] = new XElement(Constants.Achievements.TestScore, ((int)this.TestScore).ToString());
                     break;
                 case AchievementType.CompletedTests:
-                    el = parameters.CreateElement(Constants.Achievements.TestScore);
-                    el.InnerText = this.TestScore.ToString();
-                    el = parameters.CreateElement(Constants.Achievements.TestsCount);
-                    el.InnerText = this.Count.ToString();
+                    parameters = new XElement[2];
+                    parameters[0] = new XElement(Constants.Achievements.TestScore, ((int)this.TestScore).ToString());
+                    parameters[1] = new XElement(Constants.Achievements.TestsCount, this.Count.ToString());
+                    break;
+                default:
+                    parameters = null;
                     break;
             }
 
-            return parameters.OuterXml.ToString();
+            return new XDocument(new XElement(Constants.Achievements.Parameters, parameters)).ToString();
         }
     }
 }

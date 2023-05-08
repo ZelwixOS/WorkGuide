@@ -11,6 +11,7 @@ import UserPage from './Components/User/UserPage';
 import { PositionPage } from './Components/Administration/Pages/PositionPage'
 import { LessonPage as AdministrationLessonPage } from './Components/Administration/Pages/LessonPage'
 import CreatePage from './Components/Administration/Lesson/CreatePage'
+import { AchievementPage } from './Components/Administration/Pages/AchievementPage'
 
 const innerTheme = createTheme({
   palette: {
@@ -47,6 +48,7 @@ function App() {
                 <Route index element={<AdministrationLessonPage />} />
                 <Route path=":id/:pageNumber" element={<CreatePage />} />
               </Route>
+              <Route path='achievements' element={<AchievementPage />} />
             </Route>
             <Route path="*" element={<h2>Ресурс не найден</h2>} />
           </Routes>

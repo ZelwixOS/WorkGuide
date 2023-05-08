@@ -33,16 +33,16 @@ const useStyles = makeStyles()((theme) => ({
   },
 }))
 
-const AchievmentsList = () => {
+const AchievementsList = () => {
   const { classes, cx } = useStyles()
 
   return (
     <Container className={classes.container}>
       <h3 className={classes.title}>Достижения по обучению</h3>
       <h6 className={classes.noData}>Достижения в разработке ⚒️</h6>
-      <div className={classes.linkContainer}><a className={classes.link} href='/achievments'>Все достижения</a></div>
+      <div className={classes.linkContainer}><a className={classes.link} href='/achievements'>Все достижения</a></div>
     </Container>
   )
 }
 
-export default AchievmentsList;
+export default AchievementsList;

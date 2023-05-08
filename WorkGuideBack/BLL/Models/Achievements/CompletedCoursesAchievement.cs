@@ -8,7 +8,7 @@ namespace BLL.Models.Achievements
     {
         public CompletedCoursesAchievement(Achievement achievement) : base(achievement)
         {
-            var parameters = XDocument.Parse(achievement.Parameters).Elements();
+            var parameters = XDocument.Parse(achievement.Parameters).Elements().FirstOrDefault()?.Elements();
             if (int.TryParse(parameters.FirstOrDefault(d => d.Name == Constants.Achievements.TestScore)?.Value, out int ts))
             {
                 this.TestScore = (TestScore)ts;

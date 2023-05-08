@@ -41,6 +41,12 @@ namespace WorkGuideBack.Controllers
             return this.Ok(this.achievementService.GetAllAchievements(courseId));
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<AchievementTechnicalInfoDto> GetAllAchievement(Guid id)
+        {
+            return this.Ok(this.achievementService.GetAchievement(id));
+        }
+
         [HttpPost]
         [Authorize(Roles = Constants.RoleManager.Admin)]
         public async Task<ActionResult<AchievementDto>> CreateAsync([FromForm] AchievementCreateRequestDto achievement)

@@ -39,6 +39,8 @@
 
         public static class Achievements
         {
+            public const string Parameters = "Parameters";
+
             public const string TestScore = "TestScore";
 
             public const string CoursesCount = "CoursesCount";

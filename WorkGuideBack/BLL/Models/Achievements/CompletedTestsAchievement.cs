@@ -8,13 +8,13 @@ namespace BLL.Models.Achievements
     {
         public CompletedTestsAchievement(Achievement achievement) : base(achievement)
         {
-            var parameters = XDocument.Parse(achievement.Parameters).Elements();
-            if (int.TryParse(parameters.FirstOrDefault(d => d.Name == Constants.Achievements.TestScore)?.Value, out int ts))
+            var parameters = XDocument.Parse(achievement.Parameters).Elements().FirstOrDefault()?.Elements();
+            if (int.TryParse(parameters?.FirstOrDefault(d => d.Name == Constants.Achievements.TestScore)?.Value, out int ts))
             {
                 this.TestScore = (TestScore)ts;
             }
 
-            if (int.TryParse(parameters.FirstOrDefault(d => d.Name == Constants.Achievements.CoursesCount)?.Value, out int tc))
+            if (int.TryParse(parameters?.FirstOrDefault(d => d.Name == Constants.Achievements.TestsCount)?.Value, out int tc))
             {
                 this.TestsCount = tc;
             }

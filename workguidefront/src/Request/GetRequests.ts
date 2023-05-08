@@ -11,6 +11,9 @@ import TestValidAnswers from '../Types/TestValidAnswers';
 import Notification from '../Types/Notification'
 import Activity from '../Types/Activity';
 import TestScore from '../Types/TestScore';
+import Achievement from '../Types/Achievement';
+import AchievementRequestModel from '../Types/AchievementRequestModel';
+import AchievementTechModel from '../Types/AchievementTechModel';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -96,6 +99,14 @@ async function getUserTestScore(id: string): Promise<TestScore>  {
   return await getRequest(`/api/Test/userLessonScore/${id}`);
 }
 
+async function getAllAchievements(id: string): Promise<Achievement[]>  {
+    return id != null ? await getRequest(`/api/Achievement/all?courseId=${id}`) : await getRequest(`/api/Achievement/all`);
+}
+
+async function getAchievement(id: string): Promise<AchievementTechModel>  {
+  return getRequest(`/api/Achievement/${id}`)
+}
+
 export default getRequest
 
 export {
@@ -119,5 +130,7 @@ export {
   getNotifications,
   getUserById,
   getActivities,
-  getUserTestScore
+  getUserTestScore,
+  getAllAchievements,
+  getAchievement
 }

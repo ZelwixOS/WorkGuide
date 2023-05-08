@@ -36,6 +36,11 @@ namespace BLL.Services
             return this.achievementRepository.GetItems().Where(a => a.CourseId == courseId).Select(a => new AchievementDto(a)).ToList();
         }
 
+        public AchievementTechnicalInfoDto GetAchievement(Guid id)
+        {
+            return new AchievementTechnicalInfoDto(this.achievementRepository.GetItem(id));
+        }
+
         public List<AchievementDto> GetAllAchievements(Guid userId, Guid? courseId)
         {
             var userAchs = this.userAchievementRepository.GetItems().Where(ua => ua.Achievement.CourseId == courseId).ToList();

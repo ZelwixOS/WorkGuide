@@ -74,7 +74,7 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
   }
 
   const handleAnswerClick = () => {
-    if (!answers.find((y) => y.content == answer)) {
+    if (!answers.find((y) => y.content === answer)) {
       setAnswers([...answers, { content: answer, isValid: false }])
     }
   }
@@ -91,7 +91,7 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
   ) => {
     const newAnswers = [...answers]
     for (const answ of newAnswers) {
-      answ.isValid = answ.content == (event.target as any).id
+      answ.isValid = answ.content === (event.target as any).id
     }
 
     setAnswers(newAnswers)
@@ -103,7 +103,7 @@ const QuestionPageForm: React.FC<IQuestionPageForm> = (props) => {
   ) => {
     const newAnswers = [...answers]
     const id = newAnswers.findIndex(
-      (t) => t.content == content,
+      (t) => t.content === content,
     )
     newAnswers[id].isValid = checked
     setAnswers(newAnswers)
