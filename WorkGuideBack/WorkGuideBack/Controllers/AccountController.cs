@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using BLL.DTO.Request.Account;
+    using BLL.DTO.Response;
     using BLL.DTO.Response.Account;
     using BLL.Helpers;
     using BLL.Interfaces;
@@ -97,6 +98,38 @@
         public async Task<ActionResult<IList<UserInfo>>> GetAllWorkers()
         {
             var res = await this.accountService.GetWorkers();
+            return Ok(res);
+        }
+
+        [HttpPost]
+        [Route("AddRecruit/{mentorId}/{userId}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<int> AddRecruit(Guid mentorId, Guid userId)
+        {
+            var res = this.accountService.AddRecruit(mentorId, userId);
+            return Ok(res);
+        }
+
+        [HttpPost]
+        [Route("DelMentor/{userId}")]
+        [Authorize(Roles = Constants.RoleManager.Admin)]
+        public ActionResult<int> DelMentor(Guid userId)
+        {
+            var res = this.accountService.DelMentor(userId);
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("GetRecruits")]
+        public async Task<ActionResult<List<UserInfo>>> GetRecruits()
+        {
+            var user = await this.accountService.GetCurrentUserAsync(HttpContext);
+            if (user == null)
+            {
+                return this.Ok(null);
+            }
+
+            var res = this.accountService.GetRecruits(user.Id);
             return Ok(res);
         }
 

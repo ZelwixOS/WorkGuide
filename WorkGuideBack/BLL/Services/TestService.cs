@@ -1,10 +1,12 @@
 ﻿using BLL.DTO.Request;
 using BLL.DTO.Request.Test;
 using BLL.DTO.Response;
+using BLL.DTO.Response.Account;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Migrations;
+using Microsoft.EntityFrameworkCore;
 using Activity = DAL.Entities.Activity;
 
 namespace BLL.Services
@@ -246,6 +248,62 @@ namespace BLL.Services
             }
 
             return new UserLessonScoreDto(userLessonScore);
+        }
+
+        public List<RecruitResultDto> GetRecruitResult(Guid id)
+        {
+            var recruits = this.userRepository.GetItems()
+                .Include(i => i.Recruits).ThenInclude(i => i.UserCourses)
+                .FirstOrDefault(i => i.Id == id)?.Recruits.ToList();
+
+            if (recruits == null)
+            {
+                return null;
+            }
+
+            List<RecruitResultDto> result = new List<RecruitResultDto>();
+
+            foreach (var recruit in recruits)
+            {
+                var courses = recruit.UserCourses.ToList();
+                List<RecruitCourseResultDto> recruitCourseResultList = new List<RecruitCourseResultDto>();
+
+                foreach (var course in courses)
+                {
+                    var recruitResultLesson = userLessonScoreRepository.GetItems()
+                        .Where(i => i.UserId == recruit.Id && i.Lesson.CourseId == course.CourseId).ToList();
+
+                    List<RecruitLessonResultDto> recruitLessonResult = new List<RecruitLessonResultDto>();
+                    foreach (var lesson in recruitResultLesson)
+                    {
+                        recruitLessonResult.Add(new RecruitLessonResultDto(lesson.Lesson, new UserLessonScoreDto(lesson)));
+                    }
+                    
+                    var recruitResultCourse = userCourseRepository.GetItems()
+                        .FirstOrDefault(i => i.UserId == recruit.Id && i.CourseId == course.CourseId);
+
+                    if (recruitResultCourse != null)
+                    {
+                        RecruitCourseResultDto recruitCourseResult = new RecruitCourseResultDto(recruitLessonResult, 
+                            recruitResultCourse.TotalTests,
+                            recruitResultCourse.Course);
+
+                        recruitCourseResultList.Add(recruitCourseResult);
+                    }
+                    else
+                    {
+                        RecruitCourseResultDto recruitCourseResult = new RecruitCourseResultDto(new List<RecruitLessonResultDto>(),
+                            course.TotalTests,
+                            course.Course);
+
+                        recruitCourseResultList.Add(recruitCourseResult);
+                    }
+                }
+
+                result.Add(new RecruitResultDto(new UserInfo(recruit), recruitCourseResultList));
+            }
+
+            return result;
         }
     }
 }

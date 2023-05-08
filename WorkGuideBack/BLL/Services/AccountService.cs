@@ -1,4 +1,6 @@
-﻿namespace BLL.Services
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BLL.Services
 {
     using System;
     using System.Collections.Generic;
@@ -213,5 +215,51 @@
 
             return null;
         }
+
+        public int AddRecruit(Guid mentorId, Guid userId)
+        {
+            var mentor = userRepository.GetItems().FirstOrDefault(i => i.Id == mentorId);
+            var user = userRepository.GetItems().FirstOrDefault(i => i.Id == userId);
+
+            if (user == null || mentor == null)
+            {
+                return 0;
+            }
+
+            user.MentorId = mentorId;
+            userRepository.UpdateUser(user);
+
+            return 1;
+        }
+
+        public int DelMentor(Guid userId)
+        {
+            var user = userRepository.GetItems().FirstOrDefault(i => i.Id == userId);
+
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user.MentorId = null;
+            userRepository.UpdateUser(user);
+
+            return 1;
+        }
+
+        public List<UserInfo> GetRecruits(Guid userId)
+        {
+            var user = userRepository.GetItems()
+                .Include(i => i.Recruits).ThenInclude(i => i.Position)
+                .FirstOrDefault(i => i.Id == userId);
+
+            if (user == null || user.Recruits == null)
+            {
+                return null;
+            }
+
+            return user.Recruits.Select(i => new UserInfo(i)).ToList();
+        }
+
     }
 }
