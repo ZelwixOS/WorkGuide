@@ -5,6 +5,7 @@ using BLL.Interfaces;
 using BLL.Models.Achievements;
 using DAL.Entities;
 using DAL.Interfaces;
+using System.Linq;
 using static BLL.Helpers.Constants;
 using static System.Formats.Asn1.AsnWriter;
 
@@ -41,7 +42,7 @@ namespace BLL.Services
             return new AchievementTechnicalInfoDto(this.achievementRepository.GetItem(id));
         }
 
-        public List<AchievementDto> GetAllAchievements(Guid userId, Guid? courseId)
+        public List<AchievementDto> GetAllAchievements(Guid userId, Guid? courseId, int? count)
         {
             var userAchs = this.userAchievementRepository.GetItems().Where(ua => ua.Achievement.CourseId == courseId).ToList();
             var all = this.achievementRepository.GetItems().Where(a => a.CourseId == courseId).ToList();
@@ -52,6 +53,12 @@ namespace BLL.Services
                          select new AchievementDto(a, uAch != null, uAch?.ReceivingDate);
 
             var res = preres.ToList();
+
+            if (count.HasValue && count > 0)
+            {
+                res = res.Take(count.Value).ToList();
+            }
+
             return res;
         }
 
@@ -69,7 +76,10 @@ namespace BLL.Services
 
             var allGlobal = this.achievementRepository.GetItems().Where(a => a.CourseId == null);
 
-            var united = recieved.Select(ua => new AchievementDto(ua.Achievement, true, ua.ReceivingDate)).Union(allGlobal.Select(d => new AchievementDto(d, false, null)));
+            var recievedList = recieved.Select(ua => new AchievementDto(ua.Achievement, true, ua.ReceivingDate)).ToList();
+            var recievedIds = recievedList.Select(r => r.Id).ToList();
+
+            var united = recievedList.Union(allGlobal.Where(g => !recievedIds.Contains(g.Id)).Select(d => new AchievementDto(d, false, null)));
 
             if (requested == 0)
             {
@@ -158,7 +168,11 @@ namespace BLL.Services
             var userStats = this.userStatsRepository.GetItem(userId);
             
             ProcessCompletedCourseTestsAchievements(courseAchievementsTests, userId, courseId, ref res); // Ачивки за прохождение определённого количества тестов конкретного курса на оценку
-            ProcessCompletedGlobalTestsAchievements(globalAchievementsTests, userStats, ref res); // Ачивки за прохождение определённого количества тестов всего
+            if (userStats != null)
+            {
+                ProcessCompletedGlobalTestsAchievements(globalAchievementsTests, userStats, ref res); // Ачивки за прохождение определённого количества тестов всего
+            }
+
 
             if (courseCompleted)
             {
@@ -166,7 +180,10 @@ namespace BLL.Services
                 var globalAchievementsCourses = globalAchievements.Where(ca => ca.Type == AchievementType.CompletedCourses).Select(ca => (CompletedCoursesAchievement)ca.ToModel()).ToList();
                 var minCourseLessonScore = this.userLessonScoreRepository.GetItems().Where(s => s.Lesson.CourseId == courseId).Select(s => (float)s.RightAnswer / s.TestsCount).Min();
                 ProcessCompletedCourseAchievements(minCourseLessonScore, courseAchievementsCourse, userId, ref res); // Ачивки за прохождение конкретного курса на оценку
-                ProcessCompletedCoursesAchievements(globalAchievementsCourses, userStats, ref res); // Ачивки за прохождение определённого количества курсов на оценку
+                if (userStats != null)
+                {
+                    ProcessCompletedCoursesAchievements(globalAchievementsCourses, userStats, ref res); // Ачивки за прохождение определённого количества курсов на оценку
+                }
             }
 
             return res;
@@ -201,42 +218,42 @@ namespace BLL.Services
 
             if (any != null)
             {
-                achievement.Id = any.Id;
+                achievement.AchievementId = any.Id;
                 this.userAchievementRepository.CreateItem(achievement);
                 achs.Add(new AchievementDto(any, true, achievement.ReceivingDate));
             }
 
             if (minCourseLessonScore == 0 && terr != null)
             {
-                achievement.Id = terr.Id;
+                achievement.AchievementId = terr.Id;
                 this.userAchievementRepository.CreateItem(achievement);
                 achs.Add(new AchievementDto(terr, true, achievement.ReceivingDate));
             }
 
             if (minCourseLessonScore < 0.33 && bad != null)
             {
-                achievement.Id = bad.Id;
+                achievement.AchievementId = bad.Id;
                 this.userAchievementRepository.CreateItem(achievement);
                 achs.Add(new AchievementDto(bad, true, achievement.ReceivingDate));
             }
 
             if (minCourseLessonScore < 0.66 && med != null)
             {
-                achievement.Id = med.Id;
+                achievement.AchievementId = med.Id;
                 this.userAchievementRepository.CreateItem(achievement);
                 achs.Add(new AchievementDto(med, true, achievement.ReceivingDate));
             }
 
             if (minCourseLessonScore < 1 && good != null)
             {
-                achievement.Id = good.Id;
+                achievement.AchievementId = good.Id;
                 this.userAchievementRepository.CreateItem(achievement);
                 achs.Add(new AchievementDto(good, true, achievement.ReceivingDate));
             }
 
             if (minCourseLessonScore == 1 && perf != null)
             {
-                achievement.Id = perf.Id;
+                achievement.AchievementId = perf.Id;
                 this.userAchievementRepository.CreateItem(achievement);
                 achs.Add(new AchievementDto(perf, true, achievement.ReceivingDate));
             }

@@ -107,6 +107,14 @@ async function getAchievement(id: string): Promise<AchievementTechModel>  {
   return getRequest(`/api/Achievement/${id}`)
 }
 
+async function getUserAchievements(id?: string, count?: number): Promise<Achievement[]>  {
+  return await getRequest(`/api/Achievement/user?${id ? `courseId=${id}` : ''}${count ? `&count=${count}` : ''}`)
+}
+
+async function getUserMainAchievements(count?: number): Promise<Achievement[]>  {
+  return await getRequest(`/api/Achievement/userMain?${count && `count=${count}`}`)
+}
+
 export default getRequest
 
 export {
@@ -132,5 +140,7 @@ export {
   getActivities,
   getUserTestScore,
   getAllAchievements,
-  getAchievement
+  getAchievement,
+  getUserAchievements,
+  getUserMainAchievements
 }

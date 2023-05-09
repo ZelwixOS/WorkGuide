@@ -9,6 +9,7 @@ import TestQuestion from './TestQuestion'
 import TestResults from './TestResults'
 import { getUserTestScore } from '../../Request/GetRequests'
 import React from 'react'
+import Achievement from '../../Types/Achievement'
 
 const useStyles = makeStyles()((theme) => ({
   paginator: {
@@ -35,6 +36,7 @@ const TestLesson = (props: ITestLesson) => {
   const [currentAnswers, setCurrentAnswers] = useState<any>({})
   const [correctAnswers, setCorrectAnswers] = useState(0)
   const [totalQuestions, setTotalQuestions] = useState(0)
+  const [achievements, setAchievements] = useState<Achievement[]>([])
   const [loading, setLoading] = useState(true)
 
   let isMounted = true
@@ -90,6 +92,7 @@ const TestLesson = (props: ITestLesson) => {
     if (res != null) {
       setCorrectAnswers(res.correctAnswers)
       setTotalQuestions(res.totalAnswers)
+      setAchievements(res.achievements ?? [])
     }
   }
 
@@ -128,6 +131,8 @@ const TestLesson = (props: ITestLesson) => {
               score={correctAnswers}
               total={totalQuestions}
               courseUrl={props.lesson!.courseUrl}
+              achievements={achievements}
+              setAchievemetns={setAchievements}
             />
           )}
         </React.Fragment>

@@ -35,6 +35,7 @@ namespace BLL.DTO.Response
             this.Id = achievementModel.Id;
             this.Name = achievementModel.Name;
             this.Description = achievementModel.Description;
+            this.IconUrl = achievementModel.IconUrl;
 
             if ( achievementModel.Course != null )
             {

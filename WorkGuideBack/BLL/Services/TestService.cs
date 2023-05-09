@@ -171,7 +171,7 @@ namespace BLL.Services
                 Count(u => u.UserId == userId && u.Lesson.CourseId == lesson.CourseId);
 
             int totalTests = lessonRepository.GetItems().
-                Count(l => l.CourseId == lesson.Id && l.IsComplexTest);
+                Count(l => l.CourseId == lesson.CourseId && l.IsComplexTest);
 
             var userCour = userCourseRepository.GetItems()
                 .FirstOrDefault(c => c.CourseId == lesson.CourseId && c.UserId == userId);
@@ -261,11 +261,12 @@ namespace BLL.Services
         protected void UpdateUserStats(Guid userId, Guid courseId, bool courseCompleted, float correctAnswerPart)
         {
             var stats = this.userStatsRepository.GetItem(userId);
-
+            bool existed = true;
             if (stats == null)
             {
                 stats = new UserStats();
                 stats.Id = userId;
+                existed = false;
             }
 
             stats.PassedTests++;
@@ -313,6 +314,15 @@ namespace BLL.Services
                 {
                     stats.PerfectCourses++;
                 }
+            }
+
+            if (existed)
+            {
+                this.userStatsRepository.UpdateItem(stats);
+            }
+            else
+            {
+                this.userStatsRepository.CreateItem(stats);
             }
         }
     }

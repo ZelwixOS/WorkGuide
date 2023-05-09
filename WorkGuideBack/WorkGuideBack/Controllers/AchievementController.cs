@@ -23,7 +23,7 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpGet("user")]
-        public async Task<ActionResult<List<AchievementDto>>> GetAchievements([FromQuery] Guid? courseId)
+        public async Task<ActionResult<List<AchievementDto>>> GetAchievements([FromQuery] Guid? courseId, [FromQuery] int? count)
         {
             var user = await this.accountService.GetCurrentUserAsync(HttpContext);
             if (user == null)
@@ -31,7 +31,19 @@ namespace WorkGuideBack.Controllers
                 return this.Ok(null);
             }
 
-            return this.Ok(this.achievementService.GetAllAchievements(user.Id, courseId));
+            return this.Ok(this.achievementService.GetAllAchievements(user.Id, courseId, count));
+        }
+
+        [HttpGet("userMain")]
+        public async Task<ActionResult<List<AchievementDto>>> GetUserMainAchievements([FromQuery] Guid? courseId, [FromQuery] int? count)
+        {
+            var user = await this.accountService.GetCurrentUserAsync(HttpContext);
+            if (user == null)
+            {
+                return this.Ok(null);
+            }
+
+            return this.Ok(this.achievementService.GetLastRecieved(user.Id, count.HasValue ? count.Value : 0));
         }
 
         [HttpGet("all")]
