@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230507160133_OptionalParameter")]
-    partial class OptionalParameter
+    [Migration("20230514110542_Achievements")]
+    partial class Achievements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -361,6 +361,9 @@ namespace DAL.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<Guid?>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -398,6 +401,8 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MentorId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -806,11 +811,17 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
+                    b.HasOne("DAL.Entities.User", "Mentor")
+                        .WithMany("Recruits")
+                        .HasForeignKey("MentorId");
+
                     b.HasOne("DAL.Entities.Position", "Position")
                         .WithMany("Users")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Mentor");
 
                     b.Navigation("Position");
                 });
@@ -1009,6 +1020,8 @@ namespace DAL.Migrations
                     b.Navigation("LessonsScore");
 
                     b.Navigation("NotificationUser");
+
+                    b.Navigation("Recruits");
 
                     b.Navigation("Stats")
                         .IsRequired();

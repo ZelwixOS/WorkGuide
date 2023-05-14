@@ -1021,6 +1021,9 @@ namespace DAL.Migrations
 
                     b.Navigation("Recruits");
 
+                    b.Navigation("Stats")
+                        .IsRequired();
+
                     b.Navigation("TestsAnswers");
 
                     b.Navigation("UserAchievements");
