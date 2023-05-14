@@ -14,6 +14,7 @@ import TestScore from '../Types/TestScore';
 import Achievement from '../Types/Achievement';
 import AchievementRequestModel from '../Types/AchievementRequestModel';
 import AchievementTechModel from '../Types/AchievementTechModel';
+import RecruitResult from '../Types/RecruitResult';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -39,7 +40,7 @@ async function getLessonByNumber(url: string, lessonNumber: string): Promise<Les
   return await getRequest(`/api/lesson/url/${url}/${lessonNumber}`);
 }
 
-async function getAllWorkers(): Promise<UserMainInfo[]>  {
+async function getAllWorkers(): Promise<UserInfo[]>  {
   return await getRequest(`/api/account/GetAllWorkers`);
 }
 
@@ -115,6 +116,14 @@ async function getUserMainAchievements(count?: number): Promise<Achievement[]>  
   return await getRequest(`/api/Achievement/userMain?${count && `count=${count}`}`)
 }
 
+async function getRecruits(): Promise<UserInfo[]>  {
+  return await getRequest('/api/Account/GetRecruits/');
+}
+
+async function getRecruitResult(): Promise<RecruitResult[]>  {
+  return await getRequest('/api/Test/GetRecruitResult/');
+}
+
 export default getRequest
 
 export {
@@ -142,5 +151,7 @@ export {
   getAllAchievements,
   getAchievement,
   getUserAchievements,
-  getUserMainAchievements
+  getUserMainAchievements,
+  getRecruits,
+  getRecruitResult
 }

@@ -10,6 +10,7 @@ type UserInfo = {
   banned: boolean;
   position: string;
   positionId: string;
+  mentorId: string | null
 };
 
 export default UserInfo;

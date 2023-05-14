@@ -24,6 +24,8 @@
 
         public bool Banned { get; set; }
 
+        public Guid? MentorId { get; set; }
+
         public HashSet<UserLessonScore> LessonsScore { get; set; }
 
         public HashSet<UserTestAnswer> TestsAnswers { get; set; }
@@ -39,5 +41,9 @@
         public Position Position { get; set; }
 
         public UserStats Stats { get; set; }
+        
+        public User Mentor { get; set; }
+
+        public HashSet<User> Recruits { get; set; }
     }
 }

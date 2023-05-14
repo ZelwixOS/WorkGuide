@@ -13,6 +13,7 @@ import { LessonPage as AdministrationLessonPage } from './Components/Administrat
 import CreatePage from './Components/Administration/Lesson/CreatePage'
 import { AchievementPage } from './Components/Administration/Pages/AchievementPage'
 import AchievementsPage from './Components/Achievements/AchievementsPage'
+import RecruitsPage from './Components/Recruits/RecruitsPage'
 
 const innerTheme = createTheme({
   palette: {
@@ -35,6 +36,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<UserPage/>} />
+            <Route path="/recruits" element={<RecruitsPage />} />
             <Route path="/courses">
               <Route index element={<CourseListPage />} />
               <Route path=":url" element={<CoursePage />} />

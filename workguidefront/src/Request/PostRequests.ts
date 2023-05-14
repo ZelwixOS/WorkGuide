@@ -129,8 +129,28 @@ async function readNotification(notificationId: string) {
   return await post(`/api/Notification/readT/${notificationId}`, null)
 }
 
-async function registerWorker(data: WorkerRegistration) {
-  return await post(`/api/Account/Register`, data)
+async function registerWorker(data : WorkerRegistration) {
+  const formData = new FormData()
+  formData.append('login', data.login)
+  formData.append('password', data.password)
+  formData.append('email', data.email)
+  formData.append('phoneNumber', data.phoneNumber)
+  formData.append('firstName', data.firstName)
+  formData.append('secondName', data.secondName)
+  formData.append('positionId', data.positionId)
+
+  if (data.avatar) {
+    formData.append('avatar', data.avatar)
+  }
+  if (data.mentorId) {
+    formData.append('mentorId', data.mentorId)
+  }
+
+  return await post(`/api/Account/Register`, formData)
+}
+
+async function addRecruit(mentorId: string, userId: string) {
+  return await post(`/api/Account/AddRecruit/${mentorId}/${userId}`, null)
 }
 
 async function createAchievement(data: AchievementRequestModel) {
@@ -178,4 +198,5 @@ export {
   registerWorker,
   createTheoryFile,
   createAchievement,
+  addRecruit
 }

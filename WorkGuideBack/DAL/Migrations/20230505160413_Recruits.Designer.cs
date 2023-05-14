@@ -4,6 +4,7 @@ using DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230505160413_Recruits")]
+    partial class Recruits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,41 +23,6 @@ namespace DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("DAL.Entities.Achievement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IconUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Parameters")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Achievements");
-                });
 
             modelBuilder.Entity("DAL.Entities.Activity", b =>
                 {
@@ -415,30 +382,6 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Entities.UserAchievement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AchievementId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ReceivingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AchievementId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserAchievements");
-                });
-
             modelBuilder.Entity("DAL.Entities.UserCourse", b =>
                 {
                     b.Property<Guid>("Id")
@@ -491,52 +434,6 @@ namespace DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserLessonScores");
-                });
-
-            modelBuilder.Entity("DAL.Entities.UserStats", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("BadCourses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BadTests")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompletedCourses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GoodCourses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GoodTests")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MediumCourses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MediumTests")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PassedTests")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PerfectCourses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PerfectTests")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TerribleCourses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TerribleTests")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UsersStats");
                 });
 
             modelBuilder.Entity("DAL.Entities.UserTestAnswer", b =>
@@ -694,15 +591,6 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Entities.Achievement", b =>
-                {
-                    b.HasOne("DAL.Entities.Course", "Course")
-                        .WithMany("Achievements")
-                        .HasForeignKey("CourseId");
-
-                    b.Navigation("Course");
-                });
-
             modelBuilder.Entity("DAL.Entities.Activity", b =>
                 {
                     b.HasOne("DAL.Entities.User", "User")
@@ -824,25 +712,6 @@ namespace DAL.Migrations
                     b.Navigation("Position");
                 });
 
-            modelBuilder.Entity("DAL.Entities.UserAchievement", b =>
-                {
-                    b.HasOne("DAL.Entities.Achievement", "Achievement")
-                        .WithMany("UserAchievements")
-                        .HasForeignKey("AchievementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.User", "User")
-                        .WithMany("UserAchievements")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Achievement");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("DAL.Entities.UserCourse", b =>
                 {
                     b.HasOne("DAL.Entities.Course", "Course")
@@ -877,17 +746,6 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Lesson");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DAL.Entities.UserStats", b =>
-                {
-                    b.HasOne("DAL.Entities.User", "User")
-                        .WithOne("Stats")
-                        .HasForeignKey("DAL.Entities.UserStats", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -962,15 +820,8 @@ namespace DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DAL.Entities.Achievement", b =>
-                {
-                    b.Navigation("UserAchievements");
-                });
-
             modelBuilder.Entity("DAL.Entities.Course", b =>
                 {
-                    b.Navigation("Achievements");
-
                     b.Navigation("Lessons");
 
                     b.Navigation("PositionCourses");
@@ -1022,8 +873,6 @@ namespace DAL.Migrations
                     b.Navigation("Recruits");
 
                     b.Navigation("TestsAnswers");
-
-                    b.Navigation("UserAchievements");
 
                     b.Navigation("UserCourses");
                 });

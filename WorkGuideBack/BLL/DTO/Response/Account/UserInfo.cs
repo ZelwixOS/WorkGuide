@@ -5,20 +5,9 @@
 
     public class UserInfo
     {
-        public UserInfo(User user, string role)
+        public UserInfo(User user, string role) : this(user)
         {
-            this.UserName = user.UserName;
-            this.FirstName = user.FirstName;
-            this.SecondName = user.SecondName;
             this.Role = role;
-            this.PhoneNumber = user.PhoneNumber;
-            this.Email = user.Email;
-            this.Avatar = user.Avatar;
-            if (user.Position != null)
-            {
-                this.Position = user.Position.Title;
-                this.PositionId = user.Position.Id;
-            }
         }
 
         public UserInfo(User user)
@@ -31,6 +20,8 @@
             this.Email = user.Email;
             this.Avatar = user.Avatar;
             this.Banned = user.Banned;
+            this.MentorId = user.MentorId;
+
             if (user.Position != null)
             {
                 this.Position = user.Position.Title;
@@ -59,5 +50,7 @@
         public string Position { get; set; }
 
         public Guid PositionId { get; set; }
+
+        public Guid? MentorId { get; set; }
     }
 }
