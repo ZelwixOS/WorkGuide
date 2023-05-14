@@ -6,6 +6,8 @@ type WorkerRegistration = {
   firstName : string;
   secondName : string;
   positionId : string;
+  avatar: File | null,
+  mentorId: string | null
 }
 
 export default WorkerRegistration;

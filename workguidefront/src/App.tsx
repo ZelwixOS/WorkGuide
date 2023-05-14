@@ -11,6 +11,7 @@ import UserPage from './Components/User/UserPage';
 import { PositionPage } from './Components/Administration/Pages/PositionPage'
 import { LessonPage as AdministrationLessonPage } from './Components/Administration/Pages/LessonPage'
 import CreatePage from './Components/Administration/Lesson/CreatePage'
+import RecruitsPage from './Components/Recruits/RecruitsPage'
 
 const innerTheme = createTheme({
   palette: {
@@ -33,6 +34,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<UserPage/>} />
+            <Route path="/recruits" element={<RecruitsPage />} />
             <Route path="/courses">
               <Route index element={<CourseListPage />} />
               <Route path=":url" element={<CoursePage />} />

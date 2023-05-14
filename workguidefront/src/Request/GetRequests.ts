@@ -11,6 +11,7 @@ import TestValidAnswers from '../Types/TestValidAnswers';
 import Notification from '../Types/Notification'
 import Activity from '../Types/Activity';
 import TestScore from '../Types/TestScore';
+import RecruitResult from '../Types/RecruitResult';
 
 async function getRequest(url: string) {
   return (await axios.get(url)).data
@@ -36,7 +37,7 @@ async function getLessonByNumber(url: string, lessonNumber: string): Promise<Les
   return await getRequest(`/api/lesson/url/${url}/${lessonNumber}`);
 }
 
-async function getAllWorkers(): Promise<UserMainInfo[]>  {
+async function getAllWorkers(): Promise<UserInfo[]>  {
   return await getRequest(`/api/account/GetAllWorkers`);
 }
 
@@ -96,6 +97,14 @@ async function getUserTestScore(id: string): Promise<TestScore>  {
   return await getRequest(`/api/Test/userLessonScore/${id}`);
 }
 
+async function getRecruits(): Promise<UserInfo[]>  {
+  return await getRequest('/api/Account/GetRecruits/');
+}
+
+async function getRecruitResult(): Promise<RecruitResult[]>  {
+  return await getRequest('/api/Test/GetRecruitResult/');
+}
+
 export default getRequest
 
 export {
@@ -119,5 +128,7 @@ export {
   getNotifications,
   getUserById,
   getActivities,
-  getUserTestScore
+  getUserTestScore,
+  getRecruits,
+  getRecruitResult
 }

@@ -1,17 +1,13 @@
 import React, { useEffect } from 'react'
 import Button from '@mui/material/Button'
 import { makeStyles } from 'tss-react/mui'
-import {
-  Grid,
-  MenuItem,
-  Snackbar,
-  TextField,
-} from '@mui/material'
+import { Card, CardContent, CardMedia, Grid, MenuItem, Snackbar, TextField } from '@mui/material'
 import { Alert } from '@mui/material'
 import Position from '../../../Types/Position'
-import { getAllPositions, getUserById } from '../../../Request/GetRequests'
+import { getAllPositions, getAllWorkers, getUserById } from '../../../Request/GetRequests'
 import { updateWorkerFull } from '../../../Request/PutRequests'
 import WorkerRegistration from '../../../Types/WorkerRegistration'
+import UserInfo from '../../../Types/UserInfo'
 
 interface IRefresher {
   refresh: () => void
@@ -46,13 +42,25 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
     phoneNumber: string,
     firstName: string,
     secondName: string,
-    positionId: string
+    positionId: string,
+    avatar: File | null,
+    mentorId: string | null,
   ) => {
-    return { login, password, email, phoneNumber, firstName, secondName, positionId } as WorkerRegistration
+    return {
+      login,
+      password,
+      email,
+      phoneNumber,
+      firstName,
+      secondName,
+      positionId,
+      avatar,
+      mentorId,
+    } as WorkerRegistration
   }
 
   const [workerData, setWorkerData] = React.useState(
-    formatWorker('', '', '', '', '', '', ''),
+    formatWorker('', '', '', '', '', '', '', null, null),
   )
 
   const getPositionsData = async (isMounted: boolean) => {
@@ -62,11 +70,22 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
     }
   }
 
-  const getWorkerData = async (isMounted: boolean) =>
-  {
+  async function createFile(url: string){
+    let response = await fetch(url);
+    let data = await response.blob();
+    let metadata = {
+      type: 'image/jpeg'
+    };
+    let file = new File([data], "test.jpg", metadata);
+    return file;
+  }
+
+  const getWorkerData = async (isMounted: boolean) => {
     const res = await getUserById(props.id)
+    const workers = await getAllWorkers()
     if (isMounted) {
-      
+      const file = res.avatar ? await createFile(res.avatar) : null
+
       const data = formatWorker(
         res.userName,
         '',
@@ -74,12 +93,20 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
         res.phoneNumber,
         res.firstName,
         res.secondName,
-        res.positionId
+        res.positionId,
+        file,
+        res.mentorId
       )
+
+      if (res.avatar) {
+        setPicUrl(`/avatars/${res.avatar}`)
+      }
 
       setWorkerData(data)
       getPositionsData(isMounted)
       setPickedPosition(res.positionId)
+
+      setAllWorkers(workers)
     }
   }
 
@@ -96,51 +123,121 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
     refreshData()
   }, [])
 
-  
   const [allPositions, setAllPositions] = React.useState<Position[]>([])
   const [pickedPosition, setPickedPosition] = React.useState<string>('')
+  const [allWorkers, setAllWorkers] = React.useState<UserInfo[]>([])
+  const [picUrl, setPicUrl] = React.useState('')
+  const picPlaceholder = '/avatars/NotSet.png'
 
   const [open, setOpen] = React.useState<boolean>(false)
   const [message, setMessage] = React.useState<string>('')
 
   const handleLoginChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setWorkerData(
-      formatWorker(event.target.value as string, workerData.password, workerData.email, workerData.phoneNumber, workerData.firstName, workerData.secondName, workerData.positionId),
+      formatWorker(
+        event.target.value as string,
+        workerData.password,
+        workerData.email,
+        workerData.phoneNumber,
+        workerData.firstName,
+        workerData.secondName,
+        workerData.positionId,
+        workerData.avatar,
+        workerData.mentorId
+      ),
     )
   }
 
-  const handlePasswordChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handlePasswordChange = (
+    event: React.ChangeEvent<{ value: unknown }>,
+  ) => {
     setWorkerData(
-      formatWorker(workerData.login, event.target.value as string, workerData.email, workerData.phoneNumber, workerData.firstName, workerData.secondName, workerData.positionId),
+      formatWorker(
+        workerData.login,
+        event.target.value as string,
+        workerData.email,
+        workerData.phoneNumber,
+        workerData.firstName,
+        workerData.secondName,
+        workerData.positionId,
+        workerData.avatar,
+        workerData.mentorId
+      ),
     )
   }
 
   const handleEmailChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setWorkerData(
-      formatWorker(workerData.login, workerData.password, event.target.value as string, workerData.phoneNumber, workerData.firstName, workerData.secondName, workerData.positionId),
+      formatWorker(
+        workerData.login,
+        workerData.password,
+        event.target.value as string,
+        workerData.phoneNumber,
+        workerData.firstName,
+        workerData.secondName,
+        workerData.positionId,
+        workerData.avatar,
+        workerData.mentorId
+      ),
     )
   }
 
-  const handlePhoneNumberChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handlePhoneNumberChange = (
+    event: React.ChangeEvent<{ value: unknown }>,
+  ) => {
     setWorkerData(
-      formatWorker(workerData.login, workerData.password, workerData.email, event.target.value as string, workerData.firstName, workerData.secondName, workerData.positionId),
+      formatWorker(
+        workerData.login,
+        workerData.password,
+        workerData.email,
+        event.target.value as string,
+        workerData.firstName,
+        workerData.secondName,
+        workerData.positionId,
+        workerData.avatar,
+        workerData.mentorId
+      ),
     )
   }
 
-  const handleFirstNameChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleFirstNameChange = (
+    event: React.ChangeEvent<{ value: unknown }>,
+  ) => {
     setWorkerData(
-      formatWorker(workerData.login, workerData.password, workerData.email, workerData.phoneNumber, event.target.value as string, workerData.secondName, workerData.positionId),
+      formatWorker(
+        workerData.login,
+        workerData.password,
+        workerData.email,
+        workerData.phoneNumber,
+        event.target.value as string,
+        workerData.secondName,
+        workerData.positionId,
+        workerData.avatar,
+        workerData.mentorId
+      ),
     )
   }
 
-  const handleSecondNameChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSecondNameChange = (
+    event: React.ChangeEvent<{ value: unknown }>,
+  ) => {
     setWorkerData(
-      formatWorker(workerData.login, workerData.password, workerData.email, workerData.phoneNumber, workerData.firstName, event.target.value as string, workerData.positionId),
+      formatWorker(
+        workerData.login,
+        workerData.password,
+        workerData.email,
+        workerData.phoneNumber,
+        workerData.firstName,
+        event.target.value as string,
+        workerData.positionId,
+        workerData.avatar,
+        workerData.mentorId
+      ),
     )
   }
 
   const handlePositionIdChange = (
-    event: React.ChangeEvent<{ value: unknown }>
+    event: React.ChangeEvent<{ value: unknown }>,
   ) => {
     if (event.target.value as string) {
       setWorkerData(
@@ -151,11 +248,54 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
           workerData.phoneNumber,
           workerData.firstName,
           workerData.secondName,
-          event.target.value as string
+          event.target.value as string,
+          workerData.avatar,
+          workerData.mentorId
         ),
       )
 
       setPickedPosition(event.target.value as string)
+    }
+  }
+
+  const handlePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0]
+    if (file) {
+      setWorkerData(
+        formatWorker(
+          workerData.login,
+          workerData.password,
+          workerData.email,
+          workerData.phoneNumber,
+          workerData.firstName,
+          workerData.secondName,
+          workerData.positionId,
+          file,
+          workerData.mentorId,
+        ),
+      )
+
+      setPicUrl(URL.createObjectURL(file))
+    }
+  }
+
+  const handleMentorIdChange = (
+    event: React.ChangeEvent<{ value: unknown }>,
+  ) => {
+    if (event.target.value as string) {
+      setWorkerData(
+        formatWorker(
+          workerData.login,
+          workerData.password,
+          workerData.email,
+          workerData.phoneNumber,
+          workerData.firstName,
+          workerData.secondName,
+          workerData.positionId,
+          workerData.avatar,
+          event.target.value as string,
+        ),
+      )
     }
   }
 
@@ -178,15 +318,14 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
       setMessage('Введите корректный e-mail')
       setOpen(true)
     } else {
-      const res = await updateWorkerFull(
-        props.id,
-        workerData
-      )
+      const res = await updateWorkerFull(props.id, workerData)
       if (res && props.refresher) {
         props.refresher.refresh()
         props.setOpen(false)
       } else {
-        setMessage('Не удалось выполнить запрос. Проверьте корректность заполнения данных.')
+        setMessage(
+          'Не удалось выполнить запрос. Проверьте корректность заполнения данных.',
+        )
         setOpen(true)
       }
     }
@@ -242,7 +381,6 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
         variant="outlined"
       />
 
-      
       <TextField
         id="WorkerEmail"
         className={classes.spaces}
@@ -264,20 +402,60 @@ const EditWorker: React.FC<IEditWorker> = (props) => {
       />
 
       <TextField
-          id="WorkerPosition"
-          select
-          label="Должность"
-          className={classes.spaces}
-          value={pickedPosition}
-          onChange={handlePositionIdChange}
-        >
-          {allPositions.map((option) => (
-            <MenuItem key={option.id} value={option.id}>
-              {option.title}
-            </MenuItem>
-          ))}
-        </TextField>
+        id="WorkerPosition"
+        select
+        label="Должность"
+        className={classes.spaces}
+        value={pickedPosition}
+        onChange={handlePositionIdChange}
+      >
+        {allPositions.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
+            {option.title}
+          </MenuItem>
+        ))}
+      </TextField>
 
+      <TextField
+        id="WorkerMentor"
+        select
+        label="Ментор"
+        className={classes.spaces}
+        value={workerData.mentorId}
+        onChange={handleMentorIdChange}
+      >
+        {allWorkers.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
+            {`${option.firstName} ${option.secondName} (${option.userName})`}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <input
+        accept="image/*"
+        className={classes.input}
+        id="contained-button-file"
+        type="file"
+        onChange={handlePicChange}
+      />
+      <Card className={classes.spaces} variant="outlined">
+        <Grid container justifyContent="center">
+          <CardMedia
+            className={classes.pic}
+            image={workerData.avatar ? picUrl : picPlaceholder}
+            title="Выбранное изображение"
+          />
+        </Grid>
+        <CardContent>
+          <Grid container justifyContent="center">
+            <label htmlFor="contained-button-file" className={classes.spaces}>
+              <Button variant="contained" color="primary" component="span">
+                Выбрать изображение
+              </Button>
+            </label>
+          </Grid>
+        </CardContent>
+      </Card>
       <Grid container justifyContent="flex-end">
         <Button
           type="submit"

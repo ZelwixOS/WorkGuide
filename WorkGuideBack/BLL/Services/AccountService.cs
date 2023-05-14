@@ -1,4 +1,6 @@
-﻿namespace BLL.Services
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BLL.Services
 {
     using System;
     using System.Collections.Generic;
@@ -15,9 +17,12 @@
     using Microsoft.Extensions.Configuration;
     using Answer = Helpers.Constants.AnswerMessage;
     using Role = Helpers.Constants.RoleManager;
+    using DAL.Migrations;
 
     public class AccountService : IAccountService
     {
+        private const string PicPath = "ClientApp/avatars/";
+
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration config;
@@ -75,6 +80,23 @@
                 return new MessageResultDto(Answer.RegisteredUnsuccessfully, new List<string>() {"Wrong position!"});
             }
 
+            string avatar;
+
+            if (model.Avatar != null)
+            {
+                var format = model.Avatar.FileName.Substring(model.Avatar.FileName.LastIndexOf('.'));
+                avatar = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + Guid.NewGuid() + format;
+
+                using (var fs = File.Create(PicPath + avatar))
+                {
+                    await model.Avatar.CopyToAsync(fs);
+                }
+            }
+            else
+            {
+                avatar = "defaultAvatar";
+            }
+
             User user = new User
             {
                 Email = model.Email,
@@ -82,8 +104,9 @@
                 FirstName = model.FirstName,
                 SecondName = model.SecondName,
                 PhoneNumber = model.PhoneNumber,
-                Avatar = "defaultAvatar",
-                PositionId = model.PositionId
+                Avatar = avatar,
+                PositionId = model.PositionId,
+                MentorId = model.MentorId,
             };
 
             var result = await this.userManager.CreateAsync(user, model.Password);
@@ -155,6 +178,39 @@
             user.PhoneNumber = us.PhoneNumber;
             user.Email = us.Email;
 
+            if (us.MentorId == null)
+            {
+                user.MentorId = us.MentorId;
+            }
+            else
+            {
+                var mentor = userRepository.GetItems().FirstOrDefault(i => i.Id == us.MentorId);
+                if (mentor == null)
+                {
+                    user.MentorId = us.MentorId;
+                }
+            }
+
+            string avatar;
+            if (model.Avatar != null)
+            {
+                var format = model.Avatar.FileName.Substring(model.Avatar.FileName.LastIndexOf('.'));
+                avatar = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + Guid.NewGuid() + format;
+
+                using (var fs = File.Create(PicPath + avatar))
+                {
+                    await model.Avatar.CopyToAsync(fs);
+                }
+
+                var file = PicPath + user.Avatar;
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+
+                user.Avatar = avatar;
+            }
+
             await this.userManager.UpdateAsync(user);
 
             if (user.UserName != us.Login)
@@ -213,5 +269,51 @@
 
             return null;
         }
+
+        public int AddRecruit(Guid mentorId, Guid userId)
+        {
+            var mentor = userRepository.GetItems().FirstOrDefault(i => i.Id == mentorId);
+            var user = userRepository.GetItems().FirstOrDefault(i => i.Id == userId);
+
+            if (user == null || mentor == null)
+            {
+                return 0;
+            }
+
+            user.MentorId = mentorId;
+            userRepository.UpdateUser(user);
+
+            return 1;
+        }
+
+        public int DelMentor(Guid userId)
+        {
+            var user = userRepository.GetItems().FirstOrDefault(i => i.Id == userId);
+
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user.MentorId = null;
+            userRepository.UpdateUser(user);
+
+            return 1;
+        }
+
+        public List<UserInfo> GetRecruits(Guid userId)
+        {
+            var user = userRepository.GetItems()
+                .Include(i => i.Recruits).ThenInclude(i => i.Position)
+                .FirstOrDefault(i => i.Id == userId);
+
+            if (user == null || user.Recruits == null)
+            {
+                return null;
+            }
+
+            return user.Recruits.Select(i => new UserInfo(i)).ToList();
+        }
+
     }
 }

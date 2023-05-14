@@ -132,7 +132,27 @@ async function readNotification(notificationId: string) {
 }
 
 async function registerWorker(data : WorkerRegistration) {
-  return await post(`/api/Account/Register`, data)
+  const formData = new FormData()
+  formData.append('login', data.login)
+  formData.append('password', data.password)
+  formData.append('email', data.email)
+  formData.append('phoneNumber', data.phoneNumber)
+  formData.append('firstName', data.firstName)
+  formData.append('secondName', data.secondName)
+  formData.append('positionId', data.positionId)
+
+  if (data.avatar) {
+    formData.append('avatar', data.avatar)
+  }
+  if (data.mentorId) {
+    formData.append('mentorId', data.mentorId)
+  }
+
+  return await post(`/api/Account/Register`, formData)
+}
+
+async function addRecruit(mentorId: string, userId: string) {
+  return await post(`/api/Account/AddRecruit/${mentorId}/${userId}`, null)
 }
 
 export default post
@@ -153,5 +173,6 @@ export {
   createQuestionPage,
   readNotification,
   registerWorker,
-  createTheoryFile
+  createTheoryFile,
+  addRecruit
 }
