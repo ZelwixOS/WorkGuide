@@ -9,7 +9,7 @@ import {
 import { getCurrentUserInfo } from '../../Request/GetRequests'
 import { makeStyles } from '../../theme'
 import UserMainInfo from '../../Types/UserMainInfo'
-import AchievmentsList from '../Achievments/AchievmentsList'
+import AchievementsList from '../Achievements/AchievementsList'
 import ActivityList from '../Activity/ActivityList'
 import Calendar from '../Calendar/Calendar'
 import Loading from '../Common/Loading'
@@ -126,7 +126,7 @@ const UserPage = () => {
             <Row className="mt-2">
               <Col md={8}>
                 <Row>
-                  <AchievmentsList />
+                  <AchievementsList />
                 </Row>
               </Col>
               <Col md={4}>

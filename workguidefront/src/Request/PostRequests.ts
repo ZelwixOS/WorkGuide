@@ -2,6 +2,7 @@ import axios from 'axios'
 import TestAnswer from '../Types/TestAnswer'
 import WorkerRegistration from '../Types/WorkerRegistration'
 import CustomFile from '../Types/CustomFile'
+import AchievementRequestModel from '../Types/AchievementRequestModel'
 
 async function post<T>(url: string, data: T) {
   return (await axios.post(url, data)).data
@@ -89,24 +90,21 @@ async function createTheoryPage(
   lessonId: string,
   pageNumber: string,
   content: string,
-  files: File[]
+  files: File[],
 ) {
   const formData = new FormData()
   formData.append('lessonId', lessonId)
   formData.append('pageNumber', pageNumber)
   formData.append('content', content)
 
-  files.forEach((file : File) => formData.append('files', file));
+  files.forEach((file: File) => formData.append('files', file))
 
   return await post(`/api/Theory`, formData)
 }
 
-async function createTheoryFile(
-  id: string,
-  file: File
-) : Promise<CustomFile> {
+async function createTheoryFile(id: string, file: File): Promise<CustomFile> {
   const formData = new FormData()
-  formData.append('file', file);
+  formData.append('file', file)
 
   return await post(`/api/Theory/createFile/${id}`, formData)
 }
@@ -126,7 +124,7 @@ async function createQuestionPage(
     answers,
   })
 }
-  
+
 async function readNotification(notificationId: string) {
   return await post(`/api/Notification/readT/${notificationId}`, null)
 }
@@ -155,6 +153,31 @@ async function addRecruit(mentorId: string, userId: string) {
   return await post(`/api/Account/AddRecruit/${mentorId}/${userId}`, null)
 }
 
+async function createAchievement(data: AchievementRequestModel) {
+  const formData = new FormData()
+
+  formData.append('name', data.name)
+
+  if (data.picFile) {
+    formData.append('picFile', data.picFile)
+  }
+
+  formData.append('description', data.description)
+  formData.append('type', data.type.toString())
+
+  if (data.courseId) {
+    formData.append('courseId', data.courseId)
+  }
+
+  if (data.count) {
+    formData.append('count', data.count.toString())
+  }
+
+  formData.append('testScore', data.testScore.toString())
+
+  return await post(`/api/Achievement`, formData)
+}
+
 export default post
 
 export {
@@ -174,5 +197,6 @@ export {
   readNotification,
   registerWorker,
   createTheoryFile,
+  createAchievement,
   addRecruit
 }

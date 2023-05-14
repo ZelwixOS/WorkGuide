@@ -36,8 +36,12 @@
 
         public HashSet<Activity> Activity { get; set; }
 
+        public HashSet<UserAchievement> UserAchievements { get; set; }
+
         public Position Position { get; set; }
 
+        public UserStats Stats { get; set; }
+        
         public User Mentor { get; set; }
 
         public HashSet<User> Recruits { get; set; }
