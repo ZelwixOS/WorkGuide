@@ -6,11 +6,11 @@ namespace BLL.DTO.Response
     {
         public RecruitLessonResultDto(Lesson lesson, UserLessonScoreDto score)
         {
-            Lesson = lesson;
+            Lesson = new LessonDto(lesson);
             Score = score;
         }
 
-        public Lesson Lesson { get; set; }
+        public LessonDto Lesson { get; set; }
 
         public UserLessonScoreDto Score { get; set; }
     }

@@ -167,7 +167,7 @@ namespace BLL.Services
                 Count(u => u.UserId == userId && u.Lesson.CourseId == lesson.CourseId);
 
             int totalTests = lessonRepository.GetItems().
-                Count(l => l.CourseId == lesson.Id && l.IsComplexTest);
+                Count(l => l.CourseId == course.Id && l.IsComplexTest);
 
             var userCour = userCourseRepository.GetItems()
                 .FirstOrDefault(c => c.CourseId == lesson.CourseId && c.UserId == userId);
@@ -270,7 +270,7 @@ namespace BLL.Services
 
                 foreach (var course in courses)
                 {
-                    var recruitResultLesson = userLessonScoreRepository.GetItems()
+                    var recruitResultLesson = userLessonScoreRepository.GetItems().Include(lr => lr.Lesson)
                         .Where(i => i.UserId == recruit.Id && i.Lesson.CourseId == course.CourseId).ToList();
 
                     List<RecruitLessonResultDto> recruitLessonResult = new List<RecruitLessonResultDto>();
@@ -279,7 +279,7 @@ namespace BLL.Services
                         recruitLessonResult.Add(new RecruitLessonResultDto(lesson.Lesson, new UserLessonScoreDto(lesson)));
                     }
                     
-                    var recruitResultCourse = userCourseRepository.GetItems()
+                    var recruitResultCourse = userCourseRepository.GetItems().Include(rc => rc.Course)
                         .FirstOrDefault(i => i.UserId == recruit.Id && i.CourseId == course.CourseId);
 
                     if (recruitResultCourse != null)

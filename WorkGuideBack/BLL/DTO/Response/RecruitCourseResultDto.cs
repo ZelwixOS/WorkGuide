@@ -8,8 +8,9 @@ namespace BLL.DTO.Response
         {
             this.ResultLesson = resultLesson;
             this.CompleteLesson = resultLesson.Count;
-            this.Course = course;
             this.Total = total;
+
+            this.Course = new CourseDto(course);
         }
         public List<RecruitLessonResultDto> ResultLesson { get; set; }
 
@@ -17,6 +18,6 @@ namespace BLL.DTO.Response
 
         public int Total { get; set; }
 
-        public Course Course { get; set; }
+        public CourseDto Course { get; set; }
     }
 }

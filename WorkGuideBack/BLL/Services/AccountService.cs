@@ -17,9 +17,12 @@ namespace BLL.Services
     using Microsoft.Extensions.Configuration;
     using Answer = Helpers.Constants.AnswerMessage;
     using Role = Helpers.Constants.RoleManager;
+    using DAL.Migrations;
 
     public class AccountService : IAccountService
     {
+        private const string PicPath = "ClientApp/avatars/";
+
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration config;
@@ -77,6 +80,23 @@ namespace BLL.Services
                 return new MessageResultDto(Answer.RegisteredUnsuccessfully, new List<string>() {"Wrong position!"});
             }
 
+            string avatar;
+
+            if (model.Avatar != null)
+            {
+                var format = model.Avatar.FileName.Substring(model.Avatar.FileName.LastIndexOf('.'));
+                avatar = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + Guid.NewGuid() + format;
+
+                using (var fs = File.Create(PicPath + avatar))
+                {
+                    await model.Avatar.CopyToAsync(fs);
+                }
+            }
+            else
+            {
+                avatar = "defaultAvatar";
+            }
+
             User user = new User
             {
                 Email = model.Email,
@@ -84,8 +104,9 @@ namespace BLL.Services
                 FirstName = model.FirstName,
                 SecondName = model.SecondName,
                 PhoneNumber = model.PhoneNumber,
-                Avatar = "defaultAvatar",
-                PositionId = model.PositionId
+                Avatar = avatar,
+                PositionId = model.PositionId,
+                MentorId = model.MentorId,
             };
 
             var result = await this.userManager.CreateAsync(user, model.Password);
@@ -156,6 +177,39 @@ namespace BLL.Services
             user.PositionId = us.PositionId;
             user.PhoneNumber = us.PhoneNumber;
             user.Email = us.Email;
+
+            if (us.MentorId == null)
+            {
+                user.MentorId = us.MentorId;
+            }
+            else
+            {
+                var mentor = userRepository.GetItems().FirstOrDefault(i => i.Id == us.MentorId);
+                if (mentor == null)
+                {
+                    user.MentorId = us.MentorId;
+                }
+            }
+
+            string avatar;
+            if (model.Avatar != null)
+            {
+                var format = model.Avatar.FileName.Substring(model.Avatar.FileName.LastIndexOf('.'));
+                avatar = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") + Guid.NewGuid() + format;
+
+                using (var fs = File.Create(PicPath + avatar))
+                {
+                    await model.Avatar.CopyToAsync(fs);
+                }
+
+                var file = PicPath + user.Avatar;
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+
+                user.Avatar = avatar;
+            }
 
             await this.userManager.UpdateAsync(user);
 

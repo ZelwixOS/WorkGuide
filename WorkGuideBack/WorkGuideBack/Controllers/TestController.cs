@@ -87,7 +87,7 @@ namespace WorkGuideBack.Controllers
         }
 
         [HttpGet("GetRecruitResult")]
-        public async Task<ActionResult<RecruitResultDto>> GetRecruitResult()
+        public async Task<ActionResult<List<RecruitResultDto>>> GetRecruitResult()
         {
             var user = await this.accountService.GetCurrentUserAsync(HttpContext);
             if (user == null)

@@ -32,7 +32,7 @@
 
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult<MessageResultDto>> Register([FromBody] WorkerRegistrationDto model)
+        public async Task<ActionResult<MessageResultDto>> Register([FromForm] WorkerRegistrationDto model)
         {
             return this.Ok(await accountService.Register(model));
         }
@@ -40,7 +40,7 @@
         [HttpPut]
         [Route("UpdateUserInfo/{id}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public async Task<ActionResult<MessageResultDto>> UpdateUserInfo(Guid id, [FromBody] WorkerRegistrationDto model)
+        public async Task<ActionResult<MessageResultDto>> UpdateUserInfo(Guid id, [FromForm] WorkerRegistrationDto model)
         {
             return this.Ok(await accountService.UpdateUserAsync(id, model));
         }
@@ -110,10 +110,10 @@
             return Ok(res);
         }
 
-        [HttpPost]
-        [Route("DelMentor/{userId}")]
+        [HttpDelete]
+        [Route("DeleteMentor/{userId}")]
         [Authorize(Roles = Constants.RoleManager.Admin)]
-        public ActionResult<int> DelMentor(Guid userId)
+        public ActionResult<int> DeleteMentor(Guid userId)
         {
             var res = this.accountService.DelMentor(userId);
             return Ok(res);
