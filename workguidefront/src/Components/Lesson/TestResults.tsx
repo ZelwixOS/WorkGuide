@@ -24,6 +24,10 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 550,
     marginTop: '4rem',
   },
+  icon: {
+    maxWidth: '50px',
+    maxHeight: '50px'
+  },
   achievements: {
     padding: '1rem',
   },
@@ -103,7 +107,7 @@ const TestResults = (props: ITestResults) => {
           props.achievements.map((a) => (
             <Toast key={a.id} id={a.id} onClose={handleAchievementClosed}>
               <Toast.Header>
-                <img src={a.iconUrl} className="rounded me-2" alt="" />
+                <img src={`/achIcons/${a.iconUrl}`} className={`rounded me-2 ${classes.icon}`} alt="" />
                 <strong className="me-auto">{a.name}</strong>
               </Toast.Header>
               <Toast.Body>{a.description}</Toast.Body>

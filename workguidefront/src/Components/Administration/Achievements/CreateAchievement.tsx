@@ -58,7 +58,7 @@ const CreateAchievement: React.FC<ICreateAchievement> = (props) => {
 
   const commonCourseId = 'ccid'
   const [achievementData, setAchievementData] = React.useState(
-    formatAchievement('', '', '', 0, 0, commonCourseId, 0),
+    formatAchievement('', '', '', 2, 0, commonCourseId, 0),
   )
 
   const [open, setOpen] = React.useState<boolean>(false)
@@ -158,10 +158,8 @@ const CreateAchievement: React.FC<ICreateAchievement> = (props) => {
       ),
     )
   }
-  
-  const handleCountChange = (
-    event: React.ChangeEvent<{ value: unknown }>,
-  ) => {
+
+  const handleCountChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const val = +(event.target.value as string)
     if (val >= 0) {
       setAchievementData(
@@ -232,9 +230,7 @@ const CreateAchievement: React.FC<ICreateAchievement> = (props) => {
         </Alert>
       </Snackbar>
       <FormControl fullWidth className={classes.spaces}>
-        <InputLabel id="course-select-label">
-          Раздел
-        </InputLabel>
+        <InputLabel id="course-select-label">Раздел</InputLabel>
         <Select
           labelId="course-select-label"
           id="course-select"
@@ -291,26 +287,34 @@ const CreateAchievement: React.FC<ICreateAchievement> = (props) => {
       </Card>
 
       <FormControl fullWidth className={classes.spaces}>
-        <InputLabel id="ach-type-select-label">
-          Тип достижения
-        </InputLabel>
-        <Select
-          labelId="ach-type-select-label"
-          id="ach-type-select"
-          value={achievementData.type.toString()}
-          label="Тип достижения"
-          onChange={handleTypeChange}
-        >
-          <MenuItem value="0">Завершение курса</MenuItem>
-          <MenuItem value="1">Завершение курсов</MenuItem>
-          <MenuItem value="2">Завершение тестов</MenuItem>
-        </Select>
+        <InputLabel id="ach-type-select-label">Тип достижения</InputLabel>
+        {achievementData.courseId === commonCourseId ? (
+          <Select
+            labelId="ach-type-select-label"
+            id="ach-type-select"
+            value={achievementData.type.toString()}
+            label="Тип достижения"
+            onChange={handleTypeChange}
+          >
+            <MenuItem value="1">Завершение курсов</MenuItem>
+            <MenuItem value="2">Завершение тестов</MenuItem>
+          </Select>
+        ) : (
+          <Select
+            labelId="ach-type-select-label"
+            id="ach-type-select"
+            value={achievementData.type.toString()}
+            label="Тип достижения"
+            onChange={handleTypeChange}
+          >
+            <MenuItem value="0">Завершение курса</MenuItem>
+            <MenuItem value="2">Завершение тестов</MenuItem>
+          </Select>
+        )}
       </FormControl>
 
       <FormControl fullWidth className={classes.spaces}>
-        <InputLabel id="ach-ts-select-label">
-          Оценка
-        </InputLabel>
+        <InputLabel id="ach-ts-select-label">Оценка</InputLabel>
         <Select
           labelId="ach-ts-select-label"
           id="ach-ts-select"
@@ -330,7 +334,7 @@ const CreateAchievement: React.FC<ICreateAchievement> = (props) => {
       {achievementData.type > 0 && (
         <TextField
           id="AchievementCount"
-          type={"number"}
+          type={'number'}
           className={classes.spaces}
           value={achievementData.count ?? ''}
           onChange={handleCountChange}

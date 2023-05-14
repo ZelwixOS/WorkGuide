@@ -281,7 +281,7 @@ namespace BLL.Services
                 switch (achievement.TestScore)
                 {
                     case TestScore.Any:
-                        if (achievement.TestsCount >= anyC)
+                        if (achievement.TestsCount <= anyC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -289,7 +289,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Terrible:
-                        if (achievement.TestsCount >= terrC)
+                        if (achievement.TestsCount <= terrC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -297,7 +297,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Bad:
-                        if (achievement.TestsCount >= badC)
+                        if (achievement.TestsCount <= badC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -305,7 +305,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Medium:
-                        if (achievement.TestsCount >= medC)
+                        if (achievement.TestsCount <= medC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -313,7 +313,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Good:
-                        if (achievement.TestsCount >= terrC)
+                        if (achievement.TestsCount <= terrC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -321,7 +321,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Perfect:
-                        if (achievement.TestsCount >= perfC)
+                        if (achievement.TestsCount <= perfC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -352,7 +352,7 @@ namespace BLL.Services
                 switch (achievement.TestScore)
                 {
                     case TestScore.Any:
-                        if (achievement.CoursesCount >= anyC)
+                        if (achievement.CoursesCount <= anyC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -360,7 +360,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Terrible:
-                        if (achievement.CoursesCount >= terrC)
+                        if (achievement.CoursesCount <= terrC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -368,7 +368,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Bad:
-                        if (achievement.CoursesCount >= badC)
+                        if (achievement.CoursesCount <= badC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -376,7 +376,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Medium:
-                        if (achievement.CoursesCount >= medC)
+                        if (achievement.CoursesCount <= medC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -384,7 +384,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Good:
-                        if (achievement.CoursesCount >= terrC)
+                        if (achievement.CoursesCount <= terrC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -392,7 +392,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Perfect:
-                        if (achievement.CoursesCount >= perfC)
+                        if (achievement.CoursesCount <= perfC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -423,7 +423,7 @@ namespace BLL.Services
                 switch (achievement.TestScore)
                 {
                     case TestScore.Any:
-                        if (achievement.TestsCount >= anyC)
+                        if (achievement.TestsCount <= anyC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -431,7 +431,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Terrible:
-                        if (achievement.TestsCount >= terrC)
+                        if (achievement.TestsCount <= terrC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -439,7 +439,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Bad:
-                        if (achievement.TestsCount >= badC)
+                        if (achievement.TestsCount <= badC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -447,7 +447,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Medium:
-                        if (achievement.TestsCount >= medC)
+                        if (achievement.TestsCount <= medC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -455,7 +455,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Good:
-                        if (achievement.TestsCount >= terrC)
+                        if (achievement.TestsCount <= terrC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
@@ -463,7 +463,7 @@ namespace BLL.Services
                         }
                         break;
                     case TestScore.Perfect:
-                        if (achievement.TestsCount >= perfC)
+                        if (achievement.TestsCount <= perfC)
                         {
                             userAch.AchievementId = achievement.Id;
                             this.userAchievementRepository.CreateItem(userAch);
