@@ -36,6 +36,7 @@ const HiddenNavigation = () => {
   const courses = onMenuItemClick.bind(this, '/admin/courses')
   const workers = onMenuItemClick.bind(this, '/admin/workers')
   const positions = onMenuItemClick.bind(this, '/admin/positions')
+  const achievements = onMenuItemClick.bind(this, '/admin/achievements')
 
   const menuItem = (name: string, click: () => void) => (
     <MenuItem onClick={click}>
@@ -53,7 +54,7 @@ const HiddenNavigation = () => {
     return () => {
       isMounted = false
     }
-  })
+  }, [])
 
   const checkAuth = async (isMounted: boolean) => {
     const authres = await getRole()
@@ -83,6 +84,8 @@ const HiddenNavigation = () => {
           {menuItem('Работники', workers)}
           <Divider />
           {menuItem('Должность', positions)}
+          <Divider />
+          {menuItem('Достижения', achievements)}
         </List>
       </Drawer>
     </React.Fragment>

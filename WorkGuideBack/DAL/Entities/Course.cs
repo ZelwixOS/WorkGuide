@@ -21,5 +21,7 @@
         public HashSet<PositionCourse> PositionCourses { get; set;}
 
         public HashSet<UserCourse> UserCourses { get; set; }
+
+        public HashSet<Achievement> Achievements { get; set; }
     }
 }

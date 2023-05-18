@@ -29,5 +29,8 @@
         public int UnBanUser(Guid id);
         Task<IList<UserInfo>> GetWorkers();
         Task<UserInfo> UpdateUserAsync(Guid userId, WorkerRegistrationDto model);
+        int AddRecruit(Guid mentorId, Guid userId);
+        int DelMentor(Guid userId);
+        List<UserInfo> GetRecruits(Guid userId);
     }
 }

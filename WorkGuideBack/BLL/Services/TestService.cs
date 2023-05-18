@@ -1,10 +1,12 @@
 ﻿using BLL.DTO.Request;
 using BLL.DTO.Request.Test;
 using BLL.DTO.Response;
+using BLL.DTO.Response.Account;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Migrations;
+using Microsoft.EntityFrameworkCore;
 using Activity = DAL.Entities.Activity;
 
 namespace BLL.Services
@@ -20,6 +22,8 @@ namespace BLL.Services
         private IUserRepository userRepository;
         private IAnswerRepository answerRepository;
         private IActivityRepository activityRepository;
+        private IUserStatsRepository userStatsRepository;
+        private IAchievementService achievemenService;
 
         public TestService(
             ITestRepository testRepository,
@@ -30,7 +34,9 @@ namespace BLL.Services
             IUserCourseRepository userCourseRepository,
             IUserRepository userRepository,
             IAnswerRepository answerRepository,
-            IActivityRepository activityRepository)
+            IActivityRepository activityRepository,
+            IUserStatsRepository userStatsRepository,
+            IAchievementService achievemenService)
         {
             this.testService = testRepository;
             this.lessonRepository = lessonRepository;
@@ -41,6 +47,8 @@ namespace BLL.Services
             this.answerRepository = answerRepository;
             this.activityRepository = activityRepository;
             this.courseRepository = courseRepository;
+            this.userStatsRepository = userStatsRepository;
+            this.achievemenService = achievemenService;
         }
 
         public TestDto GetTest(Guid id)
@@ -165,7 +173,7 @@ namespace BLL.Services
                 Count(u => u.UserId == userId && u.Lesson.CourseId == lesson.CourseId);
 
             int totalTests = lessonRepository.GetItems().
-                Count(l => l.CourseId == lesson.Id && l.IsComplexTest);
+                Count(l => l.CourseId == course.Id && l.IsComplexTest);
 
             var userCour = userCourseRepository.GetItems()
                 .FirstOrDefault(c => c.CourseId == lesson.CourseId && c.UserId == userId);
@@ -178,7 +186,6 @@ namespace BLL.Services
             }
             else
             {
-                User user = userRepository.GetItem(userId);
                 UserCourse userCourse = new UserCourse()
                 {
                     CompletedTests = completedTests,
@@ -191,7 +198,12 @@ namespace BLL.Services
                 userCourseRepository.CreateItem(userCourse);
             }
 
-            return new TestResultDto(correct, total);
+            UpdateUserStats(userId, lesson.CourseId, completedTests == totalTests, (float)correct / total); // Обновление статистики пользователя
+            
+            // Проверка ачивок по прохождению
+            var achs = this.achievemenService.CheckNewAchievements(userId, lesson.CourseId, completedTests == totalTests);
+
+            return new TestResultDto(correct, total, achs);
         }
 
         public bool? CheckAnswer(TestAnswerDto testAnswer)
@@ -246,6 +258,130 @@ namespace BLL.Services
             }
 
             return new UserLessonScoreDto(userLessonScore);
+        }
+
+        protected void UpdateUserStats(Guid userId, Guid courseId, bool courseCompleted, float correctAnswerPart)
+        {
+            var stats = this.userStatsRepository.GetItem(userId);
+            bool existed = true;
+            if (stats == null)
+            {
+                stats = new UserStats();
+                stats.Id = userId;
+                existed = false;
+            }
+
+            stats.PassedTests++;
+            
+            if (correctAnswerPart == 0)
+            {
+                stats.TerribleTests++;
+            }
+            else if (correctAnswerPart < 0.33)
+            {
+                stats.BadTests++;
+            } else if (correctAnswerPart < 0.66)
+            {
+                stats.MediumTests++;
+            } else if (correctAnswerPart < 1)
+            {
+                stats.GoodTests++;
+            } else
+            {
+                stats.PerfectTests++;
+            }
+
+            if (courseCompleted)
+            {
+                stats.CompletedCourses++;
+                var minCourseTestRate = this.userLessonScoreRepository.GetItems().Where(c => c.UserId == userId && c.Lesson.CourseId == courseId).Select(r => (float)r.RightAnswer / r.TestsCount).Min();
+
+                if (correctAnswerPart == 0)
+                {
+                    stats.TerribleCourses++;
+                }
+                else if (correctAnswerPart < 0.33)
+                {
+                    stats.BadCourses++;
+                }
+                else if (correctAnswerPart < 0.66)
+                {
+                    stats.MediumCourses++;
+                }
+                else if (correctAnswerPart < 1)
+                {
+                    stats.GoodCourses++;
+                }
+                else
+                {
+                    stats.PerfectCourses++;
+                }
+            }
+
+            if (existed)
+            {
+                this.userStatsRepository.UpdateItem(stats);
+            }
+            else
+            {
+                this.userStatsRepository.CreateItem(stats);
+            }
+        }
+        
+        public List<RecruitResultDto> GetRecruitResult(Guid id)
+        {
+            var recruits = this.userRepository.GetItems()
+                .Include(i => i.Recruits).ThenInclude(i => i.UserCourses)
+                .FirstOrDefault(i => i.Id == id)?.Recruits.ToList();
+
+            if (recruits == null)
+            {
+                return null;
+            }
+
+            List<RecruitResultDto> result = new List<RecruitResultDto>();
+
+            foreach (var recruit in recruits)
+            {
+                var courses = recruit.UserCourses.ToList();
+                List<RecruitCourseResultDto> recruitCourseResultList = new List<RecruitCourseResultDto>();
+
+                foreach (var course in courses)
+                {
+                    var recruitResultLesson = userLessonScoreRepository.GetItems().Include(lr => lr.Lesson)
+                        .Where(i => i.UserId == recruit.Id && i.Lesson.CourseId == course.CourseId).ToList();
+
+                    List<RecruitLessonResultDto> recruitLessonResult = new List<RecruitLessonResultDto>();
+                    foreach (var lesson in recruitResultLesson)
+                    {
+                        recruitLessonResult.Add(new RecruitLessonResultDto(lesson.Lesson, new UserLessonScoreDto(lesson)));
+                    }
+                    
+                    var recruitResultCourse = userCourseRepository.GetItems().Include(rc => rc.Course)
+                        .FirstOrDefault(i => i.UserId == recruit.Id && i.CourseId == course.CourseId);
+
+                    if (recruitResultCourse != null)
+                    {
+                        RecruitCourseResultDto recruitCourseResult = new RecruitCourseResultDto(recruitLessonResult, 
+                            recruitResultCourse.TotalTests,
+                            recruitResultCourse.Course);
+
+                        recruitCourseResultList.Add(recruitCourseResult);
+                    }
+                    else
+                    {
+                        RecruitCourseResultDto recruitCourseResult = new RecruitCourseResultDto(new List<RecruitLessonResultDto>(),
+                            course.TotalTests,
+                            course.Course);
+
+                        recruitCourseResultList.Add(recruitCourseResult);
+                    }
+                }
+
+                result.Add(new RecruitResultDto(new UserInfo(recruit), recruitCourseResultList));
+            }
+
+            return result;
         }
     }
 }

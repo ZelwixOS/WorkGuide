@@ -48,10 +48,10 @@ const UserSearchCard = (props: IUserSearchCard) => {
             </Row>
             <Row>
               <Col>
-                <Card.Text className={classes.info}><Globe size={20} className={classes.icon} />{props.user.email}</Card.Text>
+                <Card.Text className={classes.info}><Globe size={20} className={classes.icon} /><a href={`mailto:${props.user.email}`}>{props.user.email}</a></Card.Text>
               </Col>
               <Col>
-                <Card.Text className={classes.info}><TelephoneFill size={20} className={classes.icon} />{props.user.phoneNumber}</Card.Text>
+                <Card.Text className={classes.info}><TelephoneFill size={20} className={classes.icon} /><a href={`tel:${props.user.phoneNumber}`}>{props.user.phoneNumber}</a></Card.Text>
               </Col>
             </Row>
           </Card.Body>

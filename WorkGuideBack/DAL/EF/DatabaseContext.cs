@@ -40,6 +40,12 @@ namespace DAL.EF
 
         public DbSet<TheoryFile> TheoryFiles { get; set; }
 
+        public DbSet<UserStats> UsersStats { get; set; }
+
+        public DbSet<Achievement> Achievements { get; set; }
+
+        public DbSet<UserAchievement> UserAchievements { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Lesson>(entity =>
@@ -123,6 +129,25 @@ namespace DAL.EF
             {
                 entity.HasOne(t => t.Theory).WithMany(q => q.TheoryFiles).HasForeignKey(t => t.TheoryId);
                 entity.HasKey(q => q.Id);
+            });
+
+            modelBuilder.Entity<Achievement>(entity =>
+            {
+                entity.HasOne(a => a.Course).WithMany(c => c.Achievements).HasForeignKey(a => a.CourseId).IsRequired(false);
+                entity.HasKey(a => a.Id);
+            });
+
+            modelBuilder.Entity<UserAchievement>(entity =>
+            {
+                entity.HasOne(ua => ua.User).WithMany(u => u.UserAchievements).HasForeignKey(ua => ua.UserId);
+                entity.HasOne(ua => ua.Achievement).WithMany(a => a.UserAchievements).HasForeignKey(ua => ua.AchievementId);
+                entity.HasKey(ua => ua.Id);
+            });
+
+            modelBuilder.Entity<UserStats>(entity =>
+            {
+                entity.HasOne(us => us.User).WithOne(u => u.Stats);
+                entity.HasKey(us => us.Id);
             });
 
             base.OnModelCreating(modelBuilder);

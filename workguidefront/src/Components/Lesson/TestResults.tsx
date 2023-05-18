@@ -1,6 +1,9 @@
 import { Button, Container, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '../../theme'
+import Toast from 'react-bootstrap/Toast'
+import ToastContainer from 'react-bootstrap/ToastContainer'
+import Achievement from '../../Types/Achievement'
 
 const useStyles = makeStyles()((theme) => ({
   paginator: {
@@ -21,6 +24,13 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 550,
     marginTop: '4rem',
   },
+  icon: {
+    maxWidth: '50px',
+    maxHeight: '50px'
+  },
+  achievements: {
+    padding: '1rem',
+  },
   success: {
     backgroundColor: '#AFA',
   },
@@ -36,6 +46,8 @@ interface ITestResults {
   score: number
   total: number
   courseUrl: string
+  achievements: Achievement[]
+  setAchievemetns: React.Dispatch<React.SetStateAction<Achievement[]>>
 }
 
 const TestResults = (props: ITestResults) => {
@@ -55,8 +67,21 @@ const TestResults = (props: ITestResults) => {
   }
 
   const getRightIndex = () => {
-    const real = props.score / props.total * (evaluation.length - 1)
+    const real = (props.score / props.total) * (evaluation.length - 1)
     return Math.round(real)
+  }
+
+  const handleAchievementClosed = (e?: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element> | undefined) => {
+    const id = (e?.target as Element)?.id
+    console.log(id)
+    if (id) {
+      const newAchs = [...props.achievements]
+      const ind = newAchs.findIndex(a => a.id === id)
+      if (ind > -1) {
+        newAchs.splice(ind, 1)
+        props.setAchievemetns(newAchs)
+      }
+    }
   }
 
   return (
@@ -77,6 +102,18 @@ const TestResults = (props: ITestResults) => {
       <Row className={classes.paginator}>
         <Button onClick={onReturnToCourse}>К курсу</Button>
       </Row>
+      <ToastContainer position="bottom-end" className={classes.achievements}>
+        {props.achievements &&
+          props.achievements.map((a) => (
+            <Toast key={a.id} id={a.id} onClose={handleAchievementClosed}>
+              <Toast.Header>
+                <img src={`/achIcons/${a.iconUrl}`} className={`rounded me-2 ${classes.icon}`} alt="" />
+                <strong className="me-auto">{a.name}</strong>
+              </Toast.Header>
+              <Toast.Body>{a.description}</Toast.Body>
+            </Toast>
+          ))}
+      </ToastContainer>
     </>
   )
 }

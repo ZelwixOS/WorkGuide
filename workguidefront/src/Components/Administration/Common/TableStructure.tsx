@@ -43,6 +43,7 @@ interface ITableStructure<Type> {
   editSelected?: (selectedId: string, refrFun: () => void) => void;
   createNew?: (update: () => void) => void;
   open?: boolean;
+  refresher?: {refresh: () => void;}
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   error?: string;
   compact?: boolean;
@@ -114,6 +115,11 @@ export const TableStructure = <Type,>(props: ITableStructure<Type>) => {
       props.editSelected(selectedItem, refreshData.bind(this));
     }
   };
+
+  if (props.refresher)
+  {
+    props.refresher.refresh = refreshData.bind(this)
+  }
 
   const handleClose = (event?: Event | React.SyntheticEvent<any, Event>, reason?: string) => {
     if (reason === 'clickaway') {

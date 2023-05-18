@@ -85,5 +85,17 @@ namespace WorkGuideBack.Controllers
 
             return this.Ok(this.testService.GetUserLessonScore(user.Id, lessonId));
         }
+
+        [HttpGet("GetRecruitResult")]
+        public async Task<ActionResult<List<RecruitResultDto>>> GetRecruitResult()
+        {
+            var user = await this.accountService.GetCurrentUserAsync(HttpContext);
+            if (user == null)
+            {
+                return this.Ok(null);
+            }
+
+            return this.Ok(this.testService.GetRecruitResult(user.Id));
+        }
     }
 }

@@ -23,6 +23,7 @@
             return this.Context.Users
                 .AsNoTracking()
                 .Include(u => u.Position)
+                .Include(i => i.Recruits)
                 .FirstOrDefault(c => c.Id == id);
         }
 

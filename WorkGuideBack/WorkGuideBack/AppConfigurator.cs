@@ -98,6 +98,12 @@ namespace WorkGuideBack
                 new ActivityRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
             services.AddScoped<ITheoryFileRepository, TheoryFileRepository>(provider =>
                 new TheoryFileRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IAchievementRepository, AchievementRepository>(provider =>
+                new AchievementRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserAchievementRepository, UserAchievementRepository>(provider =>
+                new UserAchievementRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
+            services.AddScoped<IUserStatsRepository, UserStatsRepository>(provider =>
+                new UserStatsRepository(dbconectionString, provider.GetService<IDatabaseContextFactory>()));
 
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ICourseService, CourseService>();
@@ -105,6 +111,7 @@ namespace WorkGuideBack
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IAnswerService, AnswerService>();
             services.AddScoped<ITheoryService, TheoryService>();
+            services.AddScoped<IAchievementService, AchievementService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPositionService, PositionService>();

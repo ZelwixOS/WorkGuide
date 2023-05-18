@@ -8,6 +8,7 @@ import Loading from '../Common/Loading'
 import NavigationBar from '../Common/NavigationBar'
 import LessonCard from '../Lesson/LessonCard'
 import CourseCard from './CourseCard'
+import AchievementsList from '../Achievements/AchievementsList'
 
 const useStyles = makeStyles()((theme) => ({
   backButtons: {
@@ -30,6 +31,10 @@ const useStyles = makeStyles()((theme) => ({
       color: 'white',
     },
   },
+  achievements: {
+    marginTop: '10px',
+    marginBottom: '10px',
+  }
 }))
 
 const CoursePage = () => {
@@ -65,6 +70,7 @@ const CoursePage = () => {
       <NavigationBar />
       <Container className={classes.container}>
         {isLoading || !course ? <Loading /> : <CourseCard course={course} />}
+        {isLoading || !course ? null : <AchievementsList className={classes.achievements} courseId={course.id} elementCount={2} />}
         {isLoading || !course
           ? null
           : course.lessons.map((lesson) => (

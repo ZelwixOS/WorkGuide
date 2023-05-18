@@ -32,6 +32,14 @@ async function  deleteTheoryFile(id: string) {
   return await deleteRequest(`/api/Theory/deleteFile/${id}`);
 }
 
+async function  deleteAchievement(id: string) {
+  return await deleteRequest(`/api/Achievement/${id}`);
+}
+
+async function deleteMentor(id: string) {
+  return await deleteRequest(`/api/Account/DeleteMentor/${id}`);
+}
+
 export default deleteRequest
 
 export {
@@ -42,5 +50,7 @@ export {
   deleteLesson,
   deleteTest,
   deleteTheory,
-  deleteTheoryFile
+  deleteTheoryFile,
+  deleteAchievement,
+  deleteMentor
 };
